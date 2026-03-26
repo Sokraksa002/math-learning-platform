@@ -1,0 +1,23 @@
+# Node
+node_modules/
+.vite/
+dist/
+build/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Logs
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Prisma / DB artifacts
+prisma/dev.db
+``

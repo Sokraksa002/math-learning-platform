@@ -1,0 +1,119 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email         String   @unique @db.Citext
+  name          String
+  password_hash String
+  created_at    DateTime @default(now())
+
+  quiz_sessions QuizSession[]
+  flashcards    Flashcard[]
+  activities    ActivityEvent[]
+}
+
+model Chapter {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title_km    String
+  order_index Int
+  created_at  DateTime @default(now())
+
+  lessons Lesson[]
+}
+
+model Lesson {
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  chapter_id   String   @db.Uuid
+  title_km     String
+  order_index  Int
+  content_json Json?
+  created_at   DateTime @default(now())
+
+  chapter          Chapter          @relation(fields: [chapter_id], references: [id])
+  lesson_exercises LessonExercise[]
+  quiz_questions   QuizQuestion[]
+  quiz_sessions    QuizSession[]
+  flashcards       Flashcard[]
+}
+
+model LessonExercise {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lesson_id   String @db.Uuid
+  question_km String
+  solution_km String
+  order_index Int
+
+  lesson Lesson @relation(fields: [lesson_id], references: [id])
+}
+
+model QuizQuestion {
+  id             String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lesson_id      String @db.Uuid
+  question_km    String
+  choice_a_km    String
+  choice_b_km    String
+  choice_c_km    String
+  choice_d_km    String
+  correct_choice String
+  solution_km    String
+  difficulty     Int    @default(1)
+
+  lesson Lesson            @relation(fields: [lesson_id], references: [id])
+  items  QuizSessionItem[]
+}
+
+model QuizSession {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String   @db.Uuid
+  lesson_id  String   @db.Uuid
+  score      Float?
+  created_at DateTime @default(now())
+
+  user   User              @relation(fields: [user_id], references: [id])
+  lesson Lesson            @relation(fields: [lesson_id], references: [id])
+  items  QuizSessionItem[]
+}
+
+model QuizSessionItem {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  session_id      String   @db.Uuid
+  question_id     String   @db.Uuid
+  selected_choice String?
+  is_correct      Boolean?
+
+  session  QuizSession  @relation(fields: [session_id], references: [id])
+  question QuizQuestion @relation(fields: [question_id], references: [id])
+}
+
+model Flashcard {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id     String   @db.Uuid
+  lesson_id   String?  @db.Uuid
+  question_km String
+  answer_km   String
+  created_at  DateTime @default(now())
+
+  user   User    @relation(fields: [user_id], references: [id])
+  lesson Lesson? @relation(fields: [lesson_id], references: [id])
+}
+
+model ActivityEvent {
+  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  user_id    String?  @db.Uuid // <- add @db.Uuid
+  event_type String
+  entity     String?
+  created_at DateTime @default(now())
+
+  user User? @relation(fields: [user_id], references: [id])
+}

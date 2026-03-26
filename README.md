@@ -1,2 +1,30 @@
-# math-learning-platform
-# math-learning-platform
+# Math Learning Platform (Grade 12)
+
+A web platform for Grade 12 Mathematics learning.
+
+## Features
+- Microlearning lessons with practice exercises
+- Lesson-based quizzes (randomized MCQ)
+- AI-powered flashcards (Claude)
+- Student activity & learning analysis dashboards
+
+## Tech Stack
+
+### Frontend
+- React.js
+- Tailwind CSS
+- KaTeX (Math rendering)
+- Chart.js (Analytics)
+
+### Backend
+- Node.js (LTS)
+- Fastify
+- Prisma
+- PostgreSQL
+- Zod
+- JWT Authentication
+
+### AI
+- Claude (Anthropic)
+
+## Project Structure

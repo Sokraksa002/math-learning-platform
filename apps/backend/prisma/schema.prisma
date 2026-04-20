@@ -1,119 +1,234 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  STUDENT
+  ADMIN
+}
+
+/* ===================== USER ===================== */
 model User {
-  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email         String   @unique @db.Citext
-  name          String
-  password_hash String
-  created_at    DateTime @default(now())
+  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  email        String   @unique @db.Citext
+  name         String
+  passwordHash String   @map("password_hash")
+  role         UserRole @default(STUDENT)
+  isBanned     Boolean  @default(false) @map("is_banned")
+  createdAt    DateTime @default(now()) @map("created_at")
 
-  quiz_sessions QuizSession[]
-  flashcards    Flashcard[]
-  activities    ActivityEvent[]
+  lessonCompletions LessonCompletion[]
+  quizSessions      QuizSession[]
+  flashcards        Flashcard[]
+  flashcardReviews  FlashcardReview[]
+  decks             Deck[]
+  activities        ActivityEvent[]
+  userProgress      UserProgress[]
+  certificates      Certificate[]
+
+  @@map("users")
 }
 
+/* ===================== CHAPTER ===================== */
 model Chapter {
   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  title_km    String
-  order_index Int
-  created_at  DateTime @default(now())
+  titleKm     String   @map("title_km")
+  orderIndex  Int      @map("order_index")
+  isPublished Boolean  @default(false) @map("is_published")
+  createdAt   DateTime @default(now()) @map("created_at")
 
-  lessons Lesson[]
+  lessons    Lesson[]
+  flashcards Flashcard[]
+  decks      Deck[]
+
+  @@map("chapters")
 }
 
+/* ===================== LESSON ===================== */
 model Lesson {
-  id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  chapter_id   String   @db.Uuid
-  title_km     String
-  order_index  Int
-  content_json Json?
-  created_at   DateTime @default(now())
-
-  chapter          Chapter          @relation(fields: [chapter_id], references: [id])
-  lesson_exercises LessonExercise[]
-  quiz_questions   QuizQuestion[]
-  quiz_sessions    QuizSession[]
-  flashcards       Flashcard[]
-}
-
-model LessonExercise {
-  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  lesson_id   String @db.Uuid
-  question_km String
-  solution_km String
-  order_index Int
-
-  lesson Lesson @relation(fields: [lesson_id], references: [id])
-}
-
-model QuizQuestion {
-  id             String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  lesson_id      String @db.Uuid
-  question_km    String
-  choice_a_km    String
-  choice_b_km    String
-  choice_c_km    String
-  choice_d_km    String
-  correct_choice String
-  solution_km    String
-  difficulty     Int    @default(1)
-
-  lesson Lesson            @relation(fields: [lesson_id], references: [id])
-  items  QuizSessionItem[]
-}
-
-model QuizSession {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id    String   @db.Uuid
-  lesson_id  String   @db.Uuid
-  score      Float?
-  created_at DateTime @default(now())
-
-  user   User              @relation(fields: [user_id], references: [id])
-  lesson Lesson            @relation(fields: [lesson_id], references: [id])
-  items  QuizSessionItem[]
-}
-
-model QuizSessionItem {
-  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  session_id      String   @db.Uuid
-  question_id     String   @db.Uuid
-  selected_choice String?
-  is_correct      Boolean?
-
-  session  QuizSession  @relation(fields: [session_id], references: [id])
-  question QuizQuestion @relation(fields: [question_id], references: [id])
-}
-
-model Flashcard {
   id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id     String   @db.Uuid
-  lesson_id   String?  @db.Uuid
-  question_km String
-  answer_km   String
-  created_at  DateTime @default(now())
+  chapterId   String   @map("chapter_id") @db.Uuid
+  titleKm     String   @map("title_km")
+  orderIndex  Int      @map("order_index")
+  contentJson Json?    @map("content_json")
+  createdAt   DateTime @default(now()) @map("created_at")
 
-  user   User    @relation(fields: [user_id], references: [id])
-  lesson Lesson? @relation(fields: [lesson_id], references: [id])
+  chapter           Chapter           @relation(fields: [chapterId], references: [id])
+  quizQuestions     QuizQuestion[]
+  quizSessions      QuizSession[]
+  lessonCompletions LessonCompletion[]
+  userProgress      UserProgress[]
+
+  @@map("lessons")
 }
 
-model ActivityEvent {
-  id         String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  user_id    String?  @db.Uuid // <- add @db.Uuid
-  event_type String
-  entity     String?
-  created_at DateTime @default(now())
+/* ===================== LESSON COMPLETION ===================== */
+model LessonCompletion {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  lessonId    String   @map("lesson_id") @db.Uuid
+  completedAt DateTime @default(now()) @map("completed_at")
 
-  user User? @relation(fields: [user_id], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+  lesson Lesson @relation(fields: [lessonId], references: [id])
+
+  @@unique([userId, lessonId])
+  @@map("lesson_completions")
+}
+
+/* ===================== QUIZ QUESTION ===================== */
+model QuizQuestion {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lessonId      String   @map("lesson_id") @db.Uuid
+  questionKm    String   @map("question_km")
+  choiceAKm     String   @map("choice_a_km")
+  choiceBKm     String   @map("choice_b_km")
+  choiceCKm     String   @map("choice_c_km")
+  choiceDKm     String   @map("choice_d_km")
+  correctChoice String   @map("correct_choice")
+  solutionKm    String   @map("solution_km")
+  difficulty    Int      @default(1)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  lesson Lesson            @relation(fields: [lessonId], references: [id])
+  items  QuizSessionItem[]
+
+  @@map("quiz_questions")
+}
+
+/* ===================== QUIZ SESSION ===================== */
+model QuizSession {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  lessonId  String   @map("lesson_id") @db.Uuid
+  score     Float?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user   User              @relation(fields: [userId], references: [id])
+  lesson Lesson            @relation(fields: [lessonId], references: [id])
+  items  QuizSessionItem[]
+
+  @@map("quiz_sessions")
+}
+
+/* ===================== QUIZ SESSION ITEM ===================== */
+model QuizSessionItem {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sessionId      String   @map("session_id") @db.Uuid
+  questionId     String   @map("question_id") @db.Uuid
+  selectedChoice String?  @map("selected_choice")
+  isCorrect      Boolean? @map("is_correct")
+
+  session  QuizSession  @relation(fields: [sessionId], references: [id])
+  question QuizQuestion @relation(fields: [questionId], references: [id])
+
+  @@map("quiz_session_items")
+}
+
+/* ===================== FLASHCARD ===================== */
+model Flashcard {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String   @map("user_id") @db.Uuid
+  chapterId       String   @map("chapter_id") @db.Uuid
+  deckId          String?  @map("deck_id") @db.Uuid
+  questionKm      String   @map("question_km")
+  answerJson      Json     @map("answer_json")
+  isUserGenerated Boolean  @default(false) @map("is_user_generated")
+  interval        Int      @default(1)
+  easeFactor      Float    @default(2.5) @map("ease_factor")
+  nextReviewDate  DateTime @default(now()) @map("next_review_date")
+  totalReviews    Int      @default(0) @map("total_reviews")
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  user    User              @relation(fields: [userId], references: [id])
+  chapter Chapter           @relation(fields: [chapterId], references: [id])
+  deck    Deck?             @relation(fields: [deckId], references: [id])
+  reviews FlashcardReview[]
+
+  @@map("flashcards")
+}
+
+/* ===================== FLASHCARD REVIEW ===================== */
+model FlashcardReview {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  flashcardId String   @map("flashcard_id") @db.Uuid
+  userId      String   @map("user_id") @db.Uuid
+  rating      String
+  interval    Int
+  reviewedAt  DateTime @default(now()) @map("reviewed_at")
+
+  flashcard Flashcard @relation(fields: [flashcardId], references: [id])
+  user      User      @relation(fields: [userId], references: [id])
+
+  @@map("flashcard_reviews")
+}
+
+/* ===================== DECK ===================== */
+model Deck {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  chapterId String?  @map("chapter_id") @db.Uuid
+  nameKm    String   @map("name_km")
+  cardCount Int      @default(0) @map("card_count")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user       User        @relation(fields: [userId], references: [id])
+  chapter    Chapter?    @relation(fields: [chapterId], references: [id])
+  flashcards Flashcard[]
+
+  @@map("decks")
+}
+
+/* ===================== USER PROGRESS ===================== */
+model UserProgress {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId        String   @map("user_id") @db.Uuid
+  lessonId      String   @map("lesson_id") @db.Uuid
+  masteryScore  Float    @default(0) @map("mastery_score")
+  totalAttempts Int      @default(0) @map("total_attempts")
+  correctCount  Int      @default(0) @map("correct_count")
+  accuracyRate  Float    @default(0) @map("accuracy_rate")
+  lastStudiedAt DateTime @default(now()) @map("last_studied_at")
+
+  user   User   @relation(fields: [userId], references: [id])
+  lesson Lesson @relation(fields: [lessonId], references: [id])
+
+  @@unique([userId, lessonId])
+  @@map("user_progress")
+}
+
+/* ===================== ACTIVITY EVENT ===================== */
+model ActivityEvent {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String?  @map("user_id") @db.Uuid
+  eventType String   @map("event_type")
+  entity    String?
+  createdAt DateTime @default(now()) @map("created_at")
+
+  user User? @relation(fields: [userId], references: [id])
+
+  @@map("activity_events")
+}
+
+/* ===================== CERTIFICATE ===================== */
+model Certificate {
+  id              String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId          String    @map("user_id") @db.Uuid
+  certificateCode String    @unique @map("certificate_code")
+  course          String
+  averageScore    Float     @map("average_score")
+  totalLessons    Int       @map("total_lessons")
+  issuedAt        DateTime  @default(now()) @map("issued_at")
+  revokedAt       DateTime? @map("revoked_at")
+  pdfUrl          String?   @map("pdf_url")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([userId, course])
+  @@map("certificates")
 }

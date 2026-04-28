@@ -1,6 +1,6 @@
 import { AppBar, Box, Button, Toolbar, Typography, IconButton } from '@mui/material';
 import { AccountCircle } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Header() {
   const navigate = useNavigate();
@@ -15,14 +15,15 @@ export default function Header() {
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, sm: 4 } }}>
-          {/* Logo */}
+          {/* Logo → Home */}
           <Typography
-            variant="h6"
-            onClick={() => navigate('/home')}
+            component={Link}
+            to="/home"
             sx={{
               fontWeight: 'bold',
               color: '#2196F3',
               fontSize: '24px',
+              textDecoration: 'none',
               cursor: 'pointer',
             }}
           >
@@ -30,38 +31,29 @@ export default function Header() {
           </Typography>
 
           {/* Menu */}
-          <Box sx={{ display: 'flex', gap: { xs: 1, sm: 3 }, alignItems: 'center' }}>
-            <Button
-              onClick={() => navigate('/home')}
-              sx={{ color: '#333', fontWeight: 500, textTransform: 'none', fontSize: 14 }}
-            >
-              Home
-            </Button>
-
+          <Box sx={{ display: 'flex', gap: 3, alignItems: 'center' }}>
             <Button
               onClick={() => navigate('/chapter')}
-              sx={{ color: '#333', fontWeight: 500, textTransform: 'none', fontSize: 14 }}
+              sx={navBtn}
             >
               Chapter
             </Button>
 
             <Button
               onClick={() => navigate('/quiz')}
-              sx={{ color: '#333', fontWeight: 500, textTransform: 'none', fontSize: 14 }}
+              sx={navBtn}
             >
               Quiz
             </Button>
 
             <Button
               onClick={() => navigate('/flashcard')}
-              sx={{ color: '#333', fontWeight: 500, textTransform: 'none', fontSize: 14 }}
+              sx={navBtn}
             >
               Flashcard
             </Button>
 
-            <Button
-              sx={{ color: '#333', fontWeight: 500, textTransform: 'none', fontSize: 14 }}
-            >
+            <Button sx={navBtn}>
               About us
             </Button>
           </Box>
@@ -73,7 +65,8 @@ export default function Header() {
         </Toolbar>
       </AppBar>
 
-      {/* Banner */}
+      {/* Optional banner (correct JSX comment) */}
+      {/*
       <Box
         sx={{
           backgroundColor: '#2196F3',
@@ -86,6 +79,14 @@ export default function Header() {
       >
         Let&apos;s study with us!
       </Box>
+      */}
     </>
   );
 }
+
+const navBtn = {
+  color: '#333',
+  fontWeight: 500,
+  textTransform: 'none',
+  fontSize: 14,
+};

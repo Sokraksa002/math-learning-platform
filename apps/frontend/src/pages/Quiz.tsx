@@ -58,6 +58,22 @@ export default function Quiz() {
                 <CardContent sx={{ textAlign: 'center', py: 3 }}>
                   <Typography sx={{ fontWeight: 'bold', color: '#333', mb: 1, fontSize: '14px' }}>{chapter.name}</Typography>
                   <Typography sx={{ fontSize: '13px', color: '#666' }}>{chapter.lesson}</Typography>
+                  <Button
+                    onClick={() => navigate(`/quiz/paper/${chapter.id}`)}
+                    variant="text"
+                    sx={{
+                      mt: 1,
+                      p: 0,
+                      minWidth: 'auto',
+                      textTransform: 'none',
+                      fontSize: '13px',
+                      fontWeight: 700,
+                      color: '#2196F3',
+                      '&:hover': { backgroundColor: 'transparent', textDecoration: 'underline' },
+                    }}
+                  >
+                    Start
+                  </Button>
                 </CardContent>
               </Card>
             </Grid>

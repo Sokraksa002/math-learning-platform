@@ -7,17 +7,22 @@ import ForgotPassword from "./pages/ForgotPassword";
 import Quiz from "./pages/Quiz";
 import Chapter from "./pages/Chapter";
 import Flashcard from "./pages/Flashcard";
+import LessonDetail from "./pages/LessonDetail";
+import Quizepaper from "./components/Quiz/Quizepaper";
 
 export default function AppRoutes() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz/paper/:chapterId" element={<Quizepaper />} />
         <Route path="/chapter" element={<Chapter />} />
+        <Route path="/lesson/:lessonId" element={<LessonDetail />} />
         <Route path="/flashcard" element={<Flashcard />} />
       </Routes>
     </BrowserRouter>

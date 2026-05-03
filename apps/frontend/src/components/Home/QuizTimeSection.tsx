@@ -31,48 +31,53 @@ export default function QuizTimeSection() {
         >
           Quiz Time
         </Typography>
+{/* Hamburger list */}
+<Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+  {quizzes.map((quiz) => (
+    <Box
+      key={quiz.id}
+      onClick={() => navigate(`/quiz`)}
+      // onClick={() => navigate(`/quiz/${quiz.id}`)}
+      sx={{
+        backgroundColor: quiz.bgColor, // ✅ use chapter color
+        borderRadius: '12px',
+        px: 3,
+        py: 2.5,
+        cursor: 'pointer',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        transition: 'all 0.2s ease',
+        '&:hover': {
+          transform: 'translateY(-2px)',
+          boxShadow: '0 6px 16px rgba(0,0,0,0.15)',
+        },
+      }}
+    >
+      <Typography sx={{ fontSize: 16, fontWeight: 600, color: '#2B2B2B' }}>
+        {quiz.title}
+      </Typography>
 
-        <Box sx={{ display: 'flex', gap: 3, flexWrap: 'wrap' }}>
-          {quizzes.map((quiz) => (
-            <Box
-              key={quiz.id}
-              onClick={() => navigate('/quiz')}
-              sx={{
-                flex: { xs: '1 1 calc(50% - 12px)', md: '1 1 calc(25% - 12px)' },
-                backgroundColor: quiz.bgColor,
-                borderRadius: '12px',
-                padding: '20px',
-                textAlign: 'center',
-                cursor: 'pointer',
-                transition: 'transform 0.3s ease',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
-                },
-              }}
-            >
-              <Typography sx={{ fontWeight: 700, color: '#2B2B2B', mb: 1 }}>{quiz.title}</Typography>
-              <Typography sx={{ fontSize: 13, color: '#666', mb: 1 }}>Lesson: Limit</Typography>
-              <Button
-                onClick={(event) => {
-                  event.stopPropagation();
-                  navigate('/quiz');
-                }}
-                variant="text"
-                sx={{
-                  p: 0,
-                  minWidth: 'auto',
-                  textTransform: 'none',
-                  fontSize: 12,
-                  fontWeight: 700,
-                  color: '#3D86E8',
-                  '&:hover': { backgroundColor: 'transparent', textDecoration: 'underline' },
-                }}
-              >
-                Start
-              </Button>
-            </Box>
-          ))}
-        </Box>
+      <Button
+        onClick={(e) => {
+          e.stopPropagation();
+           navigate(`/quiz`)}
+      //  navigate(`/quiz/${quiz.id}`)}
+      }
+        sx={{
+          textTransform: 'none',
+          fontWeight: 700,
+          fontSize: 20,
+          fontWidth: 50,
+          color: '#3D86E8',
+          minWidth: 'auto',
+        }}
+      >
+        →
+      </Button>
+    </Box>
+  ))}
+</Box>
       </Container>
     </Box>
   );

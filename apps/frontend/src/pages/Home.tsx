@@ -9,11 +9,19 @@ import FlashcardSection from '../components/Home/FlashcardSection';
 
 export default function Home() {
   return (
-    <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: '#fff' }}>
+    <Box
+      sx={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        backgroundColor: '#fff',
+      }}
+    >
       <Header />
       <HeroSection />
       <OurFunctionsSection />
-      <MoodSection />
+      <MoodSection/>
+      {/* Learning sections */}
       <QuizTimeSection />
       <ChapterSection />
       <FlashcardSection />

@@ -9,6 +9,7 @@ import Chapter from "./pages/Chapter";
 import Flashcard from "./pages/Flashcard";
 import LessonDetail from "./pages/LessonDetail";
 import Quizepaper from "./components/Quiz/Quizepaper";
+import Focus from "./pages/Focus";
 
 export default function AppRoutes() {
   return (
@@ -24,6 +25,7 @@ export default function AppRoutes() {
         <Route path="/chapter" element={<Chapter />} />
         <Route path="/lesson/:lessonId" element={<LessonDetail />} />
         <Route path="/flashcard" element={<Flashcard />} />
+        <Route path="/focus" element={<Focus/>} />
       </Routes>
     </BrowserRouter>
   );

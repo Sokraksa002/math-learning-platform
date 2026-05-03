@@ -56,6 +56,9 @@ export default function Header() {
             <Button sx={navBtn}>
               About us
             </Button>
+            <Button sx={navBtn}>
+              focus
+            </Button>
           </Box>
 
           {/* Account Icon */}

@@ -1,52 +1,100 @@
-import { Box, Container, TextField, Typography } from '@mui/material';
+import { Box, Container, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 
 interface Chapter {
   id: number;
   name: string;
-  placeholder: string;
+  accent: string;
 }
 
-export default function ChapterSection() {
-  const chapters: Chapter[] = [
-    { id: 1, name: 'Chapter 1', placeholder: 'Enter chapter 1 content' },
-    { id: 2, name: 'Chapter 2', placeholder: 'Enter chapter 2 content' },
-    { id: 3, name: 'Chapter 3', placeholder: 'Enter chapter 3 content' },
-  ];
+const chapters: Chapter[] = [
+  { id: 1, name: 'Chapter 1', accent: '#C8E6C9' }, // mint
+  { id: 2, name: 'Chapter 2', accent: '#BBDEFB' }, // baby blue
+  { id: 3, name: 'Chapter 3', accent: '#FFE0B2' }, // peach
+];
+
+const ChapterSection: React.FC = () => {
+   const navigate = useNavigate(); // FIX: hook at top level
 
   return (
-    <Box sx={{ backgroundColor: '#2196F3', py: 8 }}>
-      <Container maxWidth="lg">
+    <Box
+      sx={{
+        backgroundColor: '#2196F3',
+        py: 6,
+        mb: 5,
+      }}
+    >
+      <Container maxWidth="md">
         <Typography
-          variant="h4"
           sx={{
-            fontWeight: 'bold',
+            fontWeight: 800,
             color: '#fff',
             mb: 4,
-            fontSize: '28px',
+            fontSize: 28,
+            letterSpacing: 0.5,
           }}
         >
           Chapter
         </Typography>
 
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, maxWidth: '500px' }}>
+        {/* Pastel Hamburger list */}
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           {chapters.map((chapter) => (
-            <TextField
+            <Box
               key={chapter.id}
-              fullWidth
-              label={chapter.name}
-              placeholder={chapter.placeholder}
-              variant="outlined"
+              onClick={() => navigate(`/chapter/${chapter.id}`)}
               sx={{
-                backgroundColor: '#fff',
-                borderRadius: '4px',
-                '& .MuiOutlinedInput-root': {
-                  color: '#333',
+                backgroundColor: chapter.accent, // ✅ pastel color
+                borderRadius: '16px',
+                px: 4,
+                py: 3,
+                cursor: 'pointer',
+
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+
+                boxShadow: '0 6px 14px rgba(0, 0, 0, 0.12)',
+                transition: 'all 0.25s ease',
+
+                '&:hover': {
+                  transform: 'translateY(-3px)',
+                  boxShadow: '0 12px 24px rgba(0, 0, 0, 0.18)',
                 },
               }}
-            />
+            >
+              <Typography
+                sx={{
+                  fontSize: 17,
+                  fontWeight: 700,
+                  color: '#374151',
+                }}
+              >
+                {chapter.name}
+              </Typography>
+
+              {/* Arrow */}
+              <Box
+                sx={{
+                  width: 34,
+                  height: 34,
+                  borderRadius: '50%',
+                  backgroundColor: '#fff',
+                  display: 'grid',
+                  placeItems: 'center',
+                  fontWeight: 800,
+                  color: '#6B7280',
+                  boxShadow: '0 2px 6px rgba(0,0,0,0.15)',
+                }}
+              >
+                →
+              </Box>
+            </Box>
           ))}
         </Box>
       </Container>
     </Box>
   );
-}
+};
+
+export default ChapterSection;

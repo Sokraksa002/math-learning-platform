@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Box, Button, Card, CardContent, Chip, Divider, Paper, Stack, Typography } from '@mui/material';
 import Header from '../components/Home/Header';
-import Footer from '../components/Home/Footer';
 
 interface FlashcardCard {
   front: string;
@@ -243,7 +242,6 @@ export default function FlashcardHistory() {
             })}
           </Stack>
         </Box>
-        <Footer/>
       </Box>
     </>
   );

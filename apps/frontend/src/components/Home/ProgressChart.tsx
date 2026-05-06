@@ -8,6 +8,7 @@ import {
   CartesianGrid,
 } from 'recharts';
 import { Box, Typography, Card, CardContent } from '@mui/material';
+import { useLocale } from '../../hooks/useLocale';
 
 // ✅ TEMP mock data
 const progressData = [
@@ -18,6 +19,8 @@ const progressData = [
 ];
 
 export default function ProgressChart() {
+  const { t } = useLocale();
+
   return (
     <Card sx={{ borderRadius: 4, mb: 6 }}>
       <CardContent>
@@ -26,7 +29,7 @@ export default function ProgressChart() {
           fontSize="1.1rem"
           mb={2}
         >
-          Your Learning Progress
+          {t('components.Home.ProgressChart.your_progress', 'Your Learning Progress')}
         </Typography>
 
         <Box sx={{ width: '100%', height: 260 }}>

@@ -1,7 +1,6 @@
 import { Box } from '@mui/material';
 import Header from '../components/Home/Header';
 import FlashcardBoard from '../components/Flashcard/FlashcardBoard';
-import Footer from '../components/Home/Footer';
 
 export default function Flashcard() {
   return (
@@ -25,7 +24,6 @@ export default function Flashcard() {
       >
         <FlashcardBoard />
       </Box>
-      <Footer/>
     </Box>
   );
 }

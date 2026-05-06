@@ -32,121 +32,177 @@
   "components": {
     "Calendor": {
       "FocusTimer": {
-        "start_focus": "Start Focus"
+        "start_focus": "ចាប់ផ្តើមផ្តោត"
+      },
+      "Calender": {
+        "mood_question": "ចូលចិត្តអ្វីដែលជាក្ដីង្វល់របស់អ្នកថ្ងៃនេះ?",
+        "mood_bad": "អាក្រក់",
+        "mood_sad": "ឈឺចាប់",
+        "mood_happy": "សប្បាយ",
+        "mood_okay": "មិនអាក្រក់",
+        "mood_great": "អស្ចារ្យ",
+        "motivational_1": "មានន័យថាបន្តទៅ! ខ្ញុំដឹងថាអ្នកអាចធ្វើវាបាន",
+        "motivational_2": "អ្នកកំពុងរៀនល្អ! ដាលបន្ត!",
+        "motivational_3": "ជំហានទាំងឡាយរាប់បញ្ចូលក្នុងវត្ត។ ចូលចិត្តនូវស្ទង់មតិ!",
+        "motivational_4": "ជឿលើខ្លួនរបស់អ្នក!",
+        "motivational_5": "អ្នកលេង! 💪"
       }
     },
     "Flashcard": {
       "FlashcardBoard": {
-        "flashcard": "Flashcard",
-        "lesson": "lesson",
-        "topic": "Topic",
-        "flashcard_q__a": "Flashcard Q & A",
-        "enter_exercise": "Enter exercise"
+        "flashcard": "ឆ្នាក់នៃការចងចាំ",
+        "lesson": "មេរៀន",
+        "topic": "ប្រធានបទ",
+        "flashcard_q__a": "សំណួរ និង ចម្លើយ",
+        "enter_exercise": "ក្រុមលំហាត់"
       }
     },
     "focus": {
       "FocusHeader": {
-        "total_focused_time": "Total Focused Time",
-        "mins": "mins"
+        "total_focused_time": "ពេលវេលាផ្តោតសរុប",
+        "mins": "នាទី"
       }
     },
     "Home": {
+      "Calender": {
+        "mood_question": "ចូលចិត្តអ្វីដែលជាក្ដីង្វល់របស់អ្នកថ្ងៃនេះ?"
+      },
       "EmotionCalendar": {
-        "cancel": "Cancel",
-        "reflection_note": "Reflection Note"
+        "cancel": "បោះបង់",
+        "reflection_note": "ចំណាំនៃការលឹងលើ"
       },
       "HeaderBeforeLogin": {
-        "about_us": "About us"
+        "about_us": "អំពីយើង"
       },
       "HeroSection": {
-        "learning_illustration": "Learning Illustration"
+        "learning_illustration": "រូបភាពនៃការរៀន"
+      },
+      "OurFunctionsSection": {
+        "our_functions": "មុខងាររបស់យើង",
+        "interactive_learning": "ការរៀនមាន ប៉ះពាល់",
+        "track_progress": "តាមដានលក្ខណៈឧត្តមភាព",
+        "earn_certificates": "រកស្វយ័ត្ត",
+        "community_support": "ការគាំទ្របង្គ្របាង"
+      },
+      "MoodSection": {
+        "emotional_support": "ការគាំទ្ដផ្លូវចិត្ត",
+        "track_emotions": "តាមដានអារម្មណ៍របស់អ្នកខណៈពេលរៀន"
+      },
+      "QuizTimeSection": {
+        "quiz_section": "ពេលវេលាប្រឡង",
+        "take_quizzes": "សាកល្បងចំណេះដឹងរបស់អ្នក"
+      },
+      "ProgressChart": {
+        "learning_progress": "លក្ខណៈឧត្តមភាពនៃការរៀន",
+        "your_progress": "លក្ខណៈឧត្តមភាពរបស់អ្នក"
+      },
+      "ChapterSection": {
+        "chapters": "មេរៀនសម្គាល់",
+        "start_learning": "ចាប់ផ្តើមរៀន"
+      },
+      "FlashcardSection": {
+        "flashcards": "ឆ្នាក់នៃការចងចាំ",
+        "review_material": "ពិនិត្យមើលសម្ភារៈប្រើប្រាស់ពីឆ្នាក់នៃការចងចាំ",
+        "best_approach": "សូមឱ្យយើងបង្ហាញលក្ខណៈម៉ាកដ៏អស្ចារ្យក្នុងការប្រឡងលេង!",
+        "card_generate": "បង្កើតឆ្នាក់"
       }
     },
     "Profile": {
       "ManageProfile": {
-        "name": "Name",
-        "email": "Email",
-        "phone": "Phone"
+        "name": "ឈ្មោះ",
+        "email": "អ៊ីមែល",
+        "phone": "ទូរស័ព្ទ"
       },
       "Notifications": {
-        "quiz_reminders": "Quiz reminders",
-        "new_lessons_available": "New lessons available",
-        "certificate_notifications": "Certificate notifications"
+        "quiz_reminders": "ការរំលឹកសំណួរ",
+        "new_lessons_available": "មេរៀនថ្មីមាន",
+        "certificate_notifications": "ការជូនដំណឹងវិស័យឆ្នាក់"
       },
       "PasswordSecurity": {
-        "current_password": "Current Password",
-        "new_password": "New Password",
-        "confirm_new_password": "Confirm New Password"
+        "current_password": "ពាក្យសម្ងាត់បច្ចុប្បន្ន",
+        "new_password": "ពាក្យសម្ងាត់ថ្មី",
+        "confirm_new_password": "អះអាងពាក្យសម្ងាត់ថ្មី"
       },
       "Security": {
-        "current_password": "Current Password",
-        "new_password": "New Password",
-        "confirm_new_password": "Confirm New Password"
+        "current_password": "ពាក្យសម្ងាត់បច្ចុប្បន្ន",
+        "new_password": "ពាក្យសម្ងាត់ថ្មី",
+        "confirm_new_password": "អះអាងពាក្យសម្ងាត់ថ្មី"
       }
+    },
+    "Chapter": {
+      "lets_study": "ចូលចិត្តរៀនជាមួយយើង!"
     }
   },
   "pages": {
     "AdminDashboard": {
-      "user": "User",
-      "email": "Email",
-      "role": "Role",
-      "join_date": "Join Date",
-      "status": "Status",
-      "chapter_chapter_algebra_basics": "Chapter {chapter}: Algebra Basics",
-      "server_health": "Server Health",
-      "database_load": "Database Load",
-      "api_response_time": "API Response Time",
-      "cancel": "Cancel",
-      "excellent": "Excellent",
-      "name": "Name",
-      "title": "Title",
-      "description": "Description"
+      "user": "អ្នកប្រើប្រាស់",
+      "email": "អ៊ីមែល",
+      "role": "តួនាទី",
+      "join_date": "ថ្ងៃចូល",
+      "status": "ស្ថានភាព",
+      "chapter_chapter_algebra_basics": "មេរៀនទី {chapter}: គោលមូលលេខ",
+      "server_health": "សុខភាពម៉ាកានិក",
+      "database_load": "បន្ទុកឯកសារ",
+      "api_response_time": "ពេលវេលាឆ្លើយ API",
+      "cancel": "បោះបង់",
+      "excellent": "ល្អ",
+      "name": "ឈ្មោះ",
+      "title": "ចំណងជើង",
+      "description": "ការពិពណ៌នា"
     },
     "Certificate": {
-      "date": "Date",
-      "authorized_by": "Authorized by",
-      "admin": "Admin",
-      "back": "Back"
+      "date": "ថ្ងៃឈាម",
+      "authorized_by": "អនុញ្ញាតដោយ",
+      "admin": "ប្រशាសន៍",
+      "back": "ត្រឡប់"
     },
     "Dashboard": {
-      "math": "Math",
-      "science": "Science",
-      "history": "History"
+      "math": "គណិតវិទ្យា",
+      "science": "វិទ្យាសាស្រ្ត",
+      "history": "ប្រវត្តិសាស្រ្ត"
     },
     "Focus": {
-      "focused_time_distribution": "Focused Time Distribution"
+      "focused_time_distribution": "ការចែកចាយពេលវេលាផ្តោត"
     },
     "ForgotPassword": {
-      "background": "background",
-      "background2": "background2",
-      "book": "book",
-      "paper": "paper",
-      "backpack": "backpack",
-      "enter_your_email": "Enter your email"
+      "background": "ផ្ទាំងទស្សន៍",
+      "background2": "ផ្ទាំងទស្សន៍ 2",
+      "book": "សៀវភៅ",
+      "paper": "ឯកសារ",
+      "backpack": "ថង្ក",
+      "enter_your_email": "បញ្ចូលអ៊ីមែលរបស់អ្នក"
     },
     "Login": {
-      "email": "Email",
-      "password": "Password",
-      "remember_me": "Remember me"
+      "email": "អ៊ីមែល",
+      "password": "ពាក្យសម្ងាត់",
+      "remember_me": "ចូលចិត្តក្នុងវត្ត"
     },
     "Profile": {
-      "view": "View"
+      "view": "មើល"
     },
     "Register": {
-      "full_name": "Full name",
-      "email": "Email",
-      "password": "Password",
-      "confirm_password": "Confirm Password",
-      "background": "background",
-      "background2": "background2",
-      "book": "book",
-      "paper": "paper",
-      "backpack": "backpack",
-      "enter_your_full_name": "Enter your full name",
-      "enter_your_email": "Enter your email",
-      "create_a_password": "Create a password",
-      "confirm_your_password": "Confirm your password",
-      "i_agree_to_the_terms_and_conditions": "I agree to the terms and conditions"
+      "full_name": "ឈ្មោះពេញលេញ",
+      "email": "អ៊ីមែល",
+      "password": "ពាក្យសម្ងាត់",
+      "confirm_password": "អះអាងពាក្យសម្ងាត់",
+      "background": "ផ្ទាំងទស្សន៍",
+      "background2": "ផ្ទាំងទស្សន៍ 2",
+      "book": "សៀវភៅ",
+      "paper": "ឯកសារ",
+      "backpack": "ថង្ក",
+      "enter_your_full_name": "បញ្ចូលឈ្មោះពេញលេញរបស់អ្នក",
+      "enter_your_email": "បញ្ចូលអ៊ីមែលរបស់អ្នក",
+      "create_a_password": "បង្កើតពាក្យសម្ងាត់",
+      "confirm_your_password": "អះអាងពាក្យសម្ងាត់របស់អ្នក",
+      "i_agree_to_the_terms_and_conditions": "ខ្ញុំយល់ព្រម និងលក្ខខណ្ឌ"
     }
+  },
+  "footer": {
+    "title": "វេបសាយសិក្សាអនឡាញ",
+    "subtitle": "គណិតវិទ្យា ថ្នាក់ទី១២",
+    "description": "សម្រាប់ការសិក្សា ការវាយតម្លៃ និងការអភិវឌ្ឍចំណេះដឹងរបស់សិស្ស",
+    "disclaimer_title": "សេចក្តីប្រកាស",
+    "disclaimer_text": "វិញ្ញាបនបត្រ និងមាតិកានៅលើវេបសាយនេះ ត្រូវបានបង្កើតឡើងសម្រាប់គោលបំណងសិក្សា និងវាយតម្លៃតែប៉ុណ្ណោះ មិនមែនជាឯកសារផ្លូវការរបស់ក្រសួងអប់រំ យុវជន និងកីឡា ទេ។",
+    "copyright": "© {year} វេបសាយសិក្សាអនឡាញ | រក្សាសិទ្ធិគ្រប់យ៉ាង"
   }
 }

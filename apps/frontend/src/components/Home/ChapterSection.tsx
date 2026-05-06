@@ -1,5 +1,6 @@
 import { Box, Container, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useLocale } from '../../hooks/useLocale';
 
 interface Chapter {
   id: number;
@@ -14,7 +15,8 @@ const chapters: Chapter[] = [
 ];
 
 const ChapterSection: React.FC = () => {
-   const navigate = useNavigate(); // FIX: hook at top level
+  const { t } = useLocale();
+  const navigate = useNavigate(); // FIX: hook at top level
 
   return (
     <Box
@@ -34,7 +36,7 @@ const ChapterSection: React.FC = () => {
             letterSpacing: 0.5,
           }}
         >
-          Chapter
+          {t('components.Home.ChapterSection.chapters', 'Chapter')}
         </Typography>
 
         {/* Pastel Hamburger list */}

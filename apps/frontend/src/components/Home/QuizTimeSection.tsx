@@ -1,5 +1,6 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useLocale } from '../../hooks/useLocale';
 
 interface QuizCard {
   id: number;
@@ -8,6 +9,7 @@ interface QuizCard {
 }
 
 export default function QuizTimeSection() {
+  const { t } = useLocale();
   const navigate = useNavigate();
 
   const quizzes: QuizCard[] = [
@@ -29,7 +31,7 @@ export default function QuizTimeSection() {
             fontSize: '28px',
           }}
         >
-          Quiz Time
+          {t('components.Home.QuizTimeSection.quiz_section', 'Quiz Time')}
         </Typography>
 {/* Hamburger list */}
 <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>

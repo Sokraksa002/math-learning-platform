@@ -33,6 +33,19 @@
     "Calendor": {
       "FocusTimer": {
         "start_focus": "Start Focus"
+      },
+      "Calender": {
+        "mood_question": "What about your mood for today?",
+        "mood_bad": "Bad",
+        "mood_sad": "Sad",
+        "mood_happy": "Happy",
+        "mood_okay": "Okay",
+        "mood_great": "Great",
+        "motivational_1": "Just keep going! I know you can do it",
+        "motivational_2": "You're doing great! Keep it up!",
+        "motivational_3": "Every step counts. Stay motivated!",
+        "motivational_4": "Believe in yourself!",
+        "motivational_5": "You've got this! 💪"
       }
     },
     "Flashcard": {
@@ -51,6 +64,9 @@
       }
     },
     "Home": {
+      "Calender": {
+        "mood_question": "What about your mood for today?"
+      },
       "EmotionCalendar": {
         "cancel": "Cancel",
         "reflection_note": "Reflection Note"
@@ -60,6 +76,35 @@
       },
       "HeroSection": {
         "learning_illustration": "Learning Illustration"
+      },
+      "OurFunctionsSection": {
+        "our_functions": "Our Functions",
+        "interactive_learning": "Interactive Learning",
+        "track_progress": "Track Progress",
+        "earn_certificates": "Earn Certificates",
+        "community_support": "Community Support"
+      },
+      "MoodSection": {
+        "emotional_support": "Emotional Support",
+        "track_emotions": "Track your emotions while learning"
+      },
+      "QuizTimeSection": {
+        "quiz_section": "Quiz Time",
+        "take_quizzes": "Test Your Knowledge"
+      },
+      "ProgressChart": {
+        "learning_progress": "Learning Progress",
+        "your_progress": "Your Progress"
+      },
+      "ChapterSection": {
+        "chapters": "Chapters",
+        "start_learning": "Start Learning"
+      },
+      "FlashcardSection": {
+        "flashcards": "Flashcards",
+        "review_material": "Review material with flashcards",
+        "best_approach": "Let us show you the best approach to ace the test!",
+        "card_generate": "Card Generate"
       }
     },
     "Profile": {
@@ -83,6 +128,9 @@
         "new_password": "New Password",
         "confirm_new_password": "Confirm New Password"
       }
+    },
+    "Chapter": {
+      "lets_study": "Let's study with us!"
     }
   },
   "pages": {
@@ -148,5 +196,13 @@
       "confirm_your_password": "Confirm your password",
       "i_agree_to_the_terms_and_conditions": "I agree to the terms and conditions"
     }
+  },
+  "footer": {
+    "title": "Online Learning Platform",
+    "subtitle": "Mathematics Grade 12",
+    "description": "For learning, assessment and student knowledge development",
+    "disclaimer_title": "Disclaimer",
+    "disclaimer_text": "Certificates and content on this website are created for educational and assessment purposes only and are not official documents of the Ministry of Education, Youth and Sports.",
+    "copyright": "© {year} Online Learning Platform | All Rights Reserved"
   }
 }

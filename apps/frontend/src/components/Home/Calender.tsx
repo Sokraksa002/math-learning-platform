@@ -2,31 +2,33 @@ import { useState } from 'react';
 import { Box, Typography, Paper, Grid } from '@mui/material';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { useLocale } from '../../hooks/useLocale';
 
 const moods = [
-  { emoji: '😢', label: 'Bad', color: '#FF6B6B' },
-  { emoji: '😕', label: 'Sad', color: '#FFA500' },
-  { emoji: '😊', label: 'Happy', color: '#FFD700' },
-  { emoji: '😢', label: 'Okay', color: '#87CEEB' },
-  { emoji: '😄', label: 'Great', color: '#90EE90' },
-];
-
-const motivationalMessages = [
-  "Just keep going! I know you can do it",
-  "You're doing great! Keep it up!",
-  "Every step counts. Stay motivated!",
-  "Believe in yourself!",
-  "You've got this! 💪",
+  { emoji: '😢', key: 'mood_bad', color: '#FF6B6B' },
+  { emoji: '😕', key: 'mood_sad', color: '#FFA500' },
+  { emoji: '😊', key: 'mood_happy', color: '#FFD700' },
+  { emoji: '😐', key: 'mood_okay', color: '#87CEEB' },
+  { emoji: '😄', key: 'mood_great', color: '#90EE90' },
 ];
 
 export default function CalendarComponent() {
+  const { t } = useLocale();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedMood, setSelectedMood] = useState<number | null>(null);
+
+  const motivationalMessages = [
+    t('components.Home.Calender.motivational_1', "Just keep going! I know you can do it"),
+    t('components.Home.Calender.motivational_2', "You're doing great! Keep it up!"),
+    t('components.Home.Calender.motivational_3', "Every step counts. Stay motivated!"),
+    t('components.Home.Calender.motivational_4', "Believe in yourself!"),
+    t('components.Home.Calender.motivational_5', "You've got this! 💪"),
+  ];
 
   return (
     <Box sx={{ p: 6, maxWidth: '1200px', mx: 'auto' }}>
       <Typography sx={{ fontWeight: 700, fontSize: '20px', textAlign: 'center', color: '#2c3e50', mb: 4 }}>
-        What about your mood for today?
+        {t('components.Home.Calender.mood_question', 'What about your mood for today?')}
       </Typography>
 
       <Grid container spacing={4} sx={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'flex-start' }}>
@@ -73,6 +75,7 @@ export default function CalendarComponent() {
               {moods.map((mood, index) => (
                 <Box
                   key={index}
+                  title={t(`components.Home.Calender.${mood.key}`, mood.key)}
                   onClick={() => setSelectedMood(index)}
                   sx={{
                     fontSize: '52px',

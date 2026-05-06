@@ -1,6 +1,9 @@
 import { Box, Container, Typography, Divider } from "@mui/material";
+import { useLocale } from "../../hooks/useLocale";
 
 export default function Footer() {
+  const { t } = useLocale();
+
   return (
     <Box
       component="footer"
@@ -25,25 +28,26 @@ export default function Footer() {
           {/* Platform Info */}
           <Box>
             <Typography fontWeight={700} fontSize={16} mb={1}>
-              វេបសាយសិក្សាអនឡាញ
+              {t("footer.title", "វេបសាយសិក្សាអនឡាញ")}
             </Typography>
             <Typography fontSize={14}>
-              គណិតវិទ្យា ថ្នាក់ទី១២
+              {t("footer.subtitle", "គណិតវិទ្យា ថ្នាក់ទី១២")}
             </Typography>
             <Typography fontSize={14} mt={1}>
-              សម្រាប់ការសិក្សា ការវាយតម្លៃ និងការអភិវឌ្ឍចំណេះដឹងរបស់សិស្ស
+              {t("footer.description", "សម្រាប់ការសិក្សា ការវាយតម្លៃ និងការអភិវឌ្ឍចំណេះដឹងរបស់សិស្ស")}
             </Typography>
           </Box>
 
           {/* Disclaimer */}
           <Box maxWidth={360}>
             <Typography fontWeight={600} fontSize={14} mb={1}>
-              សេចក្តីប្រកាស
+              {t("footer.disclaimer_title", "សេចក្តីប្រកាស")}
             </Typography>
             <Typography fontSize={13} color="text.secondary">
-              វិញ្ញាបនបត្រ និងមាតិកានៅលើវេបសាយនេះ
-              ត្រូវបានបង្កើតឡើងសម្រាប់គោលបំណងសិក្សា និងវាយតម្លៃតែប៉ុណ្ណោះ
-              មិនមែនជាឯកសារផ្លូវការរបស់ក្រសួងអប់រំ យុវជន និងកីឡា ទេ។
+              {t(
+                "footer.disclaimer_text",
+                "វិញ្ញាបនបត្រ និងមាតិកានៅលើវេបសាយនេះ ត្រូវបានបង្កើតឡើងសម្រាប់គោលបំណងសិក្សា និងវាយតម្លៃតែប៉ុណ្ណោះ មិនមែនជាឯកសារផ្លូវការរបស់ក្រសួងអប់រំ យុវជន និងកីឡា ទេ។"
+              )}
             </Typography>
           </Box>
         </Box>
@@ -56,7 +60,10 @@ export default function Footer() {
           textAlign="center"
           color="text.secondary"
         >
-          © {new Date().getFullYear()} វេបសាយសិក្សាអនឡាញ | រក្សាសិទ្ធិគ្រប់យ៉ាង
+          {t("footer.copyright", "© {year} វេបសាយសិក្សាអនឡាញ | រក្សាសិទ្ធិគ្រប់យ៉ាង").replace(
+            "{year}",
+            new Date().getFullYear().toString()
+          )}
         </Typography>
       </Container>
     </Box>

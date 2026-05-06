@@ -1,8 +1,11 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
+import { useLocale } from '../../hooks/useLocale';
 
 
 export default function FlashcardSection() {
+  const { t } = useLocale();
+
   return (
     <Box sx={{ backgroundColor: '#FFF9C4', py: 8 }}>
       <Container maxWidth="lg">
@@ -15,12 +18,12 @@ export default function FlashcardSection() {
             fontSize: '28px',
           }}
         >
-          Flashcard Q&A
+          {t('components.Home.FlashcardSection.flashcards', 'Flashcard Q&A')}
         </Typography>
 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
           <Typography sx={{ color: '#666', fontSize: '16px' }}>
-            Let us show you the best approach to ace the test!
+            {t('components.Home.FlashcardSection.best_approach', "Let us show you the best approach to ace the test!")}
           </Typography>
 
           
@@ -39,7 +42,7 @@ export default function FlashcardSection() {
   }}
 
           >
-            Card Generate
+            {t('components.Home.FlashcardSection.card_generate', 'Card Generate')}
           </Button>
         </Box>
       </Container>

@@ -1,7 +1,10 @@
 import { Box, Container, Typography } from '@mui/material';
 import Calender from './Calender';
+import { useLocale } from '../../hooks/useLocale';
 
 export default function MoodSection() {
+  const { t } = useLocale();
+
   return (
     <Box sx={{ py: 8 }}>
       <Container maxWidth="lg">
@@ -14,7 +17,7 @@ export default function MoodSection() {
             fontSize: '20px',
           }}
         >
-          What about your mood for today?
+          {t('components.Home.MoodSection.emotional_support', 'What about your mood for today?')}
         </Typography>
         <Calender />
       </Container>

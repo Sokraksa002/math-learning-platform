@@ -1,9 +1,11 @@
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Container } from '@mui/material';
 import Header from '../components/Home/Header';
 import Lesson from '../components/Chapter/Lesson';
-import Footer from '../components/Home/Footer';
+import { useLocale } from '../hooks/useLocale';
 
 export default function Chapter() {
+  const { t } = useLocale();
+
   return (
     <Box
       sx={{
@@ -26,7 +28,7 @@ export default function Chapter() {
           color: '#fff',
         }}
       >
-        Let&apos;s study with us !
+        {t('components.Chapter.lets_study', "Let's study with us!")}
       </Box>
 
       {/* Content */}
@@ -35,39 +37,6 @@ export default function Chapter() {
           <Lesson />
         </Container>
       </Box>
-
-      {/* Footer */}
-      <Box
-        sx={{
-          backgroundColor: '#3D86E8',
-          color: '#fff',
-          py: 2,
-          px: { xs: 2, md: 4 },
-          mt: 'auto',
-        }}
-      >
-        <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            gap: 2,
-          }}
-        >
-          <Typography sx={{ fontWeight: 800, fontSize: { xs: '1.25rem', md: '1.8rem' } }}>
-            KANIT
-          </Typography>
-
-          <Typography
-            sx={{ fontSize: { xs: '0.7rem', md: '0.9rem' }, textAlign: 'center', flex: 1 }}
-          >
-            Copyright © 2024 Osman IT | Design &amp; Developed by Arif Hasan
-          </Typography>
-
-          <Box sx={{ width: 56 }} />
-        </Box>
-      </Box>
-      <Footer/>
     </Box>
   );
 }

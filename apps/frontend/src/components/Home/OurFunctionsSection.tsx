@@ -1,26 +1,29 @@
 import { Box, Container, Typography } from '@mui/material';
 import { MenuBook, Lock, AutoStories } from '@mui/icons-material';
 import FeatureCard from './FeatureCard';
+import { useLocale } from '../../hooks/useLocale';
 
 export default function OurFunctionsSection() {
+  const { t } = useLocale();
+
   const features = [
     {
-      title: 'Chapter',
-      description: 'The gradual accumulation of information about atomic and small-scale behaviour...',
+      title: t('nav.chapter', 'Chapter'),
+      description: t('components.Home.OurFunctionsSection.interactive_learning', 'The gradual accumulation of information about atomic and small-scale behaviour...'),
       icon: MenuBook,
       bgColor: '#C8E6C9',
       iconBg: '#81C784',
     },
     {
-      title: 'Quiz',
-      description: 'The gradual accumulation of information about atomic and small-scale behaviour...',
+      title: t('nav.quiz', 'Quiz'),
+      description: t('components.Home.OurFunctionsSection.track_progress', 'The gradual accumulation of information about atomic and small-scale behaviour...'),
       icon: Lock,
       bgColor: '#B3E5FC',
       iconBg: '#4FC3F7',
     },
     {
-      title: 'Flashcard Q&A',
-      description: 'The gradual accumulation of information about atomic and small-scale behaviour...',
+      title: t('flashcard.flashcardQA', 'Flashcard Q & A'),
+      description: t('components.Home.OurFunctionsSection.earn_certificates', 'The gradual accumulation of information about atomic and small-scale behaviour...'),
       icon: AutoStories,
       bgColor: '#FFF9C4',
       iconBg: '#FFD54F',
@@ -39,7 +42,7 @@ export default function OurFunctionsSection() {
             fontSize: '28px',
           }}
         >
-          Our Functions
+          {t('components.Home.OurFunctionsSection.our_functions', 'Our Functions')}
         </Typography>
 
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'nowrap' }}>

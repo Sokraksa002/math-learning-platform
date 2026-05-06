@@ -1,6 +1,7 @@
 import { Box, Container, Typography } from '@mui/material';
 import Header from '../components/Home/Header';
 import Lesson from '../components/Chapter/Lesson';
+import Footer from '../components/Home/Footer';
 
 export default function Chapter() {
   return (
@@ -66,6 +67,7 @@ export default function Chapter() {
           <Box sx={{ width: 56 }} />
         </Box>
       </Box>
+      <Footer/>
     </Box>
   );
 }

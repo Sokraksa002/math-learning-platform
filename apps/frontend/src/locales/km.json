@@ -1,0 +1,152 @@
+{
+  "nav": {
+    "home": "ទំព័រដើម",
+    "chapter": "មេរៀន",
+    "quiz": "សំណួរ",
+    "flashcard": "ការចងចាំ",
+    "profile": "ប្រវត្តិ",
+    "quizHistory": "ប្រវត្តិការប្រឡង",
+    "flashcardHistory": "ប្រវត្តិការចងចាំ",
+    "ability": "សមត្ថភាពរបស់ខ្ញុំ"
+  },
+  "menu": {
+    "myProfile": "ប្រវត្តិរបស់ខ្ញុំ",
+    "lesson": "មេរៀន",
+    "about": "អំពីយើង"
+  },
+  "profile": {
+    "account": "គណនី",
+    "settings": "ការកំណត់",
+    "logout": "ចាកចេញ",
+    "manageProfile": "គ្រប់គ្រងប្រវត្តិ",
+    "security": "ពាក្យសម្ងាត់ និងសុវត្ថិភាព",
+    "notifications": "ការជូនដំណឹង"
+  },
+  "flashcard": {
+    "generate": "បង្កើត",
+    "clear": "សម្អាត",
+    "clickToFlip": "ចុចដើម្បីបង្វិល",
+    "flashcardQA": "សំណួរ និង ចម្លើយ",
+    "reviewSessions": "ការសិក្សារបស់អ្នក"
+  },
+  "components": {
+    "Calendor": {
+      "FocusTimer": {
+        "start_focus": "Start Focus"
+      }
+    },
+    "Flashcard": {
+      "FlashcardBoard": {
+        "flashcard": "Flashcard",
+        "lesson": "lesson",
+        "topic": "Topic",
+        "flashcard_q__a": "Flashcard Q & A",
+        "enter_exercise": "Enter exercise"
+      }
+    },
+    "focus": {
+      "FocusHeader": {
+        "total_focused_time": "Total Focused Time",
+        "mins": "mins"
+      }
+    },
+    "Home": {
+      "EmotionCalendar": {
+        "cancel": "Cancel",
+        "reflection_note": "Reflection Note"
+      },
+      "HeaderBeforeLogin": {
+        "about_us": "About us"
+      },
+      "HeroSection": {
+        "learning_illustration": "Learning Illustration"
+      }
+    },
+    "Profile": {
+      "ManageProfile": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone"
+      },
+      "Notifications": {
+        "quiz_reminders": "Quiz reminders",
+        "new_lessons_available": "New lessons available",
+        "certificate_notifications": "Certificate notifications"
+      },
+      "PasswordSecurity": {
+        "current_password": "Current Password",
+        "new_password": "New Password",
+        "confirm_new_password": "Confirm New Password"
+      },
+      "Security": {
+        "current_password": "Current Password",
+        "new_password": "New Password",
+        "confirm_new_password": "Confirm New Password"
+      }
+    }
+  },
+  "pages": {
+    "AdminDashboard": {
+      "user": "User",
+      "email": "Email",
+      "role": "Role",
+      "join_date": "Join Date",
+      "status": "Status",
+      "chapter_chapter_algebra_basics": "Chapter {chapter}: Algebra Basics",
+      "server_health": "Server Health",
+      "database_load": "Database Load",
+      "api_response_time": "API Response Time",
+      "cancel": "Cancel",
+      "excellent": "Excellent",
+      "name": "Name",
+      "title": "Title",
+      "description": "Description"
+    },
+    "Certificate": {
+      "date": "Date",
+      "authorized_by": "Authorized by",
+      "admin": "Admin",
+      "back": "Back"
+    },
+    "Dashboard": {
+      "math": "Math",
+      "science": "Science",
+      "history": "History"
+    },
+    "Focus": {
+      "focused_time_distribution": "Focused Time Distribution"
+    },
+    "ForgotPassword": {
+      "background": "background",
+      "background2": "background2",
+      "book": "book",
+      "paper": "paper",
+      "backpack": "backpack",
+      "enter_your_email": "Enter your email"
+    },
+    "Login": {
+      "email": "Email",
+      "password": "Password",
+      "remember_me": "Remember me"
+    },
+    "Profile": {
+      "view": "View"
+    },
+    "Register": {
+      "full_name": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "confirm_password": "Confirm Password",
+      "background": "background",
+      "background2": "background2",
+      "book": "book",
+      "paper": "paper",
+      "backpack": "backpack",
+      "enter_your_full_name": "Enter your full name",
+      "enter_your_email": "Enter your email",
+      "create_a_password": "Create a password",
+      "confirm_your_password": "Confirm your password",
+      "i_agree_to_the_terms_and_conditions": "I agree to the terms and conditions"
+    }
+  }
+}

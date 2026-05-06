@@ -1,6 +1,8 @@
 import { Box, Typography } from '@mui/material';
+import { useLocale } from '../../hooks/useLocale';
 
 export default function FocusHeader({ totalMinutes }: { totalMinutes: number }) {
+  const { t } = useLocale();
   const today = new Date();
   const month = String(today.getMonth() + 1).padStart(2, '0');
   const day = String(today.getDate()).padStart(2, '0');
@@ -24,11 +26,11 @@ export default function FocusHeader({ totalMinutes }: { totalMinutes: number }) 
 
       <Box sx={{ display: 'flex', gap: 4, alignItems: 'center' }}>
         <Box sx={{ textAlign: 'right' }}>
-          <Typography sx={{ fontSize: 14, color: '#999', fontWeight: 500 }}>Total Focused Time</Typography>
+          <Typography sx={{ fontSize: 14, color: '#999', fontWeight: 500 }}>{t('components.focus.FocusHeader.total_focused_time', 'Total Focused Time')}</Typography>
           <Typography sx={{ fontSize: 48, fontWeight: 700, color: '#333' }}>
             {totalMinutes}
           </Typography>
-          <Typography sx={{ fontSize: 14, color: '#999' }}>mins</Typography>
+          <Typography sx={{ fontSize: 14, color: '#999' }}>{t('components.focus.FocusHeader.mins', 'mins')}</Typography>
         </Box>
       </Box>
     </Box>

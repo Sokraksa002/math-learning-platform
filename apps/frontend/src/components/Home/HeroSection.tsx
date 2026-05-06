@@ -1,7 +1,9 @@
 import { Box, Container, Grid, Typography } from '@mui/material';
+import { useLocale } from '../../hooks/useLocale';
 import heroImg from '../../assets/avatar.jpg';
 
 export default function HeroSection() {
+  const { t } = useLocale();
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
       <Grid container spacing={4} alignItems="center">
@@ -24,7 +26,7 @@ export default function HeroSection() {
           <Box
             component="img"
             src={heroImg}
-            alt="Learning Illustration"
+            alt={t('components.Home.HeroSection.learning_illustration', 'Learning Illustration')}
             sx={{
               maxWidth: { xs: '220px', md: '320px' },
               height: 'auto',

@@ -7,15 +7,104 @@ import {
   Checkbox,
   FormControlLabel,
 } from "@mui/material";
-import { Link as RouterLink } from "react-router-dom";
+import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useLocale } from "../hooks/useLocale";
 
+// Images
 import bookImg from "../assets/Login/Book.png";
 import paperImg from "../assets/Login/Paper.png";
 import backpackImg from "../assets/Login/backpack.png";
 import bg1 from "../assets/Login/bg1.png";
 import bg2 from "../assets/Login/bg2.png";
 
+type UserRole = "admin" | "student";
+
+interface MockUser {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  role: UserRole;
+}
+
+interface LoginResult {
+  success: boolean;
+  message?: string;
+  user?: Omit<MockUser, "password">;
+}
+
+/* ================= MOCK USERS ================= */
+const mockUsers = [
+  {
+    id: 1,
+    name: "Admin",
+    email: "admin@school.com",
+    password: "Admin@123",
+    role: "admin",
+  },
+  {
+    id: 2,
+    name: "Student One",
+    email: "student1@gmail.com",
+    password: "student123",
+    role: "student",
+  },
+];
+
+/* ================= LOGIN FUNCTION ================= */
+const mockLogin = (email: string, password: string): LoginResult => {
+  const user = mockUsers.find(
+    (u) => u.email === email && u.password === password
+  );
+
+  if (!user) {
+    return { success: false, message: "Invalid email or password" };
+  }
+
+  return {
+    success: true,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      role: user.role as UserRole,
+    },
+  };
+};
+
 export default function Login() {
+  const navigate = useNavigate();
+  const { t } = useLocale();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleLogin = () => {
+    const result = mockLogin(email, password);
+
+    if (!result.success) {
+      setError(result.message ?? "Invalid email or password");
+      return;
+    }
+
+    if (!result.user) {
+      setError("Login failed. Please try again.");
+      return;
+    }
+
+    // Save session
+    localStorage.setItem("user", JSON.stringify(result.user));
+
+    // Role-based redirect
+    if (result.user.role === "admin") {
+      navigate("/admin");
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
   return (
     <Box
       sx={{
@@ -29,314 +118,117 @@ export default function Login() {
           "radial-gradient(circle at 12% 16%, #fefefe 0%, #f4f6fb 45%, #ebedf4 100%)",
       }}
     >
-      {/* LEFT SIDE — FULL BACKGROUND IMAGE */}
+      {/* ========== LEFT SIDE ========== */}
       <Box
         sx={{
           flex: 1,
-          height: "100dvh",
-          position: "relative",
           display: { xs: "none", md: "block" },
-          overflow: "hidden",
-          filter: "saturate(1.06)",
+          position: "relative",
         }}
       >
-        {/* Background Layer 1 */}
-        <img
-          src={bg1}
-          alt="background"
-          style={{
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "left center",
-          }}
-        />
-
-        {/* Background Layer 2 */}
-        <img
-          src={bg2}
-          alt="background2"
-          style={{
-            position: "absolute",
-            width: "50%",
-            height: "100%",
-            objectFit: "cover",
-            objectPosition: "left center",
-            opacity: 0.78,
-          }}
-        />
-
-        {/* Book */}
-        <img
-          src={bookImg}
-          alt="book"
-          style={{
-            position: "absolute",
-            width: "350px",
-            top: "5%",
-            left: "20%",
-          }}
-        />
-
-        {/* Paper */}
-        <img
-          src={paperImg}
-          alt="paper"
-          style={{
-            position: "absolute",
-            width: "300px",
-            top: "34%",
-            left: "45%",
-          }}
-        />
-
-        {/* Backpack */}
-        <img
-          src={backpackImg}
-          alt="backpack"
-          style={{
-            position: "absolute",
-            width: "260px",
-            bottom: "0%",
-            left: "0%",
-          }}
-        />
+        <img src={bg1} alt="" style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover" }} />
+        <img src={bg2} alt="" style={{ position: "absolute", width: "50%", height: "100%", opacity: 0.8 }} />
+        <img src={bookImg} alt="" style={{ position: "absolute", width: 350, top: "6%", left: "20%" }} />
+        <img src={paperImg} alt="" style={{ position: "absolute", width: 300, top: "34%", left: "45%" }} />
+        <img src={backpackImg} alt="" style={{ position: "absolute", width: 260, bottom: 0 }} />
       </Box>
 
-      {/* RIGHT SIDE — FULL HEIGHT, NO SCROLL */}
+      {/* ========== RIGHT SIDE ========== */}
       <Box
         sx={{
           flex: 1,
-          height: "100dvh",
           display: "flex",
-          justifyContent: "center",
           alignItems: "center",
-          px: { xs: 2, sm: 3 },
-          overflow: "hidden",
-          position: "relative",
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            width: { xs: 240, sm: 340 },
-            height: { xs: 240, sm: 340 },
-            borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(116,178,255,0.38) 0%, rgba(116,178,255,0) 72%)",
-            top: { xs: 10, sm: 24 },
-            right: { xs: -60, sm: -70 },
-            pointerEvents: "none",
-          },
+          justifyContent: "center",
+          px: 2,
         }}
       >
         <Paper
           sx={{
-            width: { xs: "min(94vw, 420px)", sm: "420px" },
-            maxHeight: "calc(100dvh - 32px)",
-            overflow: "hidden",
-            padding: { xs: 2.5, sm: 3.5 },
+            width: 420,
+            p: 3.5,
             borderRadius: "26px",
-            background: "linear-gradient(160deg, #4ea0ed 0%, #3e89db 48%, #367dcc 100%)",
+            background: "linear-gradient(160deg,#4ea0ed,#367dcc)",
             color: "white",
-            border: "1px solid rgba(255,255,255,0.26)",
-            backdropFilter: "blur(8px)",
-            boxShadow: "0 22px 55px rgba(19, 62, 130, 0.28)",
-            fontFamily: "Poppins, sans-serif",
           }}
-          elevation={6}
         >
-          <Typography
-            variant="h4"
-            fontWeight={700}
-            mb={0.75}
-            letterSpacing={1.05}
-            fontSize={{ xs: "1.8rem", sm: "2.1rem" }}
-            sx={{ textShadow: "0 2px 14px rgba(0,0,0,0.17)" }}
-          >
+          <Typography variant="h4" fontWeight={700} mb={1}>
             WELCOME BACK
           </Typography>
 
-          <Typography variant="body1" mb={2.6} sx={{ opacity: 0.95, fontSize: "0.95rem", color: "#ecf5ff" }}>
-            Welcome back! Please enter your details.
+          <Typography mb={2} sx={{ opacity: 0.95 }}>
+            Please enter your login details.
           </Typography>
 
-          {/* Email */}
-          <Typography mb={0.55} sx={{ fontSize: "0.88rem", fontWeight: 600, color: "#f3f9ff" }}>
-            Email
-          </Typography>
+          {/* EMAIL */}
           <TextField
-            size="small"
-            placeholder="Enter your email"
-            type="email"
+            placeholder={t('pages.Login.email', 'Email')}
             fullWidth
-            sx={{
-              mb: 1.5,
-              "& .MuiInputBase-input": {
-                color: "white",
-                fontSize: "0.9rem",
-              },
-              "& .MuiInputBase-input::placeholder": {
-                color: "rgba(239,247,255,0.78)",
-                opacity: 1,
-              },
-              "& .MuiOutlinedInput-root": {
-                background: "rgba(255,255,255,0.1)",
-                borderRadius: "12px",
-                height: 36,
-                "& fieldset": {
-                  borderColor: "rgba(255,255,255,0.38)",
-                },
-                "&:hover fieldset": {
-                  borderColor: "rgba(255,255,255,0.75)",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "white",
-                },
-              },
-            }}
+            size="small"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            sx={{ mb: 1.5 }}
           />
 
-          {/* Password */}
-          <Typography mb={0.55} sx={{ fontSize: "0.88rem", fontWeight: 600, color: "#f3f9ff" }}>
-            Password
-          </Typography>
+          {/* PASSWORD */}
           <TextField
-            size="small"
-            placeholder="********"
+            placeholder={t('pages.Login.password', 'Password')}
             type="password"
             fullWidth
-            sx={{
-              mb: 1.5,
-              "& .MuiInputBase-input": {
-                color: "white",
-                fontSize: "0.9rem",
-              },
-              "& .MuiInputBase-input::placeholder": {
-                color: "rgba(239,247,255,0.78)",
-                opacity: 1,
-              },
-              "& .MuiOutlinedInput-root": {
-                background: "rgba(255,255,255,0.1)",
-                borderRadius: "12px",
-                height: 36,
-                "& fieldset": {
-                  borderColor: "rgba(255,255,255,0.38)",
-                },
-                "&:hover fieldset": {
-                  borderColor: "rgba(255,255,255,0.75)",
-                },
-                "&.Mui-focused fieldset": {
-                  borderColor: "white",
-                },
-              },
-            }}
+            size="small"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            sx={{ mb: 1.5 }}
           />
 
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              mb: 1.5,
-            }}
-          >
-            <FormControlLabel
-              control={
-                <Checkbox
-                  size="small"
-                  sx={{
-                    color: "rgba(240,248,255,0.8)",
-                    p: 0.5,
-                    "&.Mui-checked": { color: "white" },
-                  }}
-                />
-              }
-              label="Remember me"
-              sx={{ color: "#f1f8ff", m: 0, "& .MuiFormControlLabel-label": { fontSize: "0.86rem" } }}
-            />
-
-            <Typography
-              component={RouterLink}
-              to="/forgot-password"
-              sx={{
-                cursor: "pointer",
-                fontSize: "0.86rem",
-                color: "#f1f8ff",
-                textDecoration: "none",
-                "&:hover": { textDecoration: "underline" },
-              }}
-            >
-              Forgot password
+          {/* ERROR */}
+          {error && (
+            <Typography sx={{ color: "#ffdede", mb: 1, fontSize: "0.85rem" }}>
+              {error}
             </Typography>
-          </Box>
+          )}
 
-          {/* Sign-in Button */}
+          <FormControlLabel
+            control={<Checkbox sx={{ color: "white" }} />}
+            label={t('pages.Login.remember_me', 'Remember me')}
+          />
+
+          {/* LOGIN BUTTON */}
           <Button
-            variant="contained"
             fullWidth
+            onClick={handleLogin}
             sx={{
-              background: "linear-gradient(180deg, #1f58cc 0%, #1448b0 100%)",
-              py: 1,
-              mb: 1.5,
+              mt: 2,
+              background: "#1f58cc",
+              color: "white",
               borderRadius: "12px",
-              fontWeight: 600,
-              letterSpacing: 0.3,
-              fontSize: "1rem",
-              textTransform: "none",
-              boxShadow: "0 10px 22px rgba(12, 53, 138, 0.35)",
-              "&:hover": {
-                background: "linear-gradient(180deg, #2a63d8 0%, #1a52bb 100%)",
-                boxShadow: "0 14px 26px rgba(12, 53, 138, 0.4)",
-              },
+              py: 1,
+              "&:hover": { background: "#1749a6" },
             }}
           >
             Sign in
           </Button>
 
-          {/* Google Sign-in Button */}
+          {/* GOOGLE MOCK */}
           <Button
             fullWidth
             sx={{
-              background: "rgba(255,255,255,0.09)",
-              border: "1px solid rgba(255,255,255,0.4)",
-              py: 0.9,
-              borderRadius: "12px",
-              fontWeight: 600,
-              color: "#f7fbff",
-              display: "flex",
-              gap: 1.5,
-              alignItems: "center",
-              textTransform: "none",
-              fontSize: "0.95rem",
-              "&:hover": {
-                background: "rgba(255,255,255,0.16)",
-                borderColor: "rgba(255,255,255,0.72)",
-              },
+              mt: 1.5,
+              border: "1px solid white",
+              color: "white",
             }}
           >
-            <Box
-              component="img"
-              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-              alt="Google"
-              sx={{ width: 20, height: 20 }}
-            />
             Sign in with Google
           </Button>
 
-          <Typography textAlign="center" mt={1.85} sx={{ opacity: 0.96, fontSize: "0.76rem", color: "#f2f8ff" }}>
+          <Typography textAlign="center" mt={2} fontSize="0.8rem">
             Don&apos;t have an account?{" "}
             <Typography
               component={RouterLink}
               to="/register"
-              sx={{
-                color: "#ffe16f",
-                cursor: "pointer",
-                fontWeight: 700,
-                display: "inline",
-                textDecoration: "none",
-                "&:hover": { textDecoration: "underline" },
-              }}
+              sx={{ color: "#ffe16f", fontWeight: 700 }}
             >
-              Sign up for free!
+              Sign up
             </Typography>
           </Typography>
         </Paper>

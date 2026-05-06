@@ -1,5 +1,6 @@
 import { Box, Paper, Typography, TextField, Button } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
+import { useLocale } from "../hooks/useLocale";
 
 import bookImg from "../assets/Login/Book.png";
 import paperImg from "../assets/Login/Paper.png";
@@ -8,6 +9,7 @@ import bg1 from "../assets/Login/bg1.png";
 import bg2 from "../assets/Login/bg2.png";
 
 export default function ForgotPassword() {
+  const { t } = useLocale();
   return (
     <Box
       sx={{
@@ -33,7 +35,7 @@ export default function ForgotPassword() {
       >
         <img
           src={bg1}
-          alt="background"
+          alt={t('pages.ForgotPassword.background', 'background')}
           style={{
             position: "absolute",
             width: "100%",
@@ -45,7 +47,7 @@ export default function ForgotPassword() {
 
         <img
           src={bg2}
-          alt="background2"
+          alt={t('pages.ForgotPassword.background2', 'background2')}
           style={{
             position: "absolute",
             width: "50%",
@@ -58,7 +60,7 @@ export default function ForgotPassword() {
 
         <img
           src={bookImg}
-          alt="book"
+          alt={t('pages.ForgotPassword.book', 'book')}
           style={{
             position: "absolute",
             width: "350px",
@@ -69,7 +71,7 @@ export default function ForgotPassword() {
 
         <img
           src={paperImg}
-          alt="paper"
+          alt={t('pages.ForgotPassword.paper', 'paper')}
           style={{
             position: "absolute",
             width: "300px",
@@ -80,7 +82,7 @@ export default function ForgotPassword() {
 
         <img
           src={backpackImg}
-          alt="backpack"
+          alt={t('pages.ForgotPassword.backpack', 'backpack')}
           style={{
             position: "absolute",
             width: "260px",
@@ -148,7 +150,7 @@ export default function ForgotPassword() {
           </Typography>
           <TextField
             size="small"
-            placeholder="Enter your email"
+            placeholder={t('pages.ForgotPassword.enter_your_email', 'Enter your email')}
             type="email"
             fullWidth
             sx={{

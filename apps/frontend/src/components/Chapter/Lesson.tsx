@@ -1,160 +1,149 @@
-import { Box, Button, Card, CardContent, Grid, Stack, Typography } from '@mui/material';
+import { Box, Button, Container, Typography } from '@mui/material';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import chapterIcon from '../../assets/glasses on books.png';
 
-const lessons = [
+// 🎨 Pastel palette (UI only)
+const PASTEL_PALETTE = [
+  '#C8E6C9',
+  '#BBDEFB',
+  '#FFE0B2',
+  '#E1BEE7',
+  '#FFF9C4',
+  '#B2DFDB',
+];
+
+interface Chapter {
+  id: number;
+  title: string;
+  lessons: {
+    id: number;
+    name: string;
+  }[];
+}
+
+const chapters: Chapter[] = [
   {
     id: 1,
-    description: 'the quick fox jumps over the lazy dog',
-    accent: '#B9F2A4',
-    textColor: '#2B2B2B',
+    title: 'Chapter 1',
+    lessons: [
+      { id: 101, name: 'Introduction' },
+      { id: 102, name: 'Basic Concept' },
+    ],
   },
   {
     id: 2,
-    description: 'the quick fox jumps over the lazy dog',
-    accent: '#F8F1A6',
-    textColor: '#2B2B2B',
-  },
-  {
-    id: 3,
-    description: 'the quick fox jumps over the lazy dog',
-    accent: '#D9D5FF',
-    textColor: '#2B2B2B',
-  },
-  {
-    id: 4,
-    description: 'the quick fox jumps over the lazy dog',
-    accent: '#F8E0EC',
-    textColor: '#2B2B2B',
-  },
-  {
-    id: 5,
-    description: 'the quick fox jumps over the lazy dog',
-    accent: '#F7D0C3',
-    textColor: '#2B2B2B',
-  },
-  {
-    id: 6,
-    description: 'the quick fox jumps over the lazy dog',
-    accent: '#BFE5FB',
-    textColor: '#2B2B2B',
-  },
-  {
-    id: 7,
-    description: 'the quick fox jumps over the lazy dog',
-    accent: '#E5F0DA',
-    textColor: '#2B2B2B',
-  },
-  {
-    id: 8,
-    description: 'the quick fox jumps over the lazy dog',
-    accent: '#FBE3B6',
-    textColor: '#2B2B2B',
-  },
-  {
-    id: 9,
-    description: 'the quick fox jumps over the lazy dog',
-    accent: '#E2C7F4',
-    textColor: '#2B2B2B',
+    title: 'Chapter 2',
+    lessons: [
+      { id: 201, name: 'Overview' },
+      { id: 202, name: 'Examples' },
+    ],
   },
 ];
 
-export default function Lesson() {
+export default function ChapterLessonList() {
   const navigate = useNavigate();
+  const [openChapterId, setOpenChapterId] = useState<number | null>(null);
+
+  const toggleChapter = (id: number) => {
+    setOpenChapterId(prev => (prev === id ? null : id));
+  };
 
   return (
-    <Box sx={{ px: { xs: 2, md: 6 }, pt: 6, pb: 10 }}>
-      <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 4 }}>
-        <Box
-          component="img"
-          src={chapterIcon}
-          alt="Chapter icon"
-          sx={{ width: { xs: 48, md: 60 }, height: 'auto' }}
-        />
-        <Typography
-          variant="h3"
-          sx={{
-            fontWeight: 700,
-            color: '#3D86E8',
-            fontSize: { xs: '2rem', md: '3rem' },
-            lineHeight: 1,
-          }}
-        >
-          Chapter : 1
-        </Typography>
-      </Stack>
+    <Container maxWidth="sm" sx={{ py: 6 }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+        {chapters.map((chapter, index) => {
+          const isOpen = openChapterId === chapter.id;
+          const accent = PASTEL_PALETTE[index % PASTEL_PALETTE.length];
 
-      <Grid container spacing={3} sx={{ maxWidth: 1200, mx: 'auto' }}>
-        {lessons.map((lesson) => (
-          <Grid item xs={12} sm={6} md={4} key={lesson.id}>
-            <Card
-              elevation={0}
-              sx={{
-                backgroundColor: lesson.accent,
-                borderRadius: 2,
-                minHeight: 118,
-                px: 1,
-                py: 0.5,
-              }}
-            >
-              <CardContent sx={{ p: 2, '&:last-child': { pb: 2 } }}>
-                <Typography
+          return (
+            <Box key={chapter.id}>
+              {/* ✅ Chapter Card */}
+              <Box
+                onClick={() => toggleChapter(chapter.id)}
+                sx={{
+                  backgroundColor: '#fff',
+                  borderLeft: `6px solid ${accent}`, // 🎨 palette applied
+                  borderRadius: 3,
+                  px: 3,
+                  py: 2,
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  cursor: 'pointer',
+                  boxShadow: '0 6px 16px rgba(0,0,0,0.15)',
+                  transition: 'all 0.25s ease',
+                }}
+              >
+                <Typography sx={{ fontSize: 16, fontWeight: 700 }}>
+                  {chapter.title}
+                </Typography>
+
+                <Box
                   sx={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: lesson.textColor,
-                    mb: 1,
-                    textTransform: 'lowercase',
+                    width: 32,
+                    height: 32,
+                    borderRadius: '50%',
+                    backgroundColor: accent,
+                    color: '#1F2937',
+                    display: 'grid',
+                    placeItems: 'center',
+                    fontWeight: 800,
                   }}
                 >
-                  <Box component="span" sx={{ color: '#8E63FF', mr: 1, fontWeight: 700 }}>
-                    ›
-                  </Box>
-                  {lesson.description}
-                </Typography>
-                <Typography sx={{ fontSize: 12, color: '#6D6D6D', lineHeight: 1.4, mb: 2 }}>
-                  Things on a very small scale behave like nothing
-                </Typography>
-                <Button
-                  onClick={() => navigate(`/lesson/${lesson.id}`)}
-                  variant="text"
+                  {isOpen ? '▲' : '▼'}
+                </Box>
+              </Box>
+
+              {/* ✅ Lessons */}
+              {isOpen && (
+                <Box
                   sx={{
-                    p: 0,
-                    minWidth: 'auto',
-                    textTransform: 'none',
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: '#3D86E8',
-                    '&:hover': { backgroundColor: 'transparent', textDecoration: 'underline' },
+                    mt: 1.5,
+                    ml: 3,
+                    pl: 2,
+                    borderLeft: `3px solid ${accent}`,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 1,
                   }}
                 >
-                  View detail →
-                </Button>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+                  {chapter.lessons.map((lesson) => (
+                    <Box
+                      key={lesson.id}
+                      sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        px: 2,
+                        py: 1.2,
+                        backgroundColor: `${accent}66`, // pastel tint
+                        borderRadius: 2,
+                      }}
+                    >
+                      <Typography sx={{ fontSize: 14 }}>
+                        {lesson.name}
+                      </Typography>
 
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 5 }}>
-        <Button
-          variant="outlined"
-          sx={{
-            borderColor: '#3D86E8',
-            color: '#3D86E8',
-            borderRadius: 999,
-            px: 4,
-            textTransform: 'none',
-            fontWeight: 700,
-            '&:hover': {
-              borderColor: '#2D6FC0',
-              backgroundColor: 'rgba(61, 134, 232, 0.06)',
-            },
-          }}
-        >
-          Select more
-        </Button>
+                      <Button
+                        onClick={() => navigate(`/lesson/${lesson.id}`)}
+                        sx={{
+                          minWidth: 'auto',
+                          p: 0,
+                          fontSize: 18,
+                          fontWeight: 700,
+                          color: '#3D86E8',
+                        }}
+                      >
+                        →
+                      </Button>
+                    </Box>
+                  ))}
+                </Box>
+              )}
+            </Box>
+          );
+        })}
       </Box>
-    </Box>
+    </Container>
   );
 }

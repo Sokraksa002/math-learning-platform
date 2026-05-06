@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
+import { useLocale } from '../../hooks/useLocale';
 
 export default function FocusTimer({ onFinish }: { onFinish: (minutes: number) => void }) {
+  const { t } = useLocale();
   const [seconds, setSeconds] = useState(2 * 60);
   const [running, setRunning] = useState(false);
 
@@ -28,7 +30,7 @@ export default function FocusTimer({ onFinish }: { onFinish: (minutes: number) =
         {Math.floor(seconds / 60)}:{String(seconds % 60).padStart(2, '0')}
       </p>
 
-      <button onClick={() => setRunning(true)}>Start Focus</button>
+      <button onClick={() => setRunning(true)}>{t('components.Calendor.FocusTimer.start_focus', 'Start Focus')}</button>
     </div>
   );
 }

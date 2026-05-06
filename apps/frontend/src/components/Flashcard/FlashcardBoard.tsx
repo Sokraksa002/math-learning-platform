@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useLocale } from '../../hooks/useLocale';
 import { Box, Button, MenuItem, Paper, Select, Stack, TextField, Typography } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
 
@@ -30,6 +31,7 @@ const flashcardLibrary: Record<string, FlashcardData> = {
 const lessonOptions = ['Limit', 'Derivative', 'Integral'];
 
 export default function FlashcardBoard() {
+  const { t } = useLocale();
   const [lesson, setLesson] = useState('Limit');
   const [topic, setTopic] = useState('f(x) = (x - 1)lnx');
   const [card, setCard] = useState<FlashcardData | null>(null);
@@ -87,7 +89,7 @@ export default function FlashcardBoard() {
             borderColor: '#B7B7B7',
           }}
         >
-          <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 1 }}>Flashcard</Typography>
+          <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 1 }}>{t('components.Flashcard.FlashcardBoard.flashcard', 'Flashcard')}</Typography>
           <Typography sx={{ color: '#666', fontSize: 13, lineHeight: 1.6 }}>
             Generate interactive flashcard for fast revision and memory retention
           </Typography>
@@ -95,7 +97,7 @@ export default function FlashcardBoard() {
 
         <Stack spacing={1.5}>
           <Box>
-            <Typography sx={{ mb: 0.75, fontSize: 16 }}>lesson</Typography>
+            <Typography sx={{ mb: 0.75, fontSize: 16 }}>{t('components.Flashcard.FlashcardBoard.lesson', 'lesson')}</Typography>
             <Select
               fullWidth
               value={lesson}
@@ -112,12 +114,12 @@ export default function FlashcardBoard() {
           </Box>
 
           <Box>
-            <Typography sx={{ mb: 0.75, fontSize: 16 }}>Topic</Typography>
+            <Typography sx={{ mb: 0.75, fontSize: 16 }}>{t('components.Flashcard.FlashcardBoard.topic', 'Topic')}</Typography>
             <TextField
               fullWidth
               value={topic}
               onChange={(event) => setTopic(event.target.value)}
-              placeholder="Enter exercise"
+              placeholder={t('components.Flashcard.FlashcardBoard.enter_exercise', 'Enter exercise')}
               variant="outlined"
               sx={{
                 '& .MuiOutlinedInput-root': {
@@ -199,7 +201,7 @@ export default function FlashcardBoard() {
                   justifyContent: 'center',
                 }}
               >
-                <Typography sx={{ color: '#9A6B00', fontWeight: 700, mb: 2 }}>Flashcard</Typography>
+                <Typography sx={{ color: '#9A6B00', fontWeight: 700, mb: 2 }}>{t('components.Flashcard.FlashcardBoard.flashcard', 'Flashcard')}</Typography>
                 <Typography
                   sx={{
                     fontSize: { xs: 24, md: 30 },
@@ -258,7 +260,7 @@ export default function FlashcardBoard() {
             }}
           >
             <Box>
-              <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 1 }}>Flashcard Q & A</Typography>
+              <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 1 }}>{t('components.Flashcard.FlashcardBoard.flashcard_q__a', 'Flashcard Q & A')}</Typography>
               <Typography sx={{ fontSize: 13 }}>
                 Generate a flashcard first, then click the card to flip and see the answer.
               </Typography>

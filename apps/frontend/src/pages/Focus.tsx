@@ -6,8 +6,10 @@ import FocusTimer from '../components/Calendor/FocusTimer';
 import Garden from '../components/Calendor/Garden';
 import FocusChart from '../components/Calendor/FocusChart';
 import { useFocusData } from '../hook/useFocusData';
+import { useLocale } from '../hooks/useLocale';
 
 export default function FocusPage() {
+  const { t } = useLocale();
   const { plants, totalMinutes, hourlyFocus, addFocusSession } = useFocusData();
 
   return (
@@ -33,7 +35,7 @@ export default function FocusPage() {
                 boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
               }}
             >
-              <Box sx={{ fontSize: 14, fontWeight: 600, color: '#999', mb: 2 }}>Focused Time Distribution</Box>
+              <Box sx={{ fontSize: 14, fontWeight: 600, color: '#999', mb: 2 }}>{t('pages.Focus.focused_time_distribution', 'Focused Time Distribution')}</Box>
               <FocusChart data={hourlyFocus} />
             </Box>
           </Grid>

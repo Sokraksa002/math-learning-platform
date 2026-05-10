@@ -54,7 +54,9 @@
         "lesson": "មេរៀន",
         "topic": "ប្រធានបទ",
         "flashcard_q__a": "សំណួរ និង ចម្លើយ",
-        "enter_exercise": "ក្រុមលំហាត់"
+        "enter_exercise": "ក្រុមលំហាត់",
+        "cancel": "បោះបង់",
+        "generate": "បង្កើត"
       }
     },
     "focus": {

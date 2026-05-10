@@ -54,7 +54,9 @@
         "lesson": "lesson",
         "topic": "Topic",
         "flashcard_q__a": "Flashcard Q & A",
-        "enter_exercise": "Enter exercise"
+        "enter_exercise": "Enter exercise",
+        "Cancel": "Cancel",
+        "generate": "Generate"
       }
     },
     "focus": {

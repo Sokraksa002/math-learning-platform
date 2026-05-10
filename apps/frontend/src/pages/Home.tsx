@@ -30,7 +30,7 @@ export default function Home() {
           <HeroSection />
           <OurFunctionsSection />
           <EmotionCalendar />
-          <MoodSection />
+          {/* <MoodSection /> */}
           <QuizTimeSection />
           <ChapterSection />
           <FlashcardSection />
@@ -41,7 +41,7 @@ export default function Home() {
       {loggedIn && (
         <>
           <ProgressChart />
-          <MoodSection />
+          {/* <MoodSection /> */}
           <EmotionCalendar />
           <QuizTimeSection />
           <ChapterSection />

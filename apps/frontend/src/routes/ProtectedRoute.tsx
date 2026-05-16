@@ -1,5 +1,6 @@
 import { Navigate } from 'react-router-dom';
 import { getUser, isLoggedIn } from '../utils/auth';
+import { useAuthModal } from '../contexts/AuthModalContext';
 
 type AllowedRole = "admin" | "student";
 
@@ -12,8 +13,11 @@ export default function ProtectedRoute({
   allowedRoles?: AllowedRole[];
   redirectTo?: string;
 }) {
+  const { openLogin } = useAuthModal();
+
   if (!isLoggedIn()) {
-    return <Navigate to="/login" replace />;
+    openLogin();
+    return null;
   }
 
   if (allowedRoles?.length) {
@@ -21,7 +25,9 @@ export default function ProtectedRoute({
     const userRole = user?.role;
 
     if (!userRole || !allowedRoles.includes(userRole)) {
-      return <Navigate to={redirectTo ?? "/login"} replace />;
+      // open login as fallback
+      openLogin();
+      return null;
     }
   }
 

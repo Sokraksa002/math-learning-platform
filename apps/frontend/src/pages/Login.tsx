@@ -10,6 +10,7 @@ import {
 import { Link as RouterLink, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { useLocale } from "../hooks/useLocale";
+import { colorPalette } from "../theme/colorPalette";
 
 // Images
 import bookImg from "../assets/Login/Book.png";
@@ -127,8 +128,7 @@ export default function Login() {
         position: "fixed",
         inset: 0,
         display: "flex",
-        background:
-          "radial-gradient(circle at 12% 16%, #ffffff 0%, #f4f6fb 45%, #ebedf4 100%)",
+        background: `radial-gradient(circle at 12% 16%, ${colorPalette.background.light} 0%, ${colorPalette.background.lighter} 45%, ${colorPalette.background.default} 100%)`,
       }}
     >
       {/* ========== LEFT PANEL ========== */}
@@ -222,7 +222,7 @@ export default function Login() {
             width: 420,
             p: 4,
             borderRadius: 4,
-            background: "linear-gradient(160deg,#4ea0ed,#367dcc)",
+            background: `linear-gradient(160deg, ${colorPalette.primary.light}, ${colorPalette.primary.main})`,
             color: "white",
             position: "relative",
             zIndex: 10,
@@ -253,7 +253,7 @@ export default function Login() {
               mb: 1.5,
               "& .MuiOutlinedInput-root": {
                 borderRadius: 2,
-                backgroundColor: "#eaf2ff",
+                backgroundColor: "rgba(255,255,255,0.9)",
               },
             }}
           />
@@ -273,7 +273,7 @@ export default function Login() {
               mb: 1.5,
               "& .MuiOutlinedInput-root": {
                 borderRadius: 2,
-                backgroundColor: "#eaf2ff",
+                backgroundColor: "rgba(255,255,255,0.9)",
               },
             }}
           />
@@ -289,7 +289,7 @@ export default function Login() {
               <Checkbox
                 checked={remember}
                 onChange={(e) => setRemember(e.target.checked)}
-                sx={{ color: "white" }}
+                sx={{ color: "white", "&.Mui-checked": { color: colorPalette.primary.dark } }}
               />
             }
             label={t("pages.Login.remember_me", "Remember me")}
@@ -301,11 +301,11 @@ export default function Login() {
             onClick={handleLogin}
             sx={{
               mt: 2,
-              background: "#1f58cc",
+              background: colorPalette.primary.dark,
               color: "white",
               borderRadius: 2,
               py: 1,
-              "&:hover": { background: "#1749a6" },
+              "&:hover": { background: colorPalette.primary.main },
             }}
           >
             {loading ? "Signing in..." : "Sign in"}
@@ -315,9 +315,9 @@ export default function Login() {
             fullWidth
             sx={{
               mt: 1.5,
-              border: "1px solid white",
-              color: "white",
-              opacity: 0.7,
+              border: `1px solid ${colorPalette.border}`,
+              color: colorPalette.text.primary,
+              opacity: 0.95,
             }}
             disabled
           >
@@ -329,7 +329,7 @@ export default function Login() {
             <Typography
               component={RouterLink}
               to="/register"
-              sx={{ color: "#ffe16f", fontWeight: 700 }}
+              sx={{ color: colorPalette.accent.yellow, fontWeight: 700 }}
             >
               Sign up
             </Typography>

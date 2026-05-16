@@ -2,6 +2,23 @@ import { Box, Button, Container, Typography } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
+const COMPLETED_LESSON_STORAGE_KEY = 'math-learning-completed-lessons';
+
+const areAllLessonsCompleted = (): boolean => {
+  if (typeof window === 'undefined') {
+    return false;
+  }
+
+  try {
+    const rawValue = window.localStorage.getItem(COMPLETED_LESSON_STORAGE_KEY);
+    const completedLessonIds = rawValue ? JSON.parse(rawValue) : [];
+
+    return [101, 102, 201, 202].every((lessonId) => Array.isArray(completedLessonIds) && completedLessonIds.includes(lessonId));
+  } catch {
+    return false;
+  }
+};
+
 /* =========================
    TYPES
 ========================= */
@@ -152,6 +169,8 @@ export default function QuizPaper() {
   const question = QUESTIONS[currentIndex];
   const total = QUESTIONS.length;
   const percentage = (score / total) * 100;
+  const allLessonsCompleted = areAllLessonsCompleted();
+  const canUnlockCertificate = percentage >= 80 && allLessonsCompleted;
 
   const handleSelect = (id: string) => {
     if (selectedAnswer) return;
@@ -257,9 +276,9 @@ export default function QuizPaper() {
                 Score: {score} / {total} ({percentage.toFixed(1)}%)
               </Typography>
 
-              {percentage >= 80 ? (
+              {canUnlockCertificate ? (
                 <Button
-                  onClick={() => navigate(`/certificate/${chapterId}`)}
+                  onClick={() => navigate('/quiz-history')}
                   sx={{
                     backgroundColor: '#6366F1',
                     color: '#fff',
@@ -268,8 +287,12 @@ export default function QuizPaper() {
                     '&:hover': { backgroundColor: '#4F46E5' },
                   }}
                 >
-                  🎓 View Certificate
+                  Open Review
                 </Button>
+              ) : percentage >= 80 ? (
+                <Typography sx={{ color: '#F97316', mt: 2 }}>
+                  Finish all lessons in the site to unlock the certificate.
+                </Typography>
               ) : (
                 <Typography sx={{ color: '#F97316', mt: 2 }}>
                   Score at least 80% to unlock certificate 💪

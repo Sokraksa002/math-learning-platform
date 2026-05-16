@@ -11,6 +11,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { useAuthModal } from "../contexts/AuthModalContext";
 import { useLocale } from "../hooks/useLocale";
 
 import bookImg from "../assets/Login/Book.png";
@@ -18,6 +19,7 @@ import paperImg from "../assets/Login/Paper.png";
 import backpackImg from "../assets/Login/backpack.png";
 import bg1 from "../assets/Login/bg1.png";
 import bg2 from "../assets/Login/bg2.png";
+import { colorPalette } from "../theme/colorPalette";
 
 type StoredUser = {
   id: string;
@@ -57,6 +59,7 @@ const textFieldStyles = {
 export default function Register() {
   const navigate = useNavigate();
   const { t } = useLocale();
+  const { openLogin } = useAuthModal();
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -98,8 +101,8 @@ export default function Register() {
       existingUsers.push(newUser);
       localStorage.setItem("registeredUsers", JSON.stringify(existingUsers));
 
-      setSuccess("Registration successful! Redirecting to login...");
-      window.setTimeout(() => navigate("/login", { state: { email } }), 1200);
+      setSuccess("Registration successful! Opening login...");
+      window.setTimeout(() => openLogin(), 1200);
     } catch {
       setError("Registration failed. Please try again.");
     } finally {
@@ -116,7 +119,7 @@ export default function Register() {
         width: "100vw",
         display: "flex",
         overflow: "hidden",
-        background: "radial-gradient(circle at 12% 16%, #fefefe 0%, #f4f6fb 45%, #ebedf4 100%)",
+        background: `radial-gradient(circle at 12% 16%, ${colorPalette.background.light} 0%, ${colorPalette.background.lighter} 45%, ${colorPalette.background.default} 100%)`,
       }}
     >
       <Box
@@ -152,7 +155,7 @@ export default function Register() {
             width: { xs: 240, sm: 340 },
             height: { xs: 240, sm: 340 },
             borderRadius: "50%",
-            background: "radial-gradient(circle, rgba(116,178,255,0.38) 0%, rgba(116,178,255,0) 72%)",
+            background: `radial-gradient(circle, ${colorPalette.primary.lighter} 0%, rgba(0,0,0,0) 72%)`,
             top: { xs: 10, sm: 24 },
             right: { xs: -60, sm: -70 },
             pointerEvents: "none",
@@ -168,7 +171,7 @@ export default function Register() {
             overflow: "auto",
             p: { xs: 2.5, sm: 3.5 },
             borderRadius: "26px",
-            background: "linear-gradient(160deg, #4ea0ed 0%, #3e89db 48%, #367dcc 100%)",
+            background: `linear-gradient(160deg, ${colorPalette.primary.light} 0%, ${colorPalette.primary.main} 48%, ${colorPalette.primary.dark} 100%)`,
             color: "white",
             border: "1px solid rgba(255,255,255,0.26)",
             backdropFilter: "blur(8px)",
@@ -227,7 +230,7 @@ export default function Register() {
           />
 
           <FormControlLabel
-            control={<Checkbox size="small" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} sx={{ color: "rgba(240,248,255,0.8)", p: 0.5, "&.Mui-checked": { color: "white" } }} />}
+            control={<Checkbox size="small" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} sx={{ color: "rgba(240,248,255,0.8)", p: 0.5, "&.Mui-checked": { color: colorPalette.primary.dark } }} />}
             label={t('pages.Register.i_agree_to_the_terms_and_conditions', 'I agree to the terms and conditions')}
             sx={{ color: "#f1f8ff", mb: 1, m: 0, "& .MuiFormControlLabel-label": { fontSize: "0.86rem" } }}
           />
@@ -241,7 +244,7 @@ export default function Register() {
             fullWidth
             disabled={loading}
             sx={{
-              background: "linear-gradient(180deg, #1f58cc 0%, #1448b0 100%)",
+              background: `linear-gradient(180deg, ${colorPalette.primary.dark} 0%, ${colorPalette.primary.main} 100%)`,
               py: 1,
               mb: 1.5,
               borderRadius: "12px",
@@ -250,7 +253,7 @@ export default function Register() {
               fontSize: "1rem",
               textTransform: "none",
               boxShadow: "0 10px 22px rgba(12, 53, 138, 0.35)",
-              "&:hover": { background: "linear-gradient(180deg, #2a63d8 0%, #1a52bb 100%)", boxShadow: "0 14px 26px rgba(12, 53, 138, 0.4)" },
+              "&:hover": { boxShadow: "0 14px 26px rgba(12, 53, 138, 0.4)" },
               "&:disabled": { opacity: 0.7 },
             }}
           >
@@ -259,7 +262,7 @@ export default function Register() {
 
           <Typography textAlign="center" mt={1.6} sx={{ opacity: 0.96, fontSize: "0.8rem", color: "#f2f8ff" }}>
             Already have an account?{" "}
-            <Typography component={RouterLink} to="/login" sx={{ color: "#ffe16f", fontWeight: 700, textDecoration: "none", display: "inline", "&:hover": { textDecoration: "underline" } }}>
+            <Typography component={RouterLink} to="/login" sx={{ color: colorPalette.accent.yellow, fontWeight: 700, textDecoration: "none", display: "inline", "&:hover": { textDecoration: "underline" } }}>
               Sign in
             </Typography>
           </Typography>

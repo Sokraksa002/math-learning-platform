@@ -26,12 +26,14 @@ import Ability from "./pages/Ability.tsx";
 
 import ProtectedRoute from "./routes/ProtectedRoute";
 import MainLayout from "./components/Layout/MainLayout";
+import { AuthModalProvider } from "./contexts/AuthModalContext";
 
 export default function AppRoutes() {
   return (
     <BrowserRouter>
-      <MainLayout>
-        <Routes>
+      <AuthModalProvider>
+        <MainLayout>
+          <Routes>
           {/* Public Routes */}
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
@@ -184,8 +186,9 @@ export default function AppRoutes() {
             }
           />
 
-        </Routes>
-      </MainLayout>
+          </Routes>
+        </MainLayout>
+      </AuthModalProvider>
     </BrowserRouter>
   );
 }

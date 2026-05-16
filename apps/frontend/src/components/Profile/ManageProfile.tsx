@@ -10,7 +10,6 @@ import {
 import { useState, useEffect } from 'react';
 import { useLocale } from '../../hooks/useLocale';
 import { getUser } from '../../utils/auth';
-import Header from '../Home/Header';
 
 type User = {
   name: string;
@@ -64,12 +63,10 @@ export default function ManageProfile() {
 
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#F7F8FC' }}>
-      <Header />
-
       <Container maxWidth="sm" sx={{ py: 4 }}>
-        <Card sx={{ borderRadius: 3 }}>
+        <Card sx={{ borderRadius: 3, boxShadow: '0 12px 30px rgba(37, 99, 235, 0.08)', border: '1px solid #dbeafe' }}>
           <Box sx={{ p: 3 }}>
-            <Typography fontWeight={800} mb={3}>
+            <Typography fontWeight={800} mb={3} color="#1d4ed8">
               Manage Profile
             </Typography>
 
@@ -81,7 +78,7 @@ export default function ManageProfile() {
                   height: 80,
                   margin: '0 auto',
                   mb: 1,
-                  backgroundColor: '#2196F3',
+                  backgroundColor: '#2563eb',
                 }}
                 src={avatarPreview}
               >
@@ -133,7 +130,7 @@ export default function ManageProfile() {
               onClick={handleSave}
               sx={{
                 mt: 3,
-                backgroundColor: '#2196F3',
+                background: 'linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%)',
                 color: '#fff',
                 fontWeight: 700,
                 textTransform: 'none',

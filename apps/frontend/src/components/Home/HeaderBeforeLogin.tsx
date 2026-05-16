@@ -16,6 +16,7 @@ import {
   Psychology,
 } from '@mui/icons-material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuthModal } from '../../contexts/AuthModalContext';
 
 import logo from "../../assets/Logo.png";
 import { useState } from 'react';
@@ -25,6 +26,7 @@ export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useLocale();
+  const { openLogin, openRegister } = useAuthModal();
 
   // ✅ Profile menu state
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -124,62 +126,20 @@ export default function Header() {
         >
           <MenuItem
             onClick={() => {
-              navigate('/profile');
               handleProfileClose();
+              openLogin();
             }}
           >
-            <ListItemIcon>
-              <AccountCircle fontSize="small" />
-            </ListItemIcon>
-            My profile
+            Sign in
           </MenuItem>
 
           <MenuItem
             onClick={() => {
-              navigate('/chapter');
               handleProfileClose();
+              openRegister();
             }}
           >
-            <ListItemIcon>
-              <School fontSize="small" />
-            </ListItemIcon>
-            Lesson
-          </MenuItem>
-
-          <MenuItem
-            onClick={() => {
-              navigate('/quiz-history');
-              handleProfileClose();
-            }}
-          >
-            <ListItemIcon>
-              <Quiz fontSize="small" />
-            </ListItemIcon>
-            My quiz attempts
-          </MenuItem>
-
-          <MenuItem
-            onClick={() => {
-              navigate('/flashcard-history');
-              handleProfileClose();
-            }}
-          >
-            <ListItemIcon>
-              <Style fontSize="small" />
-            </ListItemIcon>
-            Flashcard history
-          </MenuItem>
-
-          <MenuItem
-            onClick={() => {
-              navigate('/ability');
-              handleProfileClose();
-            }}
-          >
-            <ListItemIcon>
-              <Psychology fontSize="small" />
-            </ListItemIcon>
-            My Ability
+            Sign up
           </MenuItem>
         </Menu>
       </Toolbar>

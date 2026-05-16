@@ -57,7 +57,7 @@ export default function Ability() {
       <Box
         sx={{
           minHeight: '100vh',
-          background: 'linear-gradient(180deg, #fffaf5 0%, #ffffff 100%)',
+          background: 'linear-gradient(180deg, #eff6ff 0%, #ffffff 100%)',
         }}
       >
         <Box sx={{ maxWidth: '1100px', mx: 'auto', px: { xs: 2, md: 3 }, py: 4 }}>
@@ -66,8 +66,9 @@ export default function Ability() {
               p: { xs: 3, md: 4 },
               mb: 3,
               borderRadius: 4,
-              background: 'linear-gradient(135deg, #7c2d12 0%, #f97316 100%)',
+              background: 'linear-gradient(135deg, #1d4ed8 0%, #2563eb 45%, #60a5fa 100%)',
               color: 'white',
+              boxShadow: '0 18px 40px rgba(37, 99, 235, 0.22)',
             }}
           >
             <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 1.2 }}>
@@ -90,29 +91,29 @@ export default function Ability() {
               mb: 3,
             }}
           >
-            <Paper sx={{ p: 2.5, borderRadius: 3 }}>
+            <Paper sx={{ p: 2.5, borderRadius: 3, border: '1px solid #dbeafe', boxShadow: '0 8px 24px rgba(37, 99, 235, 0.08)' }}>
               <Typography color="text.secondary" fontSize="0.9rem">
                 Top skill
               </Typography>
-              <Typography variant="h4" fontWeight={800}>
+              <Typography variant="h4" fontWeight={800} color="#1d4ed8">
                 {topSkill.name}
               </Typography>
             </Paper>
 
-            <Paper sx={{ p: 2.5, borderRadius: 3 }}>
+            <Paper sx={{ p: 2.5, borderRadius: 3, border: '1px solid #dbeafe', boxShadow: '0 8px 24px rgba(37, 99, 235, 0.08)' }}>
               <Typography color="text.secondary" fontSize="0.9rem">
                 Best score
               </Typography>
-              <Typography variant="h4" fontWeight={800}>
+              <Typography variant="h4" fontWeight={800} color="#2563eb">
                 {topSkill.score}%
               </Typography>
             </Paper>
 
-            <Paper sx={{ p: 2.5, borderRadius: 3 }}>
+            <Paper sx={{ p: 2.5, borderRadius: 3, border: '1px solid #dbeafe', boxShadow: '0 8px 24px rgba(37, 99, 235, 0.08)' }}>
               <Typography color="text.secondary" fontSize="0.9rem">
                 Focus area
               </Typography>
-              <Typography variant="h4" fontWeight={800}>
+              <Typography variant="h4" fontWeight={800} color="#1d4ed8">
                 Mental math
               </Typography>
             </Paper>
@@ -125,7 +126,7 @@ export default function Ability() {
               gap: 2,
             }}
           >
-            <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
+            <Card sx={{ borderRadius: 3, boxShadow: '0 12px 28px rgba(37, 99, 235, 0.08)', border: '1px solid #dbeafe' }}>
               <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
                 <Typography variant="h6" fontWeight={800} mb={2}>
                   Skill breakdown
@@ -141,7 +142,7 @@ export default function Ability() {
                         sx={{
                           height: 12,
                           borderRadius: 999,
-                          backgroundColor: '#e5e7eb',
+                          backgroundColor: '#dbeafe',
                           overflow: 'hidden',
                         }}
                       >
@@ -163,20 +164,20 @@ export default function Ability() {
             </Card>
 
             <Stack spacing={2}>
-              <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
+              <Card sx={{ borderRadius: 3, boxShadow: '0 12px 28px rgba(37, 99, 235, 0.08)', border: '1px solid #dbeafe' }}>
                 <CardContent>
                   <Typography variant="h6" fontWeight={800} mb={1.5}>
                     Recent wins
                   </Typography>
                   <Stack spacing={1}>
                     {recentWins.map((item) => (
-                      <Chip key={item} label={item} variant="outlined" sx={{ justifyContent: 'flex-start', py: 1.5, height: 'auto', borderRadius: 2 }} />
+                      <Chip key={item} label={item} variant="outlined" sx={{ justifyContent: 'flex-start', py: 1.5, height: 'auto', borderRadius: 2, borderColor: '#bfdbfe', color: '#1d4ed8' }} />
                     ))}
                   </Stack>
                 </CardContent>
               </Card>
 
-              <Card sx={{ borderRadius: 3, boxShadow: 2 }}>
+              <Card sx={{ borderRadius: 3, boxShadow: '0 12px 28px rgba(37, 99, 235, 0.08)', border: '1px solid #dbeafe' }}>
                 <CardContent>
                   <Typography variant="h6" fontWeight={800} mb={1.5}>
                     Next steps

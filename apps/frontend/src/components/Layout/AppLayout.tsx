@@ -30,6 +30,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { getUser } from "../../utils/auth";
 import { useLocale } from "../../hooks/useLocale";
 import { Psychology } from "@mui/icons-material";
+import { useAuthModal } from "../../contexts/AuthModalContext";
 
 export const AppLayout = ({ children, isLoggedIn }: any) => {
   const navigate = useNavigate();
@@ -43,6 +44,7 @@ export const AppLayout = ({ children, isLoggedIn }: any) => {
 
   const currentUser = getUser();
   const isAdmin = currentUser?.role === "admin";
+  const { openLogin } = useAuthModal();
 
   const navigationItems = isLoggedIn
     ? isAdmin
@@ -219,7 +221,7 @@ export const AppLayout = ({ children, isLoggedIn }: any) => {
 
           <Button
             fullWidth
-            onClick={() => navigate("/login")}
+            onClick={() => openLogin()}
             sx={{
               mt: 0.6,
               px: 1,

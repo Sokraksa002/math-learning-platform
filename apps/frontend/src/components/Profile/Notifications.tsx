@@ -7,19 +7,16 @@ import {
   Switch,
   FormControlLabel,
 } from '@mui/material';
-import Header from '../../components/Home/Header';
 import { useLocale } from '../../hooks/useLocale';
 
 export default function Notifications() {
   const { t } = useLocale();
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#F7F8FC' }}>
-      <Header />
-
       <Container maxWidth="sm" sx={{ py: 4 }}>
-        <Card sx={{ borderRadius: '16px' }}>
+        <Card sx={{ borderRadius: '16px', boxShadow: '0 12px 30px rgba(37, 99, 235, 0.08)', border: '1px solid #dbeafe' }}>
           <CardContent>
-            <Typography sx={{ fontWeight: 800, mb: 3 }}>
+            <Typography sx={{ fontWeight: 800, mb: 3, color: '#1d4ed8' }}>
               Notifications
             </Typography>
 

@@ -12,7 +12,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import Header from "../Home/Header";
 
 type QuizAnswer = {
   question: string;
@@ -284,11 +283,10 @@ export default function QuizHistory() {
 
   return (
     <>
-      <Header />
       <Box
         sx={{
           minHeight: "100vh",
-          background: "linear-gradient(180deg, #f7f9fc 0%, #ffffff 100%)",
+          background: "linear-gradient(180deg, #eff6ff 0%, #ffffff 100%)",
         }}
       >
         <Box sx={{ maxWidth: "1100px", mx: "auto", px: { xs: 2, md: 3 }, py: 4 }}>
@@ -297,8 +295,9 @@ export default function QuizHistory() {
               p: { xs: 3, md: 4 },
               mb: 3,
               borderRadius: 4,
-                background: "linear-gradient(135deg, #0f172a 0%, #1d4ed8 45%, #2563eb 100%)",
+              background: "linear-gradient(135deg, #0f172a 0%, #1d4ed8 45%, #2563eb 100%)",
               color: "white",
+              boxShadow: "0 18px 40px rgba(37, 99, 235, 0.22)",
             }}
           >
             <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 1.2 }}>
@@ -313,10 +312,10 @@ export default function QuizHistory() {
             </Typography>
           </Paper>
 
-          <Paper sx={{ p: 2.5, mb: 3, borderRadius: 3, border: "1px solid #e2e8f0" }}>
+          <Paper sx={{ p: 2.5, mb: 3, borderRadius: 3, border: "1px solid #dbeafe", boxShadow: "0 10px 24px rgba(37, 99, 235, 0.06)" }}>
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="space-between" alignItems={{ sm: "center" }}>
               <Box>
-                <Typography fontWeight={800} color="#0f172a">
+                <Typography fontWeight={800} color="#1d4ed8">
                   Jump back into quizzes
                 </Typography>
                 <Typography color="text.secondary">
@@ -337,29 +336,29 @@ export default function QuizHistory() {
               mb: 3,
             }}
           >
-            <Paper sx={{ p: 2.5, borderRadius: 3 }}>
+            <Paper sx={{ p: 2.5, borderRadius: 3, border: "1px solid #dbeafe", boxShadow: "0 10px 24px rgba(37, 99, 235, 0.06)" }}>
               <Typography color="text.secondary" fontSize="0.9rem">
                 Total attempts
               </Typography>
-              <Typography variant="h4" fontWeight={800}>
+              <Typography variant="h4" fontWeight={800} color="#1d4ed8">
                 {stats.totalAttempts}
               </Typography>
             </Paper>
 
-            <Paper sx={{ p: 2.5, borderRadius: 3 }}>
+            <Paper sx={{ p: 2.5, borderRadius: 3, border: "1px solid #dbeafe", boxShadow: "0 10px 24px rgba(37, 99, 235, 0.06)" }}>
               <Typography color="text.secondary" fontSize="0.9rem">
                 Average score
               </Typography>
-              <Typography variant="h4" fontWeight={800}>
+              <Typography variant="h4" fontWeight={800} color="#1d4ed8">
                 {stats.averageScore}%
               </Typography>
             </Paper>
 
-            <Paper sx={{ p: 2.5, borderRadius: 3 }}>
+            <Paper sx={{ p: 2.5, borderRadius: 3, border: "1px solid #dbeafe", boxShadow: "0 10px 24px rgba(37, 99, 235, 0.06)" }}>
               <Typography color="text.secondary" fontSize="0.9rem">
                 Reviewable now
               </Typography>
-              <Typography variant="h4" fontWeight={800}>
+              <Typography variant="h4" fontWeight={800} color="#1d4ed8">
                 {stats.reviewableAttempts}
               </Typography>
             </Paper>
@@ -377,7 +376,7 @@ export default function QuizHistory() {
               const isOpen = openAttemptId === attempt.id;
 
               return (
-                <Card key={attempt.id} sx={{ borderRadius: 3, boxShadow: 2 }}>
+                <Card key={attempt.id} sx={{ borderRadius: 3, boxShadow: "0 12px 28px rgba(37, 99, 235, 0.08)", border: "1px solid #dbeafe" }}>
                   <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
                     <Box
                       sx={{
@@ -389,11 +388,7 @@ export default function QuizHistory() {
                     >
                       <Box sx={{ flex: 1 }}>
                         <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mb: 1 }}>
-                          <Chip
-                            label={isReviewAvailable ? "Review available" : "Review expired"}
-                            color={isReviewAvailable ? "success" : "default"}
-                            size="small"
-                          />
+                          <Chip label={isReviewAvailable ? "Open" : "Locked"} color={isReviewAvailable ? "success" : "default"} size="small" />
                           <Chip
                             label={`${progress}% score`}
                             color={progress >= 80 ? "success" : progress >= 50 ? "warning" : "error"}
@@ -402,11 +397,11 @@ export default function QuizHistory() {
                         </Stack>
 
                         <Typography variant="h6" fontWeight={800} mb={0.5}>
-                          {attempt.quizTitle}
+                          {attempt.chapterTitle}
                         </Typography>
 
                         <Typography color="text.secondary" mb={1}>
-                          {attempt.chapterTitle}
+                          {attempt.quizTitle}
                         </Typography>
 
                         <Typography color="text.secondary" fontSize="0.9rem">
@@ -434,7 +429,7 @@ export default function QuizHistory() {
                             variant={isOpen ? "contained" : "outlined"}
                             onClick={() => setOpenAttemptId(isOpen ? null : attempt.id)}
                           >
-                            {isOpen ? "Hide answers" : "View answers"}
+                            {isOpen ? "Hide" : "Open"}
                           </Button>
                           <Button variant="text" onClick={() => navigate("/quiz")}>
                             Open Quiz

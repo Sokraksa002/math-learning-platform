@@ -30,7 +30,7 @@ export default function CalendarComponent() {
       <Typography sx={{ fontWeight: 700, fontSize: '20px', textAlign: 'center', color: '#2c3e50', mb: 4 }}>
         {t('components.Home.Calender.mood_question', 'What about your mood for today?')}
       </Typography>
-
+ 
       <Grid container spacing={4} sx={{ display: 'flex', flexWrap: 'nowrap', alignItems: 'flex-start' }}>
         {/* Calendar */}
         <Grid sx={{ flex: 1, minWidth: 0 }}>

@@ -8,17 +8,26 @@ import {
   Menu,
   MenuItem,
   ListItemIcon,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemText,
+  Divider,
 } from "@mui/material";
-import React from "react";
+
+import React, { useState } from "react";
 import {
   AccountCircle,
   School,
   Quiz,
   Style,
   Psychology,
+  Menu as MenuIcon,
+  Home,
 } from "@mui/icons-material";
+
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { useState } from "react";
+import logo from "../../assets/Logo.png";
 import { useLocale } from "../../hooks/useLocale";
 
 export default function Header() {
@@ -27,16 +36,18 @@ export default function Header() {
   const { locale, setLocale, t } = useLocale();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   const open = Boolean(anchorEl);
 
-  const handleProfileOpen = (
-    event: React.MouseEvent<HTMLElement>
-  ) => {
+  const handleProfileOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleProfileClose = () => {
-    setAnchorEl(null);
+  const handleProfileClose = () => setAnchorEl(null);
+
+  const toggleDrawer = (open: boolean) => () => {
+    setMobileOpen(open);
   };
 
   const navBtn = (path: string) => ({
@@ -54,151 +65,174 @@ export default function Header() {
     },
   });
 
+  const go = (path: string) => {
+    navigate(path);
+    setMobileOpen(false);
+  };
+
+  const menuItems = [
+    { label: t("nav.home", "Home"), path: "/home", icon: <Home /> },
+    { label: t("nav.chapter", "Chapter"), path: "/chapter", icon: <School /> },
+    { label: t("nav.quiz", "Quiz"), path: "/quiz", icon: <Quiz /> },
+    { label: t("nav.flashcard", "Flashcard"), path: "/flashcard", icon: <Style /> },
+    { label: t("menu.about", "About us"), path: "/about", icon: <School /> },
+  ];
+
   return (
-    <AppBar
-      position="static"
-      sx={{
-        backgroundColor: "#fff",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-      }}
-    >
-      <Toolbar sx={{ justifyContent: "space-between", px: { xs: 2, sm: 4 } }}>
+    <>
+      <AppBar
+        position="static"
+        sx={{
+          backgroundColor: "#fff",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+        }}
+      >
+            
+<Toolbar
+  sx={{
+    justifyContent: 'space-between',
+    px: { xs: 2, sm: 4 },
+    minHeight: 88,     // ✅ KEY LINE (default is 56)
+    alignItems: 'center',
+  }}
+>
+
         {/* Logo */}
-        <Typography
+        <Box
           component={Link}
           to="/home"
-          sx={{
-            fontWeight: "bold",
-            color: "#2196F3",
-            fontSize: "24px",
-            textDecoration: "none",
-          }}
+          sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
         >
-          Kanit
-        </Typography>
-
-        {/* Main menu */}
-        <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
-          <Button onClick={() => navigate("/home")} sx={navBtn("/home")}>
-            {t('nav.home', 'Home')}
-          </Button>
-          <Button onClick={() => navigate("/chapter")} sx={navBtn("/chapter")}>
-            {t('nav.chapter', 'Chapter')}
-          </Button>
-          <Button onClick={() => navigate("/quiz")} sx={navBtn("/quiz")}>
-            {t('nav.quiz', 'Quiz')}
-          </Button>
-          <Button
-            onClick={() => navigate("/flashcard")}
-            sx={navBtn("/flashcard")}
-          >
-            {t('nav.flashcard', 'Flashcard')}
-          </Button>
-          <Button sx={navBtn("/about")}>{t('menu.about', 'About us')}</Button>
+          <img src={logo} alt="Kanit logo" style={{ height: 76, display: 'block' }} />
         </Box>
+          {/* ================= DESKTOP MENU ================= */}
+          <Box
+            sx={{
+              display: { xs: "none", md: "flex" },
+              gap: 1.5,
+              alignItems: "center",
+            }}
+          >
+            {menuItems.map((item) => (
+              <Button
+                key={item.path}
+                onClick={() => go(item.path)}
+                sx={navBtn(item.path)}
+              >
+                {item.label}
+              </Button>
+            ))}
+          </Box>
 
-        {/* Locale switch */}
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 1 }}>
-          <Button
-            size="small"
-            variant={locale === 'en' ? 'contained' : 'outlined'}
-            onClick={() => setLocale('en')}
-            sx={{ textTransform: 'none' }}
-          >
-            EN
-          </Button>
-          <Button
-            size="small"
-            variant={locale === 'km' ? 'contained' : 'outlined'}
-            onClick={() => setLocale('km')}
-            sx={{ textTransform: 'none' }}
-          >
-            ខ្មែរ
-          </Button>
+          {/* ================= RIGHT SIDE ================= */}
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            {/* Locale */}
+            <Box sx={{ display: { xs: "none", sm: "flex" }, gap: 1 }}>
+              <Button
+                size="small"
+                variant={locale === "en" ? "contained" : "outlined"}
+                onClick={() => setLocale("en")}
+                sx={{ textTransform: "none" }}
+              >
+                EN
+              </Button>
+              <Button
+                size="small"
+                variant={locale === "km" ? "contained" : "outlined"}
+                onClick={() => setLocale("km")}
+                sx={{ textTransform: "none" }}
+              >
+                ខ្មែរ
+              </Button>
+            </Box>
+
+            {/* Profile */}
+            <IconButton onClick={handleProfileOpen} sx={{ color: "#333" }}>
+              <AccountCircle />
+            </IconButton>
+
+            {/* MOBILE MENU BUTTON */}
+            <IconButton
+              sx={{ display: { xs: "flex", md: "none" } }}
+              onClick={toggleDrawer(true)}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      {/* ================= MOBILE DRAWER ================= */}
+      <Drawer
+        anchor="right"
+        open={mobileOpen}
+        onClose={toggleDrawer(false)}
+      >
+        <Box sx={{ width: 260, p: 2 }}>
+          <Typography fontWeight={700} mb={2}>
+            Menu
+          </Typography>
+
+          <List>
+            {menuItems.map((item) => (
+              <ListItemButton
+                key={item.path}
+                onClick={() => go(item.path)}
+              >
+                <ListItemIcon>{item.icon}</ListItemIcon>
+                <ListItemText primary={item.label} />
+              </ListItemButton>
+            ))}
+          </List>
+
+          <Divider sx={{ my: 2 }} />
+
+          {/* Locale inside mobile */}
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Button
+              fullWidth
+              variant={locale === "en" ? "contained" : "outlined"}
+              onClick={() => setLocale("en")}
+            >
+              EN
+            </Button>
+            <Button
+              fullWidth
+              variant={locale === "km" ? "contained" : "outlined"}
+              onClick={() => setLocale("km")}
+            >
+              KH
+            </Button>
+          </Box>
         </Box>
+      </Drawer>
 
-        {/* Account icon */}
-        <IconButton onClick={handleProfileOpen} sx={{ color: "#333" }}>
-          <AccountCircle sx={{ fontSize: 28 }} />
-        </IconButton>
+      {/* ================= PROFILE MENU ================= */}
+      <Menu
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleProfileClose}
+      >
+        <MenuItem onClick={() => { navigate("/profile"); handleProfileClose(); }}>
+          <ListItemIcon><AccountCircle /></ListItemIcon>
+          My profile
+        </MenuItem>
 
-        {/* Profile dropdown */}
-        <Menu
-          anchorEl={anchorEl}
-          open={open}
-          onClose={handleProfileClose}
-          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-          transformOrigin={{ vertical: "top", horizontal: "right" }}
-          PaperProps={{
-            sx: {
-              borderRadius: "12px",
-              minWidth: 220,
-              mt: 1,
-              boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
-            },
-          }}
-        >
-          <MenuItem
-            onClick={() => {
-              navigate("/profile");
-              handleProfileClose();
-            }}
-          >
-            <ListItemIcon>
-              <AccountCircle fontSize="small" />
-            </ListItemIcon>
-            {t('menu.myProfile', 'My profile')}
-          </MenuItem>
+        <MenuItem onClick={() => { navigate("/quiz-history"); handleProfileClose(); }}>
+          <ListItemIcon><Quiz /></ListItemIcon>
+          My quiz attempts
+        </MenuItem>
 
-          <MenuItem
-            onClick={() => {
-              navigate("/chapter");
-              handleProfileClose();
-            }}
-          >
-            <ListItemIcon>
-              <School fontSize="small" />
-            </ListItemIcon>
-            {t('menu.lesson', 'Lesson')}
-          </MenuItem>
+        <MenuItem onClick={() => { navigate("/flashcard-history"); handleProfileClose(); }}>
+          <ListItemIcon><Style /></ListItemIcon>
+          Flashcard history
+        </MenuItem>
 
-          <MenuItem
-            onClick={() => {
-              navigate("/quiz-history");
-              handleProfileClose();
-            }}
-          >
-            <ListItemIcon>
-              <Quiz fontSize="small" />
-            </ListItemIcon>
-            {t('nav.quizHistory', 'My quiz attempts')}
-          </MenuItem>
-
-          <MenuItem
-            onClick={() => {
-              navigate("/flashcard-history");
-              handleProfileClose();
-            }}
-          >
-            <ListItemIcon>
-              <Style fontSize="small" />
-            </ListItemIcon>
-            {t('nav.flashcardHistory', 'Flashcard history')}
-          </MenuItem>
-
-          <MenuItem
-            onClick={() => {
-              navigate("/ability");
-              handleProfileClose();
-            }}
-          >
-            <ListItemIcon>
-              <Psychology fontSize="small" />
-            </ListItemIcon>
-            {t('nav.ability', 'My Ability')}
-          </MenuItem>
-        </Menu>
-      </Toolbar>
-    </AppBar>
+        <MenuItem onClick={() => { navigate("/ability"); handleProfileClose(); }}>
+          <ListItemIcon><Psychology /></ListItemIcon>
+          My ability
+        </MenuItem>
+      </Menu>
+    </>
   );
 }

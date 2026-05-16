@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -259,6 +260,7 @@ const formatDate = (dateString: string) =>
   });
 
 export default function QuizHistory() {
+  const navigate = useNavigate();
   const [openAttemptId, setOpenAttemptId] = useState<string | null>(
     quizAttempts[0]?.id ?? null
   );
@@ -295,7 +297,7 @@ export default function QuizHistory() {
               p: { xs: 3, md: 4 },
               mb: 3,
               borderRadius: 4,
-              background: "linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%)",
+                background: "linear-gradient(135deg, #0f172a 0%, #1d4ed8 45%, #2563eb 100%)",
               color: "white",
             }}
           >
@@ -309,6 +311,22 @@ export default function QuizHistory() {
               Review your recent attempts, compare scores, and reopen any review that is still
               within the 7-day window.
             </Typography>
+          </Paper>
+
+          <Paper sx={{ p: 2.5, mb: 3, borderRadius: 3, border: "1px solid #e2e8f0" }}>
+            <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="space-between" alignItems={{ sm: "center" }}>
+              <Box>
+                <Typography fontWeight={800} color="#0f172a">
+                  Jump back into quizzes
+                </Typography>
+                <Typography color="text.secondary">
+                  Open the quiz page directly when you want to practice again.
+                </Typography>
+              </Box>
+              <Button variant="contained" onClick={() => navigate("/quiz")}>
+                Go to Quiz
+              </Button>
+            </Stack>
           </Paper>
 
           <Box
@@ -411,12 +429,17 @@ export default function QuizHistory() {
                             ? `${7 - daysDifference} day${7 - daysDifference !== 1 ? "s" : ""} left to review answers`
                             : "Answer review expired after 7 days"}
                         </Typography>
-                        <Button
-                          variant={isOpen ? "contained" : "outlined"}
-                          onClick={() => setOpenAttemptId(isOpen ? null : attempt.id)}
-                        >
-                          {isOpen ? "Hide answers" : "View answers"}
-                        </Button>
+                        <Stack spacing={1.2}>
+                          <Button
+                            variant={isOpen ? "contained" : "outlined"}
+                            onClick={() => setOpenAttemptId(isOpen ? null : attempt.id)}
+                          >
+                            {isOpen ? "Hide answers" : "View answers"}
+                          </Button>
+                          <Button variant="text" onClick={() => navigate("/quiz")}>
+                            Open Quiz
+                          </Button>
+                        </Stack>
                       </Box>
                     </Box>
 

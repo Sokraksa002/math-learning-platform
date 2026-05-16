@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Toolbar,
-  Typography,
   IconButton,
   Menu,
   MenuItem,
@@ -17,6 +16,8 @@ import {
   Psychology,
 } from '@mui/icons-material';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
+
+import logo from "../../assets/Logo.png";
 import { useState } from 'react';
 import { useLocale } from '../../hooks/useLocale';
 
@@ -61,20 +62,24 @@ export default function Header() {
         boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
       }}
     >
-      <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, sm: 4 } }}>
+      
+<Toolbar
+  sx={{
+    justifyContent: 'space-between',
+    px: { xs: 2, sm: 4 },
+    minHeight: 88,     // ✅ KEY LINE (default is 56)
+    alignItems: 'center',
+  }}
+>
+
         {/* Logo */}
-        <Typography
+        <Box
           component={Link}
           to="/home"
-          sx={{
-            fontWeight: 'bold',
-            color: '#2196F3',
-            fontSize: '24px',
-            textDecoration: 'none',
-          }}
+          sx={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
         >
-          Kanit
-        </Typography>
+          <img src={logo} alt="Kanit logo" style={{ height: 76, display: 'block' }} />
+        </Box>
 
         {/* Main menu */}
         <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>

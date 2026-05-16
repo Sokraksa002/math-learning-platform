@@ -28,6 +28,32 @@ type StoredUser = {
   createdAt: string;
 };
 
+const textFieldStyles = {
+  mb: 1.5,
+  "& .MuiInputBase-input": {
+    color: "white",
+    fontSize: "0.9rem",
+  },
+  "& .MuiInputBase-input::placeholder": {
+    color: "rgba(239,247,255,0.78)",
+    opacity: 1,
+  },
+  "& .MuiOutlinedInput-root": {
+    background: "rgba(255,255,255,0.1)",
+    borderRadius: "12px",
+    height: 36,
+    "& fieldset": {
+      borderColor: "rgba(255,255,255,0.38)",
+    },
+    "&:hover fieldset": {
+      borderColor: "rgba(255,255,255,0.75)",
+    },
+    "&.Mui-focused fieldset": {
+      borderColor: "white",
+    },
+  },
+};
+
 export default function Register() {
   const navigate = useNavigate();
   const { t } = useLocale();
@@ -164,7 +190,7 @@ export default function Register() {
             fullWidth
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            sx={{ mb: 1.5, "& .MuiInputBase-input": { color: "white", fontSize: "0.9rem" }, "& .MuiInputBase-input::placeholder": { color: "rgba(239,247,255,0.78)", opacity: 1 }, "& .MuiOutlinedInput-root": { background: "rgba(255,255,255,0.1)", borderRadius: "12px", height: 36, "& fieldset": { borderColor: "rgba(255,255,255,0.38)" }, "&:hover fieldset": { borderColor: "rgba(255,255,255,0.75)" }, "&.Mui-focused fieldset": { borderColor: "white" } } }}
+            sx={textFieldStyles}
           />
 
           <Typography mb={0.55} sx={{ fontSize: "0.88rem", fontWeight: 600, color: "#f3f9ff" }}>{t('pages.Register.email', 'Email')}</Typography>
@@ -175,7 +201,7 @@ export default function Register() {
             fullWidth
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            sx={{ mb: 1.5, "& .MuiInputBase-input": { color: "white", fontSize: "0.9rem" }, "& .MuiInputBase-input::placeholder": { color: "rgba(239,247,255,0.78)", opacity: 1 }, "& .MuiOutlinedInput-root": { background: "rgba(255,255,255,0.1)", borderRadius: "12px", height: 36, "& fieldset": { borderColor: "rgba(255,255,255,0.38)" }, "&:hover fieldset": { borderColor: "rgba(255,255,255,0.75)" }, "&.Mui-focused fieldset": { borderColor: "white" } } }}
+            sx={textFieldStyles}
           />
 
           <Typography mb={0.55} sx={{ fontSize: "0.88rem", fontWeight: 600, color: "#f3f9ff" }}>{t('pages.Register.password', 'Password')}</Typography>
@@ -186,7 +212,7 @@ export default function Register() {
             fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            sx={{ mb: 1.5, "& .MuiInputBase-input": { color: "white", fontSize: "0.9rem" }, "& .MuiInputBase-input::placeholder": { color: "rgba(239,247,255,0.78)", opacity: 1 }, "& .MuiOutlinedInput-root": { background: "rgba(255,255,255,0.1)", borderRadius: "12px", height: 36, "& fieldset": { borderColor: "rgba(255,255,255,0.38)" }, "&:hover fieldset": { borderColor: "rgba(255,255,255,0.75)" }, "&.Mui-focused fieldset": { borderColor: "white" } } }}
+            sx={textFieldStyles}
           />
 
           <Typography mb={0.55} sx={{ fontSize: "0.88rem", fontWeight: 600, color: "#f3f9ff" }}>{t('pages.Register.confirm_password', 'Confirm Password')}</Typography>
@@ -197,7 +223,7 @@ export default function Register() {
             fullWidth
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            sx={{ mb: 1.5, "& .MuiInputBase-input": { color: "white", fontSize: "0.9rem" }, "& .MuiInputBase-input::placeholder": { color: "rgba(239,247,255,0.78)", opacity: 1 }, "& .MuiOutlinedInput-root": { background: "rgba(255,255,255,0.1)", borderRadius: "12px", height: 36, "& fieldset": { borderColor: "rgba(255,255,255,0.38)" }, "&:hover fieldset": { borderColor: "rgba(255,255,255,0.75)" }, "&.Mui-focused fieldset": { borderColor: "white" } } }}
+            sx={textFieldStyles}
           />
 
           <FormControlLabel

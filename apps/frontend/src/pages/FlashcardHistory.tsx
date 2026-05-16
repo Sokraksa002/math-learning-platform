@@ -1,6 +1,6 @@
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Box, Button, Card, CardContent, Chip, Divider, Paper, Stack, Typography } from '@mui/material';
-import Header from '../components/Home/Header';
 
 interface FlashcardCard {
   front: string;
@@ -82,6 +82,7 @@ const formatDate = (dateString: string) =>
   });
 
 export default function FlashcardHistory() {
+  const navigate = useNavigate();
   const [openSessionId, setOpenSessionId] = useState<string | null>(flashcardHistory[0]?.id ?? null);
 
   const averageMastery = Math.round(
@@ -90,7 +91,6 @@ export default function FlashcardHistory() {
 
   return (
     <>
-      <Header />
       <Box
         sx={{
           minHeight: '100vh',
@@ -103,7 +103,7 @@ export default function FlashcardHistory() {
               p: { xs: 3, md: 4 },
               mb: 3,
               borderRadius: 4,
-              background: 'linear-gradient(135deg, #0f766e 0%, #14b8a6 100%)',
+                  background: 'linear-gradient(135deg, #0f172a 0%, #1d4ed8 45%, #14b8a6 100%)',
               color: 'white',
             }}
           >
@@ -155,6 +155,22 @@ export default function FlashcardHistory() {
             </Paper>
           </Box>
 
+          <Paper sx={{ p: 2.5, mb: 3, borderRadius: 3, border: '1px solid #e2e8f0' }}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="space-between" alignItems={{ sm: 'center' }}>
+              <Box>
+                <Typography fontWeight={800} color="#0f172a">
+                  Jump back into flashcards
+                </Typography>
+                <Typography color="text.secondary">
+                  Open the learning page directly instead of staying in the history view.
+                </Typography>
+              </Box>
+              <Button variant="contained" onClick={() => navigate('/flashcard')}>
+                Go to Flashcards
+              </Button>
+            </Stack>
+          </Paper>
+
           <Stack spacing={2}>
             {flashcardHistory.map((session) => {
               const isOpen = openSessionId === session.id;
@@ -198,9 +214,14 @@ export default function FlashcardHistory() {
                         <Typography color="text.secondary" fontSize="0.9rem" mb={2}>
                           Session completion: {progress}%
                         </Typography>
-                        <Button variant={isOpen ? 'contained' : 'outlined'} onClick={() => setOpenSessionId(isOpen ? null : session.id)}>
-                          {isOpen ? 'Hide details' : 'View details'}
-                        </Button>
+                        <Stack spacing={1.2}>
+                          <Button variant={isOpen ? 'contained' : 'outlined'} onClick={() => setOpenSessionId(isOpen ? null : session.id)}>
+                            {isOpen ? 'Hide details' : 'View details'}
+                          </Button>
+                          <Button variant="text" onClick={() => navigate('/flashcard')}>
+                            Open Flashcards
+                          </Button>
+                        </Stack>
                       </Box>
                     </Box>
 

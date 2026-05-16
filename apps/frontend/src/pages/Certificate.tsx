@@ -1,188 +1,241 @@
-import {
-  Box,
-  Button,
-  Container,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Divider, Paper, Stack, Typography } from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { useLocale } from "../hooks/useLocale";
 
 export default function Certificate() {
-  const { chapterId } = useParams<{ chapterId: string }>();
+  const { chapterId } = useParams<{ chapterId?: string }>();
   const navigate = useNavigate();
-  const { t } = useLocale();
+  const certificateRef = useRef<HTMLDivElement | null>(null);
 
-  const certificateRef = useRef<HTMLDivElement>(null);
+  /* =========================
+     ✅ MOCK DATA (NO BACKEND)
+  ========================= */
+  const certificateData = [
+    { chapterId: "1", score: 90 },
+    { chapterId: "2", score: 60 },
+    { chapterId: "3", score: 85 },
+    { chapterId: "4", score: 70 },
+  ];
 
-  const studentName = "Student Name";
-  const score = "8 / 10";
-  const date = new Date().toLocaleDateString();
+  /* =========================
+     ✅ IF NO chapterId → SHOW LIST
+  ========================= */
+  if (!chapterId) {
+    return (
+      <Box sx={{ minHeight: "100vh", background: "linear-gradient(180deg, #f3f7ff 0%, #ffffff 100%)", py: { xs: 4, md: 8 } }}>
+        <Container maxWidth="md">
+          <Paper
+            sx={{
+              p: { xs: 3, md: 4 },
+              mb: 3,
+              borderRadius: 4,
+              color: "white",
+              background: "linear-gradient(135deg, #0f172a 0%, #1d4ed8 45%, #7c3aed 100%)",
+            }}
+          >
+            <Typography variant="overline" sx={{ letterSpacing: 1.2, opacity: 0.85 }}>
+              Achievement center
+            </Typography>
+            <Typography variant="h4" fontWeight={900} sx={{ mt: 1 }}>
+              Your Certificates
+            </Typography>
+            <Typography sx={{ mt: 1, opacity: 0.9, maxWidth: 720 }}>
+              Open any unlocked certificate to see the final award you can download.
+            </Typography>
+          </Paper>
+
+          {certificateData.map((item) => {
+            const unlocked = item.score >= 80;
+
+            return (
+              <Paper
+                key={item.chapterId}
+                sx={{
+                  p: { xs: 2.5, md: 3 },
+                  mb: 3,
+                  borderRadius: 4,
+                  display: "flex",
+                  gap: 2,
+                  flexDirection: { xs: "column", sm: "row" },
+                  justifyContent: "space-between",
+                  alignItems: { xs: "flex-start", sm: "center" },
+                  boxShadow: "0 12px 30px rgba(15, 23, 42, 0.08)",
+                  opacity: unlocked ? 1 : 0.6,
+                  border: "1px solid #e2e8f0",
+                }}
+              >
+                <Box sx={{ flex: 1 }}>
+                  <Typography fontWeight={900} color="#0f172a">
+                    Chapter {item.chapterId}
+                  </Typography>
+                  <Typography sx={{ mt: 0.5, color: "text.secondary" }}>
+                    Score: {item.score}% {unlocked ? "- certificate unlocked" : "- locked until 80%"}
+                  </Typography>
+                </Box>
+
+                {unlocked ? (
+                  <Button
+                    onClick={() =>
+                      navigate(`/certificate/${item.chapterId}`)
+                    }
+                    sx={{
+                      background: "linear-gradient(135deg, #1d4ed8 0%, #7c3aed 100%)",
+                      color: "#fff",
+                      px: 3,
+                      borderRadius: 999,
+                      minWidth: 120,
+                    }}
+                  >
+                    View
+                  </Button>
+                ) : (
+                  <Box
+                    sx={{
+                      px: 3,
+                      py: 1,
+                      backgroundColor: "#eef2ff",
+                      borderRadius: 999,
+                      color: "#64748b",
+                    }}
+                  >
+                    🔒 Locked
+                  </Box>
+                )}
+              </Paper>
+            );
+          })}
+        </Container>
+      </Box>
+    );
+  }
+
+  /* =========================
+     ✅ CERTIFICATE VIEW
+  ========================= */
+
+  const studentName = "STUDENT NAME";
+
+  const current = certificateData.find(
+    (item) => item.chapterId === chapterId
+  );
+
+  const score = current?.score ?? 0;
+  const percentage = score;
+
+  const isUnlocked = percentage >= 80;
+
+  const date = new Date().toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   const handleDownloadPDF = async () => {
     if (!certificateRef.current) return;
 
-    const canvas = await html2canvas(certificateRef.current, {
-      scale: 2,
-      backgroundColor: "#F7F3EB",
-    });
-
+    const canvas = await html2canvas(certificateRef.current);
     const imgData = canvas.toDataURL("image/png");
 
-    const pdf = new jsPDF({
-      orientation: "landscape",
-      unit: "mm",
-      format: "a4",
-    });
-
-    const imgWidth = 297;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-    pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
-    pdf.save(`certificate-chapter-${chapterId}.pdf`);
+    const pdf = new jsPDF({ orientation: "landscape" });
+    pdf.addImage(imgData, "PNG", 10, 10, 280, 160);
+    pdf.save(`Certificate_${chapterId}.pdf`);
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", backgroundColor: "#F3EFE8", py: 6 }}>
+    <Box sx={{ minHeight: "100vh", background: "linear-gradient(180deg, #f3f7ff 0%, #ffffff 100%)", py: { xs: 4, md: 8 } }}>
       <Container maxWidth="lg">
-        {/* ✅ Certificate Canvas */}
-        <Box
-          ref={certificateRef}
-          sx={{
-            position: "relative",
-            backgroundColor: "#F7F3EB",
-            borderRadius: "20px",
-            overflow: "hidden",
-            p: 8,
-            minHeight: "420px",
-            boxShadow: "0 30px 80px rgba(0,0,0,0.08)",
-          }}
-        >
-          {/* ✅ Decorative Shapes */}
-          <Box
-            sx={{
-              position: "absolute",
-              width: 200,
-              height: 200,
-              borderRadius: "50%",
-              background: "#F9AFA3",
-              top: -80,
-              right: -50,
-            }}
-          />
-          <Box
-            sx={{
-              position: "absolute",
-              width: 140,
-              height: 140,
-              borderRadius: "20%",
-              background: "#7CC4A7",
-              bottom: -50,
-              right: 150,
-              transform: "rotate(45deg)",
-            }}
-          />
-          <Box
-            sx={{
-              position: "absolute",
-              width: 160,
-              height: 160,
-              borderRadius: "50%",
-              border: "18px solid #0F2A44",
-              bottom: -60,
-              left: -60,
-            }}
-          />
 
-          {/* ✅ Content */}
-          <Box sx={{ position: "relative", zIndex: 2 }}>
-            <Typography
+        {/* 🔒 LOCKED */}
+        {!isUnlocked ? (
+          <Paper sx={{ p: { xs: 4, md: 6 }, textAlign: "center", borderRadius: 4, border: "1px solid #e2e8f0" }}>
+            <Typography sx={{ fontSize: 24, fontWeight: 900 }}>
+              🔒 Certificate Locked
+            </Typography>
+
+            <Typography sx={{ mt: 2, color: "text.secondary" }}>
+              You need at least 80% to unlock.
+            </Typography>
+
+            <Button
+              sx={{ mt: 3, borderRadius: 999, px: 3 }}
+              onClick={() => navigate("/certificate")}
+              variant="contained"
+            >
+              Back
+            </Button>
+          </Paper>
+        ) : (
+          <>
+            {/* 🎓 CERTIFICATE */}
+            <Paper
+              ref={certificateRef}
               sx={{
-                fontSize: 48,
-                fontWeight: 800,
-                color: "#0F2A44",
-                mb: 2,
+                p: { xs: 4, md: 7 },
+                textAlign: "center",
+                borderRadius: 5,
+                border: "8px solid #1d4ed8",
+                background: "linear-gradient(180deg, #ffffff 0%, #f8fbff 100%)",
+                boxShadow: "0 24px 60px rgba(15, 23, 42, 0.12)",
+                position: "relative",
+                overflow: "hidden",
               }}
             >
-              Certificate
-            </Typography>
+              <Box sx={{ position: "absolute", inset: 20, border: "1px solid rgba(29, 78, 216, 0.12)", borderRadius: 4, pointerEvents: "none" }} />
+              <Typography sx={{ fontSize: 36, fontWeight: 900, color: "#0f172a", position: "relative" }}>
+                Certificate
+              </Typography>
 
-            <Typography sx={{ fontSize: 18, color: "#444", mb: 4 }}>
-              This certifies that
-            </Typography>
+              <Typography sx={{ mt: 2, color: "#475569", position: "relative" }}>
+                This is awarded to
+              </Typography>
 
-            <Typography
-              sx={{
-                fontSize: 32,
-                fontWeight: 700,
-                color: "#0F2A44",
-                mb: 3,
-              }}
-            >
-              {studentName}
-            </Typography>
+              <Typography sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 900, my: 2, color: "#1d4ed8", position: "relative" }}>
+                {studentName}
+              </Typography>
 
-            <Typography sx={{ fontSize: 18, mb: 1 }}>
-              has successfully completed
-            </Typography>
+              <Typography sx={{ color: "#334155", position: "relative" }}>
+                For completing Chapter {chapterId}
+              </Typography>
 
-            <Typography
-              sx={{ fontSize: 22, fontWeight: 600, mb: 3 }}
-            >
-              Quiz — Chapter {chapterId}
-            </Typography>
+              <Typography sx={{ mt: 2, color: "#0f172a", fontWeight: 700, position: "relative" }}>
+                Score: {score}%
+              </Typography>
 
-            <Typography sx={{ fontSize: 16 }}>
-              Score: <strong>{score}</strong>
-            </Typography>
+              <Divider sx={{ my: 4, borderColor: "rgba(29, 78, 216, 0.15)", position: "relative" }} />
 
-            <Box
-              sx={{
-                mt: 6,
-                display: "flex",
-                justifyContent: "space-between",
-                width: "60%",
-              }}
-            >
-              <Box>
-                <Typography fontSize={14}>{t('pages.Certificate.date', 'Date')}</Typography>
-                <Typography fontWeight={600}>{date}</Typography>
-              </Box>
+              <Stack direction={{ xs: "column", sm: "row" }} justifyContent="center" spacing={2} sx={{ position: "relative" }}>
+                <Box sx={{ px: 3, py: 1.5, borderRadius: 3, bgcolor: "rgba(29, 78, 216, 0.08)", color: "#1d4ed8", fontWeight: 800 }}>
+                  Verified completion
+                </Box>
+                <Box sx={{ px: 3, py: 1.5, borderRadius: 3, bgcolor: "rgba(15, 23, 42, 0.04)", color: "#0f172a", fontWeight: 700 }}>
+                  {date}
+                </Box>
+              </Stack>
+            </Paper>
 
-              <Box>
-                <Typography fontSize={14}>{t('pages.Certificate.authorized_by', 'Authorized by')}</Typography>
-                <Typography fontWeight={600}>{t('pages.Certificate.admin', 'Admin')}</Typography>
-              </Box>
-            </Box>
-          </Box>
-        </Box>
+            {/* 🎯 BUTTONS */}
+            <Stack direction={{ xs: "column", sm: "row" }} justifyContent="center" spacing={2} sx={{ textAlign: "center", mt: 4 }}>
+              <Button
+                onClick={handleDownloadPDF}
+                sx={{
+                  background: "linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%)",
+                  color: "#fff",
+                  px: 3,
+                  borderRadius: 999,
+                }}
+                variant="contained"
+              >
+                Download PDF
+              </Button>
 
-        {/* ✅ Buttons */}
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            gap: 2,
-            mt: 4,
-          }}
-        >
-          <Button
-            onClick={handleDownloadPDF}
-            sx={{
-              backgroundColor: "#F9AFA3",
-              color: "#111",
-              fontWeight: 700,
-              px: 4,
-              "&:hover": { backgroundColor: "#F79C8D" },
-            }}
-          >
-            Download PDF
-          </Button>
-
-          <Button onClick={() => navigate("/quiz")}>{t('pages.Certificate.back', 'Back')}</Button>
-        </Box>
+              <Button onClick={() => navigate("/certificate")} variant="outlined" sx={{ px: 3, borderRadius: 999 }}>
+                Back
+              </Button>
+            </Stack>
+          </>
+        )}
       </Container>
     </Box>
   );

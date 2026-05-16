@@ -5,7 +5,7 @@ import { useLocale } from '../../hooks/useLocale';
 interface QuizCard {
   id: number;
   title: string;
-  bgColor: string;
+  accent: string;
 }
 
 export default function QuizTimeSection() {
@@ -13,10 +13,10 @@ export default function QuizTimeSection() {
   const navigate = useNavigate();
 
   const quizzes: QuizCard[] = [
-    { id: 1, title: 'Chapter 1', bgColor: '#A8D5BA' },
-    { id: 2, title: 'Chapter 2', bgColor: '#74B9FF' },
-    { id: 3, title: 'Chapter 3', bgColor: '#FFD4A3' },
-    { id: 4, title: 'Chapter 4', bgColor: '#D8B9F9' },
+    { id: 1, title: 'Chapter 1', accent: '#3D86E8' },
+    { id: 2, title: 'Chapter 2', accent: '#5CA8F2' },
+    { id: 3, title: 'Chapter 3', accent: '#2F6FD4' },
+    { id: 4, title: 'Chapter 4', accent: '#78B4F6' },
   ];
 
   return (
@@ -26,7 +26,7 @@ export default function QuizTimeSection() {
           variant="h4"
           sx={{
             fontWeight: 'bold',
-            color: '#000',
+            color: '#1F2937',
             mb: 5,
             fontSize: '28px',
           }}
@@ -39,9 +39,9 @@ export default function QuizTimeSection() {
     <Box
       key={quiz.id}
       onClick={() => navigate(`/quiz`)}
-      // onClick={() => navigate(`/quiz/${quiz.id}`)}
       sx={{
-        backgroundColor: quiz.bgColor, // ✅ use chapter color
+        backgroundColor: '#fff',
+        borderLeft: `6px solid ${quiz.accent}`,
         borderRadius: '12px',
         px: 3,
         py: 2.5,
@@ -50,9 +50,10 @@ export default function QuizTimeSection() {
         alignItems: 'center',
         justifyContent: 'space-between',
         transition: 'all 0.2s ease',
+        boxShadow: '0 6px 16px rgba(0,0,0,0.12)',
         '&:hover': {
           transform: 'translateY(-2px)',
-          boxShadow: '0 6px 16px rgba(0,0,0,0.15)',
+          boxShadow: '0 10px 22px rgba(0,0,0,0.15)',
         },
       }}
     >
@@ -63,14 +64,13 @@ export default function QuizTimeSection() {
       <Button
         onClick={(e) => {
           e.stopPropagation();
-           navigate(`/quiz`)}
-      //  navigate(`/quiz/${quiz.id}`)}
-      }
+          navigate(`/quiz`);
+        }}
         sx={{
           textTransform: 'none',
           fontWeight: 700,
           fontSize: 20,
-          fontWidth: 50,
+          width: 40,
           color: '#3D86E8',
           minWidth: 'auto',
         }}

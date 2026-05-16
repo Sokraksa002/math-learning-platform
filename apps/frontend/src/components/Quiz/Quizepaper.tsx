@@ -2,36 +2,144 @@ import { Box, Button, Container, Typography } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
+/* =========================
+   TYPES
+========================= */
 interface QuizOption {
   id: string;
   label: string;
   text: string;
-  color: string;
 }
 
 interface QuizQuestion {
   id: number;
   prompt: string;
-  equation: string;
+  equation?: string;
   options: QuizOption[];
   answerId: string;
 }
 
+/* =========================
+   MOCK QUESTIONS (10)
+   👉 Replace later with API
+========================= */
 const QUESTIONS: QuizQuestion[] = [
   {
     id: 1,
     prompt: 'What is the limit as x → 0?',
     equation: 'sin(x) / x',
     options: [
-      { id: 'a', label: 'A.', text: '0', color: '#A8D5BA' },
-      { id: 'b', label: 'B.', text: '1', color: '#74B9FF' },
-      { id: 'c', label: 'C.', text: '∞', color: '#FFD4A3' },
-      { id: 'd', label: 'D.', text: '-1', color: '#D8B9F9' },
+      { id: 'a', label: 'A.', text: '0' },
+      { id: 'b', label: 'B.', text: '1' },
+      { id: 'c', label: 'C.', text: '∞' },
+      { id: 'd', label: 'D.', text: '-1' },
     ],
     answerId: 'b',
   },
+  {
+    id: 2,
+    prompt: 'Derivative of x² is?',
+    options: [
+      { id: 'a', label: 'A.', text: 'x' },
+      { id: 'b', label: 'B.', text: '2x' },
+      { id: 'c', label: 'C.', text: 'x²' },
+      { id: 'd', label: 'D.', text: '2' },
+    ],
+    answerId: 'b',
+  },
+  {
+    id: 3,
+    prompt: 'Solve: 2x + 4 = 10',
+    options: [
+      { id: 'a', label: 'A.', text: '2' },
+      { id: 'b', label: 'B.', text: '3' },
+      { id: 'c', label: 'C.', text: '4' },
+      { id: 'd', label: 'D.', text: '6' },
+    ],
+    answerId: 'c',
+  },
+  {
+    id: 4,
+    prompt: 'Integral of 1 dx?',
+    options: [
+      { id: 'a', label: 'A.', text: '1' },
+      { id: 'b', label: 'B.', text: 'x' },
+      { id: 'c', label: 'C.', text: 'x²' },
+      { id: 'd', label: 'D.', text: 'ln x' },
+    ],
+    answerId: 'b',
+  },
+  {
+    id: 5,
+    prompt: 'What is π approximately?',
+    options: [
+      { id: 'a', label: 'A.', text: '2.14' },
+      { id: 'b', label: 'B.', text: '3.14' },
+      { id: 'c', label: 'C.', text: '1.14' },
+      { id: 'd', label: 'D.', text: '4.14' },
+    ],
+    answerId: 'b',
+  },
+  {
+    id: 6,
+    prompt: 'Derivative of sin(x)?',
+    options: [
+      { id: 'a', label: 'A.', text: 'cos(x)' },
+      { id: 'b', label: 'B.', text: '-cos(x)' },
+      { id: 'c', label: 'C.', text: 'tan(x)' },
+      { id: 'd', label: 'D.', text: 'x' },
+    ],
+    answerId: 'a',
+  },
+  {
+    id: 7,
+    prompt: 'Solve: x² = 9',
+    options: [
+      { id: 'a', label: 'A.', text: '3 only' },
+      { id: 'b', label: 'B.', text: '-3 only' },
+      { id: 'c', label: 'C.', text: '±3' },
+      { id: 'd', label: 'D.', text: '0' },
+    ],
+    answerId: 'c',
+  },
+  {
+    id: 8,
+    prompt: 'What is 2³?',
+    options: [
+      { id: 'a', label: 'A.', text: '6' },
+      { id: 'b', label: 'B.', text: '8' },
+      { id: 'c', label: 'C.', text: '9' },
+      { id: 'd', label: 'D.', text: '4' },
+    ],
+    answerId: 'b',
+  },
+  {
+    id: 9,
+    prompt: 'Slope of y = 3x?',
+    options: [
+      { id: 'a', label: 'A.', text: '1' },
+      { id: 'b', label: 'B.', text: '2' },
+      { id: 'c', label: 'C.', text: '3' },
+      { id: 'd', label: 'D.', text: '0' },
+    ],
+    answerId: 'c',
+  },
+  {
+    id: 10,
+    prompt: 'What is √16?',
+    options: [
+      { id: 'a', label: 'A.', text: '2' },
+      { id: 'b', label: 'B.', text: '3' },
+      { id: 'c', label: 'C.', text: '4' },
+      { id: 'd', label: 'D.', text: '5' },
+    ],
+    answerId: 'c',
+  },
 ];
 
+/* =========================
+   COMPONENT
+========================= */
 export default function QuizPaper() {
   const { chapterId } = useParams();
   const navigate = useNavigate();
@@ -40,158 +148,133 @@ export default function QuizPaper() {
   const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
   const [score, setScore] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [showAnswers, setShowAnswers] = useState(false);
 
-  const currentQuestion = QUESTIONS[currentIndex];
-  const totalQuestions = QUESTIONS.length;
+  const question = QUESTIONS[currentIndex];
+  const total = QUESTIONS.length;
+  const percentage = (score / total) * 100;
 
-  if (!currentQuestion && !finished) return null;
-
-  const handleAnswer = (answerId: string) => {
+  const handleSelect = (id: string) => {
     if (selectedAnswer) return;
 
-    setSelectedAnswer(answerId);
+    setSelectedAnswer(id);
 
-    if (answerId === currentQuestion.answerId) {
-      setScore((prev) => prev + 1);
+    if (id === question.answerId) {
+      setScore((s) => s + 1);
     }
 
     setTimeout(() => {
-      if (currentIndex === totalQuestions - 1) {
+      if (currentIndex === total - 1) {
         setFinished(true);
       } else {
-        setCurrentIndex((prev) => prev + 1);
+        setCurrentIndex((i) => i + 1);
         setSelectedAnswer(null);
       }
     }, 600);
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#F7F8FC', py: 8 }}>
+    <Box sx={{ minHeight: '100vh', backgroundColor: '#F4F6FB', py: 8 }}>
       <Container maxWidth="md">
         <Box
           sx={{
             backgroundColor: '#fff',
-            borderRadius: 3,
-            p: 4,
-            boxShadow: '0 20px 40px rgba(0,0,0,0.08)',
+            borderRadius: 4,
+            p: 5,
+            boxShadow: '0 12px 25px rgba(0,0,0,0.05)',
           }}
         >
           {!finished ? (
             <>
-              {/* Header */}
-              <Typography sx={{ fontSize: 22, fontWeight: 800, mb: 1 }}>
+              {/* HEADER */}
+              <Typography sx={{ fontSize: 20, fontWeight: 700 }}>
                 Quiz – Chapter {chapterId}
               </Typography>
 
-              <Typography sx={{ fontSize: 14, color: '#666', mb: 3 }}>
-                Question {currentIndex + 1} / {totalQuestions}
+              <Typography sx={{ fontSize: 13, color: '#888', mb: 3 }}>
+                Question {currentIndex + 1} / {total}
               </Typography>
 
-              {/* Question */}
-              <Typography sx={{ fontWeight: 700, mb: 1 }}>
-                {currentQuestion.prompt}
+              {/* QUESTION */}
+              <Typography sx={{ fontWeight: 600, mb: 2 }}>
+                {question.prompt}
               </Typography>
 
-              <Typography sx={{ fontSize: 14, color: '#555', mb: 3 }}>
-                {currentQuestion.equation}
-              </Typography>
-
-              {/* Options */}
+              {/* OPTIONS */}
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                {currentQuestion.options.map((option) => {
-                  const isSelected = selectedAnswer === option.id;
-                  const isCorrect = option.id === currentQuestion.answerId;
-                  const showResult = selectedAnswer !== null;
+                {question.options.map((opt) => {
+                  const isSelected = selectedAnswer === opt.id;
+                  const isCorrect = opt.id === question.answerId;
+                  const show = selectedAnswer !== null;
 
-                  let bgColor = option.color;
-                  if (showResult && isCorrect) bgColor = '#A8D5BA';
-                  if (showResult && isSelected && !isCorrect) bgColor = '#FFD4A3';
+                  let borderColor = '#E5E7EB';
+                  let bgColor = '#FFFFFF';
+
+                  if (show && isCorrect) {
+                    borderColor = '#4CAF50';
+                    bgColor = '#ECFDF5';
+                  }
+
+                  if (show && isSelected && !isCorrect) {
+                    borderColor = '#F97316';
+                    bgColor = '#FFF7ED';
+                  }
 
                   return (
                     <Box
-                      key={option.id}
-                      onClick={() => handleAnswer(option.id)}
+                      key={opt.id}
+                      onClick={() => handleSelect(opt.id)}
                       sx={{
-                        backgroundColor: bgColor,
-                        borderRadius: 2,
+                        border: `2px solid ${borderColor}`,
+                        borderRadius: 3,
                         px: 3,
                         py: 2,
-                        cursor: showResult ? 'default' : 'pointer',
-                        fontWeight: 600,
-                        transition: '0.2s',
-                        opacity:
-                          showResult && !isSelected && !isCorrect ? 0.6 : 1,
+                        backgroundColor: bgColor,
+                        cursor: show ? 'default' : 'pointer',
+                        transition: 'all 0.3s ease',
+
+                        /* ✅ HOVER EFFECT */
                         '&:hover': {
-                          transform: showResult ? 'none' : 'translateY(-2px)',
+                          backgroundColor: show ? bgColor : 'transparent',
+                          borderColor: '#6366F1',
+                          transform: show ? 'none' : 'scale(1.02)',
                         },
                       }}
                     >
-                      {option.label} {option.text}
+                      <strong>{opt.label}</strong> {opt.text}
                     </Box>
                   );
                 })}
               </Box>
             </>
           ) : (
-            /* ✅ FINISHED SCREEN (NO TRY AGAIN) */
+            /* ✅ RESULT */
             <Box textAlign="center">
-              <Typography sx={{ fontSize: 28, fontWeight: 800, mb: 2 }}>
-                Quiz finished
+              <Typography sx={{ fontSize: 24, fontWeight: 700, mb: 2 }}>
+                🎉 Quiz Finished
               </Typography>
 
-              <Typography sx={{ fontSize: 16, mb: 4 }}>
-                Your score is {score} / {totalQuestions}
+              <Typography sx={{ mb: 2 }}>
+                Score: {score} / {total} ({percentage.toFixed(1)}%)
               </Typography>
 
-              <Button
-                onClick={() => navigate(`/certificate/${chapterId}`)}
-                sx={{
-                  textTransform: 'none',
-                  backgroundColor: '#3D86E8',
-                  color: '#fff',
-                  fontWeight: 700,
-                  borderRadius: 2,
-                  px: 4,
-                  mb: 2,
-                  '&:hover': { backgroundColor: '#2F6FC0' },
-                }}
-              >
-                View Certificate
-              </Button>
-
-              <br />
-
-              <Button
-                onClick={() => setShowAnswers(true)}
-                sx={{ textTransform: 'none', fontWeight: 600, mb: 1 }}
-              >
-                View Answers
-              </Button>
-
-              <br />
-
-              <Button
-                onClick={() => navigate('/quiz')}
-                sx={{ textTransform: 'none', fontWeight: 600 }}
-              >
-                Back
-              </Button>
-            </Box>
-          )}
-
-          {/* ✅ ANSWER REVIEW */}
-          {finished && showAnswers && (
-            <Box sx={{ mt: 4 }}>
-              <Typography sx={{ fontWeight: 700, mb: 2 }}>
-                Correct Answers
-              </Typography>
-
-              {QUESTIONS.map((q, index) => (
-                <Typography key={q.id} sx={{ fontSize: 14, mb: 1 }}>
-                  {index + 1}. {q.answerId.toUpperCase()}
+              {percentage >= 80 ? (
+                <Button
+                  onClick={() => navigate(`/certificate/${chapterId}`)}
+                  sx={{
+                    backgroundColor: '#6366F1',
+                    color: '#fff',
+                    borderRadius: 2,
+                    px: 4,
+                    '&:hover': { backgroundColor: '#4F46E5' },
+                  }}
+                >
+                  🎓 View Certificate
+                </Button>
+              ) : (
+                <Typography sx={{ color: '#F97316', mt: 2 }}>
+                  Score at least 80% to unlock certificate 💪
                 </Typography>
-              ))}
+              )}
             </Box>
           )}
         </Box>

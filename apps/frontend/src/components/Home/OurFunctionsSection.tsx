@@ -1,6 +1,5 @@
-import { Box, Container, Typography } from '@mui/material';
-import { MenuBook, Lock, AutoStories } from '@mui/icons-material';
-import FeatureCard from './FeatureCard';
+import { Box, Container, Typography, Card, CardContent, CardActionArea } from '@mui/material';
+import { MenuBook, Edit, Image, School, AutoStories, Camera } from '@mui/icons-material';
 import { useLocale } from '../../hooks/useLocale';
 
 export default function OurFunctionsSection() {
@@ -9,53 +8,183 @@ export default function OurFunctionsSection() {
   const features = [
     {
       title: t('nav.chapter', 'Chapter'),
-      description: t('components.Home.OurFunctionsSection.interactive_learning', 'The gradual accumulation of information about atomic and small-scale behaviour...'),
+      titleKhmer: t('chapter.khmer', 'ជំពូក'),
+      description: t(
+        'components.Home.OurFunctionsSection.chapter_desc',
+        'រៀនមេរៀនរៀងរាប់ដែលផ្សំឡើងដោយស្ថាប័នអប់រំ'
+      ),
       icon: MenuBook,
-      bgColor: '#C8E6C9',
-      iconBg: '#81C784',
+      bgColor: '#DBEAFE',
+      iconColor: '#0284C7',
     },
     {
-      title: t('nav.quiz', 'Quiz'),
-      description: t('components.Home.OurFunctionsSection.track_progress', 'The gradual accumulation of information about atomic and small-scale behaviour...'),
-      icon: Lock,
-      bgColor: '#B3E5FC',
-      iconBg: '#4FC3F7',
+      title: t('nav.quiz', 'Quiz Practice'),
+      titleKhmer: t('quiz.khmer', 'ធ្វើតេស្ត'),
+      description: t(
+        'components.Home.OurFunctionsSection.quiz_desc',
+        'ហាត់សំណួរ និងបង្កើនចំណេះដឹងគណិតវិទ្យា'
+      ),
+      icon: Edit,
+      bgColor: '#E0E7FF',
+      iconColor: '#6366F1',
     },
     {
-      title: t('flashcard.flashcardQA', 'Flashcard Q & A'),
-      description: t('components.Home.OurFunctionsSection.earn_certificates', 'The gradual accumulation of information about atomic and small-scale behaviour...'),
+      title: t('flashcard.flashcardQA', 'Flashcard'),
+      titleKhmer: t('flashcard.khmer', 'កាតបង្រៀន'),
+      description: t(
+        'components.Home.OurFunctionsSection.flashcard_desc',
+        'ស្វែងរករូបមន្ត មេរៀន និងឯកសារសិក្សា'
+      ),
       icon: AutoStories,
-      bgColor: '#FFF9C4',
-      iconBg: '#FFD54F',
+      bgColor: '#FEF3C7',
+      iconColor: '#D97706',
+    },
+    {
+      title: t('focus.title', 'Focus Timer'),
+      titleKhmer: t('focus.khmer', 'ផ្តោតលើគោលដៅ'),
+      description: t(
+        'components.Home.OurFunctionsSection.focus_desc',
+        'ផ្តោតលើការរៀនដោយលម្អិតក្នុងរយៈពេលសមស្របក'
+      ),
+      icon: School,
+      bgColor: '#F3E8FF',
+      iconColor: '#9333EA',
+    },
+    {
+      title: t('certificate.title', 'Certificate'),
+      titleKhmer: t('certificate.khmer', 'វិក័យប័ត្រ'),
+      description: t(
+        'components.Home.OurFunctionsSection.certificate_desc',
+        'ទទួលបានវិក័យប័ត្របង្ហាញការបញ្ចប់ដ៏ល្អឥតខ្ចោះ'
+      ),
+      icon: Image,
+      bgColor: '#FECACA',
+      iconColor: '#DC2626',
+    },
+    {
+      title: t('scan.title', 'Quick Scan'),
+      titleKhmer: t('scan.khmer', 'ស្កេនលឿន'),
+      description: t(
+        'components.Home.OurFunctionsSection.scan_desc',
+        'ថតនិងបញ្ជូនទៅ ដោះស្រាយលម្អិតលម្អន់'
+      ),
+      icon: Camera,
+      bgColor: '#CCFBF1',
+      iconColor: '#0891B2',
     },
   ];
 
   return (
-    <Box sx={{ backgroundColor: '#fafafa', py: 8 }}>
+    <Box sx={{ backgroundColor: '#fff', py: { xs: 6, md: 10 } }}>
       <Container maxWidth="lg">
         <Typography
           variant="h4"
           sx={{
             fontWeight: 'bold',
-            color: '#000',
-            mb: 5,
-            fontSize: '28px',
+            color: '#1f2937',
+            mb: 1,
+            textAlign: 'center',
+            fontSize: { xs: '28px', md: '36px' },
           }}
         >
-          {t('components.Home.OurFunctionsSection.our_functions', 'Our Functions')}
+          {t('components.Home.OurFunctionsSection.our_functions', 'Our Features')}
+        </Typography>
+        <Typography
+          sx={{
+            textAlign: 'center',
+            color: '#6b7280',
+            mb: 6,
+            maxWidth: '600px',
+            mx: 'auto',
+          }}
+        >
+          {t(
+            'components.Home.OurFunctionsSection.features_intro',
+            'ឧបករណ៍សិក្សាដ៏ឆ្នើមសម្រាប់ភាពជោគជ័យ'
+          )}
         </Typography>
 
-        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'nowrap' }}>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)' },
+            gap: 3,
+          }}
+        >
           {features.map((feature, index) => (
-            <Box key={index} sx={{ flex: 1, minWidth: 0 }}>
-              <FeatureCard
-                title={feature.title}
-                description={feature.description}
-                icon={feature.icon}
-                bgColor={feature.bgColor}
-                iconBg={feature.iconBg}
-              />
-            </Box>
+            <Card
+              key={index}
+              sx={{
+                height: '100%',
+                borderRadius: 3,
+                transition: 'all 0.3s ease',
+                border: 'none',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                '&:hover': {
+                  transform: 'translateY(-8px)',
+                  boxShadow: '0 12px 24px rgba(0,0,0,0.12)',
+                },
+              }}
+            >
+              <CardActionArea>
+                <Box
+                  sx={{
+                    backgroundColor: feature.bgColor,
+                    py: 3,
+                    px: 2,
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: '50%',
+                      backgroundColor: '#fff',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                    }}
+                  >
+                    <feature.icon sx={{ fontSize: 32, color: feature.iconColor }} />
+                  </Box>
+                </Box>
+                <CardContent sx={{ textAlign: 'center' }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 'bold',
+                      color: '#1f2937',
+                      mb: 0.5,
+                    }}
+                  >
+                    {feature.title}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontSize: '13px',
+                      color: '#3B82F6',
+                      fontWeight: 600,
+                      mb: 1,
+                    }}
+                  >
+                    {feature.titleKhmer}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    sx={{
+                      color: '#6b7280',
+                      lineHeight: 1.6,
+                      fontSize: '14px',
+                    }}
+                  >
+                    {feature.description}
+                  </Typography>
+                </CardContent>
+              </CardActionArea>
+            </Card>
           ))}
         </Box>
       </Container>

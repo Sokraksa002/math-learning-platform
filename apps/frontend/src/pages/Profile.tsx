@@ -24,7 +24,6 @@ import {
   Person,
 } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import Header from '../components/Home/Header';
 import { getUser, logout } from '../utils/auth';
 import { useLocale } from '../hooks/useLocale';
 
@@ -37,8 +36,6 @@ export default function Profile() {
 
   return (
     <Box sx={{ minHeight: '100vh', backgroundColor: '#F7F8FC' }}>
-      <Header />
-
       <Container maxWidth="sm" sx={{ py: 4 }}>
         <Card sx={{ borderRadius: 3, boxShadow: '0 8px 24px rgba(0,0,0,0.08)' }}>
           <CardContent>

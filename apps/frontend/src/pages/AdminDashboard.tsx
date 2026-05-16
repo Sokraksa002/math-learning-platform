@@ -29,7 +29,6 @@ import {
 } from "@mui/material";
 import { useMemo, useState } from "react";
 import { getUser } from "../utils/auth";
-import Header from "../components/Home/Header";
 
 
 type Status = "active" | "inactive";
@@ -294,7 +293,6 @@ export default function AdminDashboard() {
 
   return (
     <>
-      <Header />
       <Container maxWidth="lg" sx={{ py: 4 }}>
         <Paper sx={{ p: 4, mb: 3, background: "linear-gradient(135deg, #0f172a 0%, #4338ca 45%, #7c3aed 100%)", color: "white", borderRadius: 3 }}>
           <Typography variant="h4" fontWeight={800} mb={1}>Admin Management Center</Typography>

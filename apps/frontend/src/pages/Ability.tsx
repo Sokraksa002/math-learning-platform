@@ -1,5 +1,5 @@
 import { Box, Card, CardContent, Chip, Paper, Stack, Typography } from '@mui/material';
-import Header from '../components/Home/Header';
+import { useLocale } from '../hooks/useLocale';
 
 interface SkillArea {
   name: string;
@@ -50,9 +50,10 @@ const recommendations = [
 const topSkill = skillAreas.reduce((best, current) => (current.score > best.score ? current : best));
 
 export default function Ability() {
+  useLocale();
+
   return (
     <>
-      <Header />
       <Box
         sx={{
           minHeight: '100vh',

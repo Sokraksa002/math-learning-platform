@@ -38,12 +38,12 @@ export default function AppRoutes() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
-
+          
           {/* Protected Routes */}
           <Route
             path="/quiz"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <Quiz />
               </ProtectedRoute>
             }
@@ -52,7 +52,7 @@ export default function AppRoutes() {
           <Route
             path="/quiz/paper/:chapterId"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <Quizepaper />
               </ProtectedRoute>
             }
@@ -61,7 +61,7 @@ export default function AppRoutes() {
           <Route
             path="/chapter"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <Chapter />
               </ProtectedRoute>
             }
@@ -70,7 +70,7 @@ export default function AppRoutes() {
           <Route
             path="/lesson/:lessonId"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <LessonDetail />
               </ProtectedRoute>
             }
@@ -79,7 +79,7 @@ export default function AppRoutes() {
           <Route
             path="/flashcard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <Flashcard />
               </ProtectedRoute>
             }
@@ -88,7 +88,7 @@ export default function AppRoutes() {
           <Route
             path="/focus"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <Focus />
               </ProtectedRoute>
             }
@@ -97,7 +97,7 @@ export default function AppRoutes() {
           <Route
             path="/profile"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <Profile />
               </ProtectedRoute>
             }
@@ -106,7 +106,7 @@ export default function AppRoutes() {
           <Route
             path="/profile/manage"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <ManageProfile />
               </ProtectedRoute>
             }
@@ -115,7 +115,7 @@ export default function AppRoutes() {
           <Route
             path="/profile/security"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <Security />
               </ProtectedRoute>
             }
@@ -124,7 +124,7 @@ export default function AppRoutes() {
           <Route
             path="/quiz-history"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <QuizHistory />
               </ProtectedRoute>
             }
@@ -133,7 +133,7 @@ export default function AppRoutes() {
           <Route
             path="/flashcard-history"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <FlashcardHistory />
               </ProtectedRoute>
             }
@@ -142,7 +142,7 @@ export default function AppRoutes() {
           <Route
             path="/ability"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <Ability />
               </ProtectedRoute>
             }
@@ -151,16 +151,16 @@ export default function AppRoutes() {
           <Route
             path="/profile/notifications"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <Notifications />
               </ProtectedRoute>
             }
           />
 
           <Route
-            path="/certificate/:chapterId"
+            path="/certificate"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <Certificate />
               </ProtectedRoute>
             }
@@ -169,7 +169,7 @@ export default function AppRoutes() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
                 <Dashboard />
               </ProtectedRoute>
             }
@@ -178,7 +178,7 @@ export default function AppRoutes() {
           <Route
             path="/admin"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["admin"]} redirectTo="/dashboard">
                 <AdminDashboard />
               </ProtectedRoute>
             }

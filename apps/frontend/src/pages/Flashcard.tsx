@@ -1,5 +1,4 @@
 import { Box } from '@mui/material';
-import Header from '../components/Home/Header';
 import FlashcardBoard from '../components/Flashcard/FlashcardBoard';
 
 export default function Flashcard() {
@@ -12,8 +11,6 @@ export default function Flashcard() {
         backgroundColor: '#fff',
       }}
     >
-      <Header />
-
       <Box
         sx={{
           py: 4,

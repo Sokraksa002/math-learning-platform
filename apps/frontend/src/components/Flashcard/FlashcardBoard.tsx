@@ -97,7 +97,10 @@ export default function FlashcardBoard() {
 
         <Stack spacing={1.5}>
           <Box>
-            <Typography sx={{ mb: 0.75, fontSize: 16 }}>{t('components.Flashcard.FlashcardBoard.lesson', 'lesson')}</Typography>
+            <Typography sx={{ mb: 0.75, fontSize: 16 ,
+ textAlign: 'left',
+    alignSelf: 'flex-start',
+}}>{t('components.Flashcard.FlashcardBoard.lesson', 'lesson')}</Typography>
             <Select
               fullWidth
               value={lesson}
@@ -114,7 +117,10 @@ export default function FlashcardBoard() {
           </Box>
 
           <Box>
-            <Typography sx={{ mb: 0.75, fontSize: 16 }}>{t('components.Flashcard.FlashcardBoard.topic', 'Topic')}</Typography>
+            <Typography sx={{ mb: 0.75, fontSize: 16,
+ textAlign: 'left',
+    alignSelf: 'flex-start',
+ }}>{t('components.Flashcard.FlashcardBoard.topic', 'Topic')}</Typography>
             <TextField
               fullWidth
               value={topic}

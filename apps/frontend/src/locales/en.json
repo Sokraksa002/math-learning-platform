@@ -9,6 +9,37 @@
     "flashcardHistory": "Flashcard history",
     "ability": "My Ability"
   },
+  "hero": {
+    "ai_learning_hub": "AI Learning Hub",
+    "khmer_title": "Learn Math More Easily",
+    "subtitle": "Find exercise solutions and abundant learning resources with Kanit."
+  },
+  "chapter": {
+    "khmer": "Chapter"
+  },
+  "quiz": {
+    "khmer": "Quiz Practice"
+  },
+  "flashcard": {
+    "khmer": "Flashcard",
+    "generate": "Generate",
+    "clear": "Clear",
+    "clickToFlip": "click to flip",
+    "flashcardQA": "Flashcard Q & A",
+    "reviewSessions": "Your revision sessions"
+  },
+  "focus": {
+    "khmer": "Focus Timer",
+    "title": "Focus Timer"
+  },
+  "certificate": {
+    "khmer": "Certificate",
+    "title": "Certificate"
+  },
+  "scan": {
+    "khmer": "Quick Scan",
+    "title": "Quick Scan"
+  },
   "menu": {
     "myProfile": "My profile",
     "lesson": "Lesson",
@@ -21,13 +52,6 @@
     "manageProfile": "Manage Profile",
     "security": "Password & Security",
     "notifications": "Notifications"
-  },
-  "flashcard": {
-    "generate": "Generate",
-    "clear": "Clear",
-    "clickToFlip": "click to flip",
-    "flashcardQA": "Flashcard Q & A",
-    "reviewSessions": "Your revision sessions"
   },
   "components": {
     "Calendor": {
@@ -66,6 +90,52 @@
       }
     },
     "Home": {
+      "Buttle": {
+        "title": "Daily Check‑In",
+        "how_are_you": "How are you today?",
+        "description": "Select your mood. We'll help you plan your study smarter.",
+        "subtitle": "Pick your cute mood buddy today ✨",
+        "your_mood_week": "Your Mood This Week",
+        "older_week": "Older week",
+        "newer_week": "Newer week",
+        "today_you_feel": "Today you feel",
+        "weekly_average": "Weekly average:",
+        "emotional_insight": "Emotional Insight",
+        "study_tip": "Study tip:",
+        "moods": {
+          "awful": "Awful",
+          "bad": "Bad",
+          "okay": "Okay",
+          "good": "Good",
+          "great": "Great"
+        },
+        "messages": {
+          "awful": "Take it slow today. A short break can help reset your energy.",
+          "bad": "Start small. Even 5 minutes of study is progress.",
+          "okay": "You're steady. A balanced study session will work well today.",
+          "good": "Nice energy! Try one challenging exercise today.",
+          "great": "Excellent mood. Perfect time for deep practice or a quiz."
+        },
+        "insights": {
+          "low_energy": "Low energy day",
+          "slow_start": "Slow start",
+          "balanced_mood": "Balanced mood",
+          "high_focus": "High focus",
+          "peak_performance": "Peak performance"
+        },
+        "study_tips": {
+          "low_energy_tip": "Do light review only. Avoid heavy new topics.",
+          "slow_start_tip": "Use short focus sessions (10–15 minutes).",
+          "balanced_mood_tip": "Good for regular lessons and revision.",
+          "high_focus_tip": "Great time for problem solving and quizzes.",
+          "peak_performance_tip": "Ideal for mock exams or difficult topics."
+        },
+        "weeks": {
+          "this_week": "This week",
+          "last_week": "Last week",
+          "two_weeks_ago": "2 weeks ago"
+        }
+      },
       "Calender": {
         "mood_question": "What about your mood for today?"
       },
@@ -80,7 +150,14 @@
         "learning_illustration": "Learning Illustration"
       },
       "OurFunctionsSection": {
-        "our_functions": "Our Functions",
+        "our_functions": "Our Features",
+        "features_intro": "Excellent learning tools for success",
+        "chapter_desc": "Learn structured lessons aligned with education standards",
+        "quiz_desc": "Practice questions and enhance your math knowledge",
+        "flashcard_desc": "Find formulas, lessons, and study materials",
+        "focus_desc": "Focus on learning in appropriate time periods",
+        "certificate_desc": "Get certificates showing successful completion",
+        "scan_desc": "Take and submit photos for detailed solutions",
         "interactive_learning": "Interactive Learning",
         "track_progress": "Track Progress",
         "earn_certificates": "Earn Certificates",

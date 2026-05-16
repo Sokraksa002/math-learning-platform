@@ -18,6 +18,8 @@ import backpackImg from "../assets/Login/backpack.png";
 import bg1 from "../assets/Login/bg1.png";
 import bg2 from "../assets/Login/bg2.png";
 
+/* ================= TYPES ================= */
+
 type UserRole = "admin" | "student";
 
 interface MockUser {
@@ -35,7 +37,8 @@ interface LoginResult {
 }
 
 /* ================= MOCK USERS ================= */
-const mockUsers = [
+
+const defaultMockUsers: MockUser[] = [
   {
     id: 1,
     name: "Admin",
@@ -53,8 +56,22 @@ const mockUsers = [
 ];
 
 /* ================= LOGIN FUNCTION ================= */
+
 const mockLogin = (email: string, password: string): LoginResult => {
-  const user = mockUsers.find(
+  const registeredUsers = JSON.parse(
+    localStorage.getItem("registeredUsers") || "[]"
+  );
+
+  const registeredUser = registeredUsers.find(
+    (u: any) => u.email === email && u.password === password
+  );
+
+  if (registeredUser) {
+    const { password: _, ...safeUser } = registeredUser;
+    return { success: true, user: safeUser };
+  }
+
+  const user = defaultMockUsers.find(
     (u) => u.email === email && u.password === password
   );
 
@@ -62,16 +79,11 @@ const mockLogin = (email: string, password: string): LoginResult => {
     return { success: false, message: "Invalid email or password" };
   }
 
-  return {
-    success: true,
-    user: {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.role as UserRole,
-    },
-  };
+  const { password: _, ...safeUser } = user;
+  return { success: true, user: safeUser };
 };
+
+/* ================= COMPONENT ================= */
 
 export default function Login() {
   const navigate = useNavigate();
@@ -79,30 +91,34 @@ export default function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(false);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = () => {
+    if (!email || !password) {
+      setError("Please enter email and password");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
     const result = mockLogin(email, password);
 
-    if (!result.success) {
-      setError(result.message ?? "Invalid email or password");
-      return;
-    }
+    setTimeout(() => {
+      setLoading(false);
 
-    if (!result.user) {
-      setError("Login failed. Please try again.");
-      return;
-    }
+      if (!result.success || !result.user) {
+        setError(result.message || "Login failed");
+        return;
+      }
 
-    // Save session
-    localStorage.setItem("user", JSON.stringify(result.user));
+      localStorage.setItem("user", JSON.stringify(result.user));
+      if (remember) localStorage.setItem("remember", "true");
 
-    // Role-based redirect
-    if (result.user.role === "admin") {
-      navigate("/admin");
-    } else {
-      navigate("/dashboard");
-    }
+      navigate(result.user.role === "admin" ? "/admin" : "/dashboard");
+    }, 600);
   };
 
   return (
@@ -110,30 +126,87 @@ export default function Login() {
       sx={{
         position: "fixed",
         inset: 0,
-        height: "100dvh",
-        width: "100vw",
         display: "flex",
-        overflow: "hidden",
         background:
-          "radial-gradient(circle at 12% 16%, #fefefe 0%, #f4f6fb 45%, #ebedf4 100%)",
+          "radial-gradient(circle at 12% 16%, #ffffff 0%, #f4f6fb 45%, #ebedf4 100%)",
       }}
     >
-      {/* ========== LEFT SIDE ========== */}
+      {/* ========== LEFT PANEL ========== */}
       <Box
         sx={{
           flex: 1,
           display: { xs: "none", md: "block" },
           position: "relative",
+          overflow: "hidden", // ✅ PREVENT BLEEDING
         }}
       >
-        <img src={bg1} alt="" style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover" }} />
-        <img src={bg2} alt="" style={{ position: "absolute", width: "50%", height: "100%", opacity: 0.8 }} />
-        <img src={bookImg} alt="" style={{ position: "absolute", width: 350, top: "6%", left: "20%" }} />
-        <img src={paperImg} alt="" style={{ position: "absolute", width: 300, top: "34%", left: "45%" }} />
-        <img src={backpackImg} alt="" style={{ position: "absolute", width: 260, bottom: 0 }} />
+        {/* Backgrounds */}
+        <img
+          src={bg1}
+          alt=""
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 0,
+          }}
+        />
+
+        <img
+          src={bg2}
+          alt=""
+          style={{
+            position: "absolute",
+            top: 0,
+            right: "-10%",
+            width: "60%",
+            height: "100%",
+            opacity: 0.85,
+            zIndex: 1,
+          }}
+        />
+
+        {/* Illustrations */}
+        <img
+          src={bookImg}
+          alt="Book"
+          style={{
+            position: "absolute",
+            width: 350,
+            top: "6%",
+            left: "18%",
+            zIndex: 2,
+          }}
+        />
+
+        <img
+          src={paperImg}
+          alt="Paper"
+          style={{
+            position: "absolute",
+            width: 300,
+            top: "34%",
+            left: "46%",
+            zIndex: 2,
+          }}
+        />
+
+        <img
+          src={backpackImg}
+          alt="Backpack"
+          style={{
+            position: "absolute",
+            width: 260,
+            bottom: "-8px",
+            left: "14%",
+            zIndex: 2,
+          }}
+        />
       </Box>
 
-      {/* ========== RIGHT SIDE ========== */}
+      {/* ========== RIGHT PANEL ========== */}
       <Box
         sx={{
           flex: 1,
@@ -141,87 +214,117 @@ export default function Login() {
           alignItems: "center",
           justifyContent: "center",
           px: 2,
+          zIndex: 10,
         }}
       >
         <Paper
           sx={{
             width: 420,
-            p: 3.5,
-            borderRadius: "26px",
+            p: 4,
+            borderRadius: 4,
             background: "linear-gradient(160deg,#4ea0ed,#367dcc)",
             color: "white",
+            position: "relative",
+            zIndex: 10,
+            boxShadow: "0 20px 40px rgba(0,0,0,0.18)",
           }}
         >
-          <Typography variant="h4" fontWeight={700} mb={1}>
-            WELCOME BACK
+          <Typography variant="h4" fontWeight={700}>
+            {t("pages.Login.welcome", "Welcome back")}
           </Typography>
 
           <Typography mb={2} sx={{ opacity: 0.95 }}>
-            Please enter your login details.
+            {t(
+              "pages.Login.subtitle",
+              "Please enter your login details"
+            )}
           </Typography>
 
-          {/* EMAIL */}
           <TextField
-            placeholder={t('pages.Login.email', 'Email')}
+            placeholder={t("pages.Login.email", "Email")}
             fullWidth
             size="small"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            sx={{ mb: 1.5 }}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              setError("");
+            }}
+            sx={{
+              mb: 1.5,
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+                backgroundColor: "#eaf2ff",
+              },
+            }}
           />
 
-          {/* PASSWORD */}
           <TextField
-            placeholder={t('pages.Login.password', 'Password')}
+            placeholder={t("pages.Login.password", "Password")}
             type="password"
             fullWidth
             size="small"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            sx={{ mb: 1.5 }}
+            onChange={(e) => {
+              setPassword(e.target.value);
+              setError("");
+            }}
+            onKeyDown={(e) => e.key === "Enter" && handleLogin()}
+            sx={{
+              mb: 1.5,
+              "& .MuiOutlinedInput-root": {
+                borderRadius: 2,
+                backgroundColor: "#eaf2ff",
+              },
+            }}
           />
 
-          {/* ERROR */}
           {error && (
-            <Typography sx={{ color: "#ffdede", mb: 1, fontSize: "0.85rem" }}>
+            <Typography sx={{ color: "#ffdede", mb: 1, fontSize: 13 }}>
               {error}
             </Typography>
           )}
 
           <FormControlLabel
-            control={<Checkbox sx={{ color: "white" }} />}
-            label={t('pages.Login.remember_me', 'Remember me')}
+            control={
+              <Checkbox
+                checked={remember}
+                onChange={(e) => setRemember(e.target.checked)}
+                sx={{ color: "white" }}
+              />
+            }
+            label={t("pages.Login.remember_me", "Remember me")}
           />
 
-          {/* LOGIN BUTTON */}
           <Button
             fullWidth
+            disabled={loading}
             onClick={handleLogin}
             sx={{
               mt: 2,
               background: "#1f58cc",
               color: "white",
-              borderRadius: "12px",
+              borderRadius: 2,
               py: 1,
               "&:hover": { background: "#1749a6" },
             }}
           >
-            Sign in
+            {loading ? "Signing in..." : "Sign in"}
           </Button>
 
-          {/* GOOGLE MOCK */}
           <Button
             fullWidth
             sx={{
               mt: 1.5,
               border: "1px solid white",
               color: "white",
+              opacity: 0.7,
             }}
+            disabled
           >
             Sign in with Google
           </Button>
 
-          <Typography textAlign="center" mt={2} fontSize="0.8rem">
+          <Typography textAlign="center" mt={2} fontSize={12}>
             Don&apos;t have an account?{" "}
             <Typography
               component={RouterLink}

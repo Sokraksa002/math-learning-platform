@@ -1,5 +1,4 @@
 import { Box, Container } from '@mui/material';
-import Header from '../components/Home/Header';
 import Lesson from '../components/Chapter/Lesson';
 import { useLocale } from '../hooks/useLocale';
 
@@ -15,8 +14,6 @@ export default function Chapter() {
         backgroundColor: '#fff',
       }}
     >
-      <Header />
-
       {/* Banner */}
       <Box
         sx={{

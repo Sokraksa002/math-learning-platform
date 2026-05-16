@@ -21,7 +21,7 @@ const ChapterSection: React.FC = () => {
   return (
     <Box
       sx={{
-        backgroundColor: '#2196F3',
+        backgroundColor: 'transparent',
         py: 6,
         mb: 5,
       }}
@@ -30,7 +30,7 @@ const ChapterSection: React.FC = () => {
         <Typography
           sx={{
             fontWeight: 800,
-            color: '#fff',
+            color: '#1F2937',
             mb: 4,
             fontSize: 28,
             letterSpacing: 0.5,
@@ -46,7 +46,8 @@ const ChapterSection: React.FC = () => {
               key={chapter.id}
               onClick={() => navigate(`/chapter/${chapter.id}`)}
               sx={{
-                backgroundColor: chapter.accent, // ✅ pastel color
+                backgroundColor: '#fff',
+                borderLeft: `6px solid ${chapter.accent}`,
                 borderRadius: '16px',
                 px: 4,
                 py: 3,
@@ -56,7 +57,7 @@ const ChapterSection: React.FC = () => {
                 alignItems: 'center',
                 justifyContent: 'space-between',
 
-                boxShadow: '0 6px 14px rgba(0, 0, 0, 0.12)',
+                boxShadow: '0 6px 16px rgba(0,0,0,0.12)',
                 transition: 'all 0.25s ease',
 
                 '&:hover': {

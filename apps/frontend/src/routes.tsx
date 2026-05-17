@@ -15,6 +15,10 @@ import Profile from "./pages/Profile";
 import Certificate from "./pages/Certificate";
 import Dashboard from "./pages/Dashboard";
 import AdminDashboard from "./pages/AdminDashboard";
+import ManageUsers from "./pages/admin/ManageUsers";
+import ManageQuizzes from "./pages/admin/ManageQuizzes";
+import ManageLessons from "./pages/admin/ManageLessons";
+import VerifyCertificates from "./pages/admin/VerifyCertificates";
 
 import Quizepaper from "./components/Quiz/Quizepaper";
 import ManageProfile from "./components/Profile/ManageProfile";
@@ -182,6 +186,42 @@ export default function AppRoutes() {
             element={
               <ProtectedRoute allowedRoles={["admin"]} redirectTo="/dashboard">
                 <AdminDashboard />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/users"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]} redirectTo="/dashboard">
+                <ManageUsers />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/quizzes"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]} redirectTo="/dashboard">
+                <ManageQuizzes />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/lessons"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]} redirectTo="/dashboard">
+                <ManageLessons />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/certificates"
+            element={
+              <ProtectedRoute allowedRoles={["admin"]} redirectTo="/dashboard">
+                <VerifyCertificates />
               </ProtectedRoute>
             }
           />

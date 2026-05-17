@@ -1,6 +1,7 @@
 import { Box, Button, Container, Typography } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { loadQuizBank } from '../../data/adminContent';
 
 const COMPLETED_LESSON_STORAGE_KEY = 'math-learning-completed-lessons';
 
@@ -40,7 +41,7 @@ interface QuizQuestion {
    MOCK QUESTIONS (10)
    👉 Replace later with API
 ========================= */
-const QUESTIONS: QuizQuestion[] = [
+const FALLBACK_QUESTIONS: QuizQuestion[] = [
   {
     id: 1,
     prompt: 'What is the limit as x → 0?',
@@ -153,6 +154,21 @@ const QUESTIONS: QuizQuestion[] = [
     answerId: 'c',
   },
 ];
+
+const ADMIN_QUESTIONS: QuizQuestion[] = loadQuizBank().flatMap((quiz, quizIndex) =>
+  quiz.exercises.map((exercise, exerciseIndex) => ({
+    id: quizIndex * 100 + exerciseIndex + 1,
+    prompt: exercise.question,
+    options: exercise.choices.slice(0, 4).map((choice, choiceIndex) => ({
+      id: `choice-${choiceIndex}`,
+      label: `${String.fromCharCode(65 + choiceIndex)}.`,
+      text: choice,
+    })),
+    answerId: `choice-${Math.max(0, Math.min(3, exercise.correctIndex))}`,
+  }))
+);
+
+const QUESTIONS = ADMIN_QUESTIONS.length > 0 ? ADMIN_QUESTIONS : FALLBACK_QUESTIONS;
 
 /* =========================
    COMPONENT

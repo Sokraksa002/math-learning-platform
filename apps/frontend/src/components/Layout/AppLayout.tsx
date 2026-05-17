@@ -25,6 +25,9 @@ import {
   LogOut,
   Menu as MenuIcon,
   Flag,
+  Users,
+  FileText,
+  BadgeCheck,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { getUser } from "../../utils/auth";
@@ -50,6 +53,10 @@ export const AppLayout = ({ children, isLoggedIn }: any) => {
     ? isAdmin
       ? [
           { icon: BarChart3, label: "Admin", path: "/admin" },
+          { icon: Users, label: "Users", path: "/admin/users" },
+          { icon: Edit3, label: "Quizzes", path: "/admin/quizzes" },
+          { icon: BookOpen, label: "Lessons", path: "/admin/lessons" },
+          { icon: BadgeCheck, label: "Certificates", path: "/admin/certificates" },
           { icon: Home, label: "Home", path: "/" },
         ]
       : [

@@ -27,24 +27,26 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { getUser } from "../utils/auth";
+import {
+  createBlankExercise,
+  createBlankQuiz,
+  loadAdminUsers,
+  loadQuizBank,
+  saveAdminUsers,
+  saveQuizBank,
+} from "../data/adminContent";
+import type {
+  AdminUser,
+  AdminUserStatus,
+  QuizBankItem,
+  QuizExercise,
+} from "../data/adminContent";
 
 
-type Status = "active" | "inactive";
 type EntityType = "user" | "chapter" | "lesson" | "quiz";
 type TabKey = "overview" | "users" | "chapters" | "lessons" | "quizzes";
-
-interface User {
-  id: number;
-  name: string;
-  email: string;
-  role: string;
-  joinDate: string;
-  status: Status;
-  progress: number;
-  attempts: number;
-}
 
 interface ChapterItem {
   id: number;
@@ -63,21 +65,13 @@ interface LessonItem {
   status: "published" | "draft";
 }
 
-interface QuizItem {
-  id: number;
-  chapterId: number;
-  title: string;
-  questionCount: number;
-  status: "published" | "draft";
-}
-
 interface FormState {
-  id?: number;
+  id?: number | string;
   name: string;
   email: string;
   role: string;
   joinDate: string;
-  status: Status;
+  status: AdminUserStatus;
   progress: string;
   attempts: string;
   title: string;
@@ -86,8 +80,9 @@ interface FormState {
   quizzes: string;
   chapterId: string;
   duration: string;
-  questionCount: string;
   entityStatus: "published" | "draft";
+  lessonId: string;
+  exercises: QuizExercise[];
 }
 
 const emptyForm: FormState = {
@@ -104,15 +99,10 @@ const emptyForm: FormState = {
   quizzes: "0",
   chapterId: "1",
   duration: "45 min",
-  questionCount: "10",
   entityStatus: "published",
+  lessonId: "",
+  exercises: [createBlankExercise()],
 };
-
-const initialUsers: User[] = [
-  { id: 1, name: "Student One", email: "student1@gmail.com", role: "student", joinDate: "2025-01-15", status: "active", progress: 78, attempts: 14 },
-  { id: 2, name: "Student Two", email: "student2@gmail.com", role: "student", joinDate: "2025-02-20", status: "active", progress: 64, attempts: 11 },
-  { id: 3, name: "Student Three", email: "student3@gmail.com", role: "student", joinDate: "2025-03-10", status: "inactive", progress: 32, attempts: 6 },
-];
 
 const initialChapters: ChapterItem[] = [
   { id: 1, title: "Algebra Basics", description: "Core algebraic operations and expressions.", lessons: 5, quizzes: 3, status: "published" },
@@ -126,25 +116,27 @@ const initialLessons: LessonItem[] = [
   { id: 3, chapterId: 2, title: "Function Notation", duration: "28 min", status: "draft" },
 ];
 
-const initialQuizzes: QuizItem[] = [
-  { id: 1, chapterId: 1, title: "Algebra Basics Quiz 1", questionCount: 10, status: "published" },
-  { id: 2, chapterId: 1, title: "Algebra Basics Quiz 2", questionCount: 12, status: "draft" },
-  { id: 3, chapterId: 2, title: "Functions Quiz", questionCount: 8, status: "published" },
-];
-
 export default function AdminDashboard() {
   const currentUser = getUser();
   const [tab, setTab] = useState<TabKey>("overview");
-  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [users, setUsers] = useState<AdminUser[]>(() => loadAdminUsers());
   const [chapters, setChapters] = useState<ChapterItem[]>(initialChapters);
   const [lessons, setLessons] = useState<LessonItem[]>(initialLessons);
-  const [quizzes, setQuizzes] = useState<QuizItem[]>(initialQuizzes);
+  const [quizzes, setQuizzes] = useState<QuizBankItem[]>(() => loadQuizBank());
   const [openDialog, setOpenDialog] = useState(false);
   const [entityType, setEntityType] = useState<EntityType>("user");
-  const [editingId, setEditingId] = useState<number | null>(null);
+  const [editingId, setEditingId] = useState<number | string | null>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
 
   const isAdmin = currentUser?.role === "admin";
+
+  useEffect(() => {
+    saveAdminUsers(users);
+  }, [users]);
+
+  useEffect(() => {
+    saveQuizBank(quizzes);
+  }, [quizzes]);
 
   const stats = useMemo(
     () => [
@@ -156,7 +148,7 @@ export default function AdminDashboard() {
     [users.length, chapters.length, lessons.length, quizzes.length]
   );
 
-  const openEditor = (type: EntityType, id?: number) => {
+  const openEditor = (type: EntityType, id?: number | string) => {
     setEntityType(type);
     setEditingId(id ?? null);
 
@@ -182,13 +174,22 @@ export default function AdminDashboard() {
     }
 
     if (type === "quiz" && id) {
-      const selected = quizzes.find((item) => item.id === id);
+      const selected = quizzes.find((item) => item.lessonId === id);
       if (selected) {
-        setForm({ ...emptyForm, id: selected.id, chapterId: String(selected.chapterId), title: selected.title, questionCount: String(selected.questionCount), entityStatus: selected.status });
+        setForm({
+          ...emptyForm,
+          id: selected.lessonId,
+          lessonId: selected.lessonId,
+          exercises: selected.exercises.map((exercise) => ({ ...exercise, choices: [...exercise.choices] })),
+        });
       }
     }
 
-    if (!id) setForm(emptyForm);
+    if (type === "quiz" && !id) {
+      setForm(createBlankQuiz());
+    }
+
+    if (!id && type !== "quiz") setForm(emptyForm);
     setOpenDialog(true);
   };
 
@@ -200,7 +201,7 @@ export default function AdminDashboard() {
 
   const saveEntity = () => {
     if (entityType === "user") {
-      const payload: User = {
+      const payload: AdminUser = {
         id: editingId ?? Date.now(),
         name: form.name.trim() || "New User",
         email: form.email.trim() || "user@example.com",
@@ -240,15 +241,21 @@ export default function AdminDashboard() {
     }
 
     if (entityType === "quiz") {
-      const payload: QuizItem = {
-        id: editingId ?? Date.now(),
-        chapterId: Number(form.chapterId) || 1,
-        title: form.title.trim() || "New Quiz",
-        questionCount: Number(form.questionCount) || 0,
-        status: form.entityStatus,
+      const normalizedExercises = form.exercises.map((exercise) => ({
+        ...exercise,
+        question: exercise.question.trim(),
+        choices: exercise.choices.map((choice) => choice.trim()),
+        correctIndex: Math.max(0, Math.min(3, Number(exercise.correctIndex) || 0)),
+        explanation: exercise.explanation.trim(),
+        externalId: exercise.externalId.trim(),
+      }));
+
+      const payload: QuizBankItem = {
+        lessonId: form.lessonId.trim() || (typeof editingId === "string" ? editingId : `lesson-${Date.now()}`),
+        exercises: normalizedExercises,
       };
 
-      setQuizzes((prev) => (editingId ? prev.map((item) => (item.id === editingId ? payload : item)) : [payload, ...prev]));
+      setQuizzes((prev) => (typeof editingId === "string" ? prev.map((item) => (item.lessonId === editingId ? payload : item)) : [payload, ...prev]));
     }
 
     closeEditor();
@@ -258,10 +265,9 @@ export default function AdminDashboard() {
   const deleteChapter = (id: number) => {
     setChapters((prev) => prev.filter((item) => item.id !== id));
     setLessons((prev) => prev.filter((item) => item.chapterId !== id));
-    setQuizzes((prev) => prev.filter((item) => item.chapterId !== id));
   };
   const deleteLesson = (id: number) => setLessons((prev) => prev.filter((item) => item.id !== id));
-  const deleteQuiz = (id: number) => setQuizzes((prev) => prev.filter((item) => item.id !== id));
+  const deleteQuiz = (lessonId: string) => setQuizzes((prev) => prev.filter((item) => item.lessonId !== lessonId));
 
   if (!currentUser) {
     return (
@@ -486,34 +492,32 @@ export default function AdminDashboard() {
         {tab === "quizzes" && (
           <Paper sx={{ borderRadius: 2, overflow: "hidden" }}>
             <Box sx={{ p: 3, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <Typography variant="h6" fontWeight={800}>Manage Quizzes</Typography>
+              <Typography variant="h6" fontWeight={800}>Manage Quiz Bank</Typography>
               <Button variant="contained" onClick={() => openEditor("quiz")}>Add Quiz</Button>
             </Box>
             <TableContainer>
               <Table>
                 <TableHead sx={{ backgroundColor: "#f5f5f5" }}>
                   <TableRow>
-                    <TableCell>Title</TableCell>
-                    <TableCell>Chapter</TableCell>
-                    <TableCell>Questions</TableCell>
-                    <TableCell>Status</TableCell>
+                    <TableCell>Lesson ID</TableCell>
+                    <TableCell>Exercises</TableCell>
+                    <TableCell>First question</TableCell>
                     <TableCell align="center">Actions</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {quizzes.map((quiz) => {
-                    const chapter = chapters.find((item) => item.id === quiz.chapterId);
+                    const firstExercise = quiz.exercises[0];
                     return (
-                      <TableRow key={quiz.id} hover>
+                      <TableRow key={quiz.lessonId} hover>
                         <TableCell>
-                          <Typography fontWeight={700}>{quiz.title}</Typography>
+                          <Typography fontWeight={700}>{quiz.lessonId}</Typography>
                         </TableCell>
-                        <TableCell>{chapter?.title ?? `Chapter ${quiz.chapterId}`}</TableCell>
-                        <TableCell>{quiz.questionCount}</TableCell>
-                        <TableCell><Chip label={quiz.status} size="small" color={quiz.status === "published" ? "success" : "default"} /></TableCell>
+                        <TableCell>{quiz.exercises.length}</TableCell>
+                        <TableCell>{firstExercise?.question || "No question yet"}</TableCell>
                         <TableCell align="center">
-                          <Button size="small" onClick={() => openEditor("quiz", quiz.id)} sx={{ mr: 1 }}>Edit</Button>
-                          <Button size="small" color="error" onClick={() => deleteQuiz(quiz.id)}>Delete</Button>
+                          <Button size="small" onClick={() => openEditor("quiz", quiz.lessonId)} sx={{ mr: 1 }}>Edit</Button>
+                          <Button size="small" color="error" onClick={() => deleteQuiz(quiz.lessonId)}>Delete</Button>
                         </TableCell>
                       </TableRow>
                     );
@@ -535,7 +539,7 @@ export default function AdminDashboard() {
                 <TextField label="Join date" type="date" value={form.joinDate} onChange={(event) => setForm((prev) => ({ ...prev, joinDate: event.target.value }))} fullWidth InputLabelProps={{ shrink: true }} />
                 <FormControl fullWidth>
                   <InputLabel>Status</InputLabel>
-                  <Select value={form.status} label="Status" onChange={(event) => setForm((prev) => ({ ...prev, status: event.target.value as Status }))}>
+                  <Select value={form.status} label="Status" onChange={(event) => setForm((prev) => ({ ...prev, status: event.target.value as AdminUserStatus }))}>
                     <MenuItem value="active">active</MenuItem>
                     <MenuItem value="inactive">inactive</MenuItem>
                   </Select>
@@ -578,16 +582,130 @@ export default function AdminDashboard() {
 
             {entityType === "quiz" && (
               <Stack spacing={2} sx={{ pt: 1 }}>
-                <TextField label="Title" value={form.title} onChange={(event) => setForm((prev) => ({ ...prev, title: event.target.value }))} fullWidth />
-                <TextField label="Chapter ID" type="number" value={form.chapterId} onChange={(event) => setForm((prev) => ({ ...prev, chapterId: event.target.value }))} fullWidth />
-                <TextField label="Question count" type="number" value={form.questionCount} onChange={(event) => setForm((prev) => ({ ...prev, questionCount: event.target.value }))} fullWidth />
-                <FormControl fullWidth>
-                  <InputLabel>Status</InputLabel>
-                  <Select value={form.entityStatus} label="Status" onChange={(event) => setForm((prev) => ({ ...prev, entityStatus: event.target.value as "published" | "draft" }))}>
-                    <MenuItem value="published">published</MenuItem>
-                    <MenuItem value="draft">draft</MenuItem>
-                  </Select>
-                </FormControl>
+                <TextField
+                  label="Lesson ID"
+                  value={form.lessonId}
+                  onChange={(event) => setForm((prev) => ({ ...prev, lessonId: event.target.value }))}
+                  fullWidth
+                />
+
+                <Stack spacing={2}>
+                  {form.exercises.map((exercise, exerciseIndex) => (
+                    <Paper key={exercise.id} variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
+                      <Stack spacing={2}>
+                        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <Typography fontWeight={700}>Exercise {exerciseIndex + 1}</Typography>
+                          <Button
+                            color="error"
+                            size="small"
+                            onClick={() => {
+                              setForm((prev) => {
+                                if (prev.exercises.length === 1) {
+                                  return { ...prev, exercises: [createBlankExercise()] };
+                                }
+
+                                return { ...prev, exercises: prev.exercises.filter((item) => item.id !== exercise.id) };
+                              });
+                            }}
+                          >
+                            Remove
+                          </Button>
+                        </Box>
+
+                        <TextField
+                          label="Question"
+                          value={exercise.question}
+                          onChange={(event) => {
+                            setForm((prev) => ({
+                              ...prev,
+                              exercises: prev.exercises.map((item) => (item.id === exercise.id ? { ...item, question: event.target.value } : item)),
+                            }));
+                          }}
+                          fullWidth
+                          multiline
+                          rows={3}
+                        />
+
+                        <Stack spacing={1.5}>
+                          {exercise.choices.map((choice, choiceIndex) => (
+                            <TextField
+                              key={`${exercise.id}-${choiceIndex}`}
+                              label={`Choice ${choiceIndex + 1}`}
+                              value={choice}
+                              onChange={(event) => {
+                                setForm((prev) => ({
+                                  ...prev,
+                                  exercises: prev.exercises.map((item) => {
+                                    if (item.id !== exercise.id) {
+                                      return item;
+                                    }
+
+                                    const nextChoices = [...item.choices];
+                                    nextChoices[choiceIndex] = event.target.value;
+                                    return { ...item, choices: nextChoices };
+                                  }),
+                                }));
+                              }}
+                              fullWidth
+                            />
+                          ))}
+                        </Stack>
+
+                        <FormControl fullWidth>
+                          <InputLabel>Correct choice</InputLabel>
+                          <Select
+                            value={exercise.correctIndex}
+                            label="Correct choice"
+                            onChange={(event) => {
+                              setForm((prev) => ({
+                                ...prev,
+                                exercises: prev.exercises.map((item) => (item.id === exercise.id ? { ...item, correctIndex: Number(event.target.value) } : item)),
+                              }));
+                            }}
+                          >
+                            <MenuItem value={0}>Choice 1</MenuItem>
+                            <MenuItem value={1}>Choice 2</MenuItem>
+                            <MenuItem value={2}>Choice 3</MenuItem>
+                            <MenuItem value={3}>Choice 4</MenuItem>
+                          </Select>
+                        </FormControl>
+
+                        <TextField
+                          label="Explanation"
+                          value={exercise.explanation}
+                          onChange={(event) => {
+                            setForm((prev) => ({
+                              ...prev,
+                              exercises: prev.exercises.map((item) => (item.id === exercise.id ? { ...item, explanation: event.target.value } : item)),
+                            }));
+                          }}
+                          fullWidth
+                          multiline
+                          rows={3}
+                        />
+
+                        <TextField
+                          label="External ID"
+                          value={exercise.externalId}
+                          onChange={(event) => {
+                            setForm((prev) => ({
+                              ...prev,
+                              exercises: prev.exercises.map((item) => (item.id === exercise.id ? { ...item, externalId: event.target.value } : item)),
+                            }));
+                          }}
+                          fullWidth
+                        />
+                      </Stack>
+                    </Paper>
+                  ))}
+                </Stack>
+
+                <Button
+                  variant="outlined"
+                  onClick={() => setForm((prev) => ({ ...prev, exercises: [...prev.exercises, createBlankExercise()] }))}
+                >
+                  Add Exercise
+                </Button>
               </Stack>
             )}
           </DialogContent>

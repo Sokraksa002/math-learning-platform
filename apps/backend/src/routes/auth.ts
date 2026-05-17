@@ -1,7 +1,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
 import * as bcrypt from "bcryptjs";
 import { prisma } from "../lib/prisma";
-import { registerSchema, loginSchema } from "../validators/auth";
+import { registerSchema, loginSchema, registerJsonSchema, loginJsonSchema } from "../validators/auth";
 
 /**
  * Authentication routes
@@ -14,16 +14,10 @@ export async function authRoutes(app: FastifyInstance) {
    */
   app.post(
     "/register",
+    { schema: { body: registerJsonSchema } },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const parsed = registerSchema.safeParse(request.body);
-      if (!parsed.success) {
-        return reply.code(400).send({
-          success: false,
-          message: "Invalid input",
-        });
-      }
-
-      const { email, name, password } = parsed.data;
+      // Fastify has already validated `request.body` against registerJsonSchema
+      const { email, name, password } = request.body as { email: string; name: string; password: string };
 
       try {
         const existingUser = await prisma.user.findUnique({
@@ -75,16 +69,10 @@ export async function authRoutes(app: FastifyInstance) {
    */
   app.post(
     "/login",
+    { schema: { body: loginJsonSchema } },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      const parsed = loginSchema.safeParse(request.body);
-      if (!parsed.success) {
-        return reply.code(400).send({
-          success: false,
-          message: "Invalid input",
-        });
-      }
-
-      const { email, password } = parsed.data;
+      // Fastify has already validated `request.body` against loginJsonSchema
+      const { email, password } = request.body as { email: string; password: string };
 
       try {
         const user = await prisma.user.findUnique({

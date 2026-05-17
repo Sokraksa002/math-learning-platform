@@ -1,0 +1,238 @@
+{
+  "lessonId": "math-grade12-lesson5-graphs",
+  "lessonTitle": "សិក្សាអថេរភាព និងសង់ក្រាប",
+  "exercises": [
+    {
+      "id": "ex-001",
+      "question": "រកប្រភេទនៃអាស៊ីមតូត និងសង់ក្រាបនៃអនុគមន៍ y = (x + 1) / (x - 1)",
+      "choices": [
+        "អាស៊ីមតូតឈរ x=1, អាស៊ីមតូតដេក y=1",
+        "អាស៊ីមតូតឈរ x=-1, អាស៊ីមតូតដេក y=-1",
+        "អាស៊ីមតូតឈរ x=1, អាស៊ីមតូតទ្រេត y=x",
+        "គ្មានអាស៊ីមតូត"
+      ],
+      "correctIndex": 0,
+      "graphData": {
+        "type": "rational",
+        "equation": "f(x) = (x + 1) / (x - 1)",
+        "asymptotes": { "vertical": [1], "horizontal": [1], "oblique": null },
+        "keyPoints": [
+          {"x": 0, "y": -1, "label": "y-intercept"},
+          {"x": -1, "y": 0, "label": "x-intercept"}
+        ]
+      },
+      "explanation": "ភាគបែង x-1=0 នាំឱ្យ x=1 (VA)។ លីមីតត្រង់អនន្តគឺ 1/1=1 នាំឱ្យ y=1 (HA)។"
+    },
+    {
+      "id": "ex-002",
+      "question": "រកអាស៊ីមតូតឈរនៃអនុគមន៍ f(x) = (x^2 - 1) / (x^2 - 4)",
+      "choices": [
+        "x = 2 និង x = -2",
+        "x = 1 និង x = -1",
+        "y = 1",
+        "x = 4"
+      ],
+      "correctIndex": 0,
+      "graphData": {
+        "type": "rational",
+        "equation": "f(x) = (x^2 - 1) / (x^2 - 4)",
+        "asymptotes": { "vertical": [2, -2], "horizontal": [1], "oblique": null },
+        "keyPoints": [{"x": 0, "y": 0.25, "label": "y-intercept"}]
+      },
+      "explanation": "ឱ្យភាគបែង x^2 - 4 = 0 នាំឱ្យ x = 2 និង x = -2 ជាអាស៊ីមតូតឈរ។"
+    },
+    {
+      "id": "ex-003",
+      "question": "តើក្រាបនៃ f(x) = 2 + 1/x មានលក្ខណៈដូចម្តេច?",
+      "choices": [
+        "មានអាស៊ីមតូតដេក y=2 និងឈរ x=0",
+        "មានអាស៊ីមតូតដេក y=0 និងឈរ x=2",
+        "ជាខ្សែបន្ទាត់ត្រង់",
+        "មានអាស៊ីមតូតទ្រេត y=x"
+      ],
+      "correctIndex": 0,
+      "graphData": {
+        "type": "hyperbola",
+        "equation": "f(x) = 2 + 1/x",
+        "asymptotes": { "vertical": [0], "horizontal": [2], "oblique": null }
+      },
+      "explanation": "1/x ខិតទៅ 0 នាំឱ្យ y=2 ជាអាស៊ីមតូតដេក ហើយ x=0 ជាអាស៊ីមតូតឈរ។"
+    },
+    {
+      "id": "ex-004",
+      "question": "រកចំណុចរបត់ (Inflection Point) នៃក្រាប f(x) = x^3 - 3x^2 + 2",
+      "choices": [
+        "(1, 0)",
+        "(0, 2)",
+        "(2, -2)",
+        "គ្មានចំណុចរបត់"
+      ],
+      "correctIndex": 0,
+      "graphData": {
+        "type": "cubic",
+        "equation": "f(x) = x^3 - 3x^2 + 2",
+        "keyPoints": [{"x": 1, "y": 0, "label": "Inflection Point"}]
+      },
+      "explanation": "f''(x) = 6x - 6 = 0 នាំឱ្យ x = 1។ ជំនួស x=1 ក្នុង f(x) នាំឱ្យ y=0។"
+    },
+    {
+     "id": "ex-005",
+     "question": "តើក្រាប y = e^x + 1 កាត់អ័ក្សអ័រដោនេត្រង់ចំណុចណា?",
+     "choices": [
+     "(0, 2)",
+     "(0, 1)",
+     "(1, 0)",
+     "មិនកាត់អ័ក្ស y"
+     ],
+     "correctIndex": 0,
+     "graphData": {
+     "type": "exponential",
+     "equation": "f(x) = e^x + 1",
+     "asymptotes": { "horizontal": [1] },
+     "keyPoints": [
+      {"x": 0, "y": 2, "label": "y-intercept"}
+     ]
+    },
+    "explanation": "ដើម្បីរកចំណុចកាត់អ័ក្ស y យើងដាក់ x = 0។ នោះយើងបាន y = e^0 + 1 = 1 + 1 = 2។ ដូចនេះក្រាបកាត់អ័ក្សអ័រដោនេត្រង់ចំណុច (0, 2)។ ពេល x → -∞, e^x → 0 នាំឱ្យ y → 1 ដែលបង្ហាញថា y = 1 ជាអាស៊ីមតូតដេក។"
+   },
+    {
+      "id": "ex-006",
+      "question": "រកអាស៊ីមតូតទ្រេតនៃ y = (x^2 + x + 1) / x",
+      "choices": [
+        "y = x + 1",
+        "y = x",
+        "y = 1",
+        "y = x - 1"
+      ],
+      "correctIndex": 0,
+      "graphData": {
+        "type": "rational",
+        "equation": "f(x) = x + 1 + 1/x",
+        "asymptotes": { "vertical": [0], "oblique": ["y = x + 1"] }
+      },
+      "explanation": "y = x^2/x + x/x + 1/x = x + 1 + 1/x។ ដូចនេះ y = x + 1 ជាអាស៊ីមតូតទ្រេត។"
+    },
+    {
+      "id": "ex-007",
+      "question": "តើអនុគមន៍ f(x) = -x^2 + 4 មានក្រាបជាប្រភេទអ្វី?",
+      "choices": [
+        "ប៉ារ៉ាបូលផ្ងាក្រោម (Concave Down)",
+        "ប៉ារ៉ាបូលផ្ងាលើ (Concave Up)",
+        "ខ្សែបន្ទាត់ត្រង់",
+        "អ៊ីពែបូល"
+      ],
+      "correctIndex": 0,
+      "graphData": {
+        "type": "parabola",
+        "equation": "f(x) = -x^2 + 4",
+        "keyPoints": [{"x": 0, "y": 4, "label": "Vertex"}]
+      },
+      "explanation": "មេគុណ a = -1 (អវិជ្ជមាន) នាំឱ្យប៉ារ៉ាបូលផ្ងាចុះក្រោម។"
+    },
+    {
+      "id": "ex-008",
+      "question": "រកចំណុចអប្បបរមានៃក្រាប f(x) = x^2 - 4x + 5",
+      "choices": [
+        "(2, 1)",
+        "(2, 5)",
+        "(0, 5)",
+        "(4, 5)"
+      ],
+      "correctIndex": 0,
+      "graphData": {
+        "type": "polynomial",
+        "equation": "f(x) = x^2 - 4x + 5",
+        "keyPoints": [{"x": 2, "y": 1, "label": "Minimum Point"}]
+      },
+      "explanation": "f'(x) = 2x - 4 = 0 នាំឱ្យ x=2។ ជំនួស x=2 បាន y = 4-8+5 = 1។"
+    },
+    {
+      "id": "ex-009",
+      "question": "រកអាស៊ីមតូតឈរនៃ f(x) = ln(x - 2)",
+      "choices": [
+        "x = 2",
+        "x = 0",
+        "y = 0",
+        "x = -2"
+      ],
+      "correctIndex": 0,
+      "graphData": {
+        "type": "logarithmic",
+        "equation": "f(x) = ln(x - 2)",
+        "asymptotes": { "vertical": [2] }
+      },
+      "explanation": "លោការីតមិនកំណត់ត្រង់ x-2 <= 0 ដូចនេះ x=2 ជាអាស៊ីមតូតឈរ។"
+    },
+    {
+      "id": "ex-010",
+      "question": "តើក្រាប y = 1/(x^2 + 1) មានអាស៊ីមតូតដេកដែរឬទេ?",
+      "choices": [
+        "មាន គឺ y = 0",
+        "មាន គឺ y = 1",
+        "គ្មាន",
+        "មាន គឺ x = 0"
+      ],
+      "correctIndex": 0,
+      "graphData": {
+        "type": "rational",
+        "equation": "f(x) = 1/(x^2 + 1)",
+        "asymptotes": { "horizontal": [0], "vertical": null }
+      },
+      "explanation": "លីមីតត្រង់អនន្តនៃ 1/(x^2 + 1) គឺ 0 ដូចនេះ y=0 ជាអាស៊ីមតូតដេក។"
+    },
+    {
+      "id": "ex-011",
+      "question": "រកចំណុចប្រសព្វរវាងក្រាប f(x) = 2x - 4 និងអ័ក្សអាប់ស៊ីស",
+      "choices": [
+        "(2, 0)",
+        "(0, -4)",
+        "(4, 0)",
+        "(0, 2)"
+      ],
+      "correctIndex": 0,
+      "graphData": {
+        "type": "linear",
+        "equation": "f(x) = 2x - 4",
+        "keyPoints": [
+          {"x": 2, "y": 0, "label": "x-intercept"},
+          {"x": 0, "y": -4, "label": "y-intercept"}
+        ]
+      },
+      "explanation": "ឱ្យ y = 0 នាំឱ្យ 2x - 4 = 0 ដូចនេះ x = 2។"
+    },
+    {
+      "id": "ex-012",
+      "question": "តើក្រាបនៃ f(x) = -1/x ស្ថិតនៅកាដ្រង់ទីប៉ុន្មាន?",
+      "choices": [
+        "ទី២ និងទី៤",
+        "ទី១ និងទី៣",
+        "ទី១ និងទី២",
+        "ទី៣ និងទី៤"
+      ],
+      "correctIndex": 0,
+      "graphData": {
+        "type": "hyperbola",
+        "equation": "f(x) = -1/x",
+        "asymptotes": { "vertical": [0], "horizontal": [0] }
+      },
+      "explanation": "ដោយសារមានសញ្ញាដក បើ x > 0 នោះ f(x) < 0 ⇒ កាដ្រង់ទី៤ បើ x < 0 នោះ f(x) > 0 ⇒ កាដ្រង់ទី២  ដូចនេះក្រាបស្ថិតនៅកាដ្រង់ទី២ និងទី៤។។"
+    },
+    {
+      "id": "ex-013",
+      "question": "រកសមីការអាស៊ីមតូតដេកនៃ y = (5x + 3) / (2x - 1)",
+      "choices": [
+        "y = 2.5",
+        "y = 5",
+        "y = 0.5",
+        "y = 2"
+      ],
+      "correctIndex": 0,
+      "graphData": {
+        "type": "rational",
+        "equation": "f(x) = (5x + 3) / (2x - 1)",
+        "asymptotes": { "horizontal": [2.5], "vertical": [0.5] }
+      },
+      "explanation": "លីមីតត្រង់អនន្តគឺ 5/2 = 2.5 ដូចនេះ y = 2.5 ជាអាស៊ីមតូតដេក។"
+    }
+  ]
+}

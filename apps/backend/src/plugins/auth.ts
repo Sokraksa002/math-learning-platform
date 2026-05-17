@@ -8,6 +8,7 @@ async function authPlugin(app: FastifyInstance) {
     throw new Error("JWT_SECRET is not defined");
   }
 
+  // ✅ Register JWT plugin (await is REQUIRED)
   await app.register(jwt, {
     secret: process.env.JWT_SECRET,
     sign: {
@@ -15,13 +16,40 @@ async function authPlugin(app: FastifyInstance) {
     },
   });
 
+  /**
+   * 🔐 Auth guard: any logged‑in user
+   */
   app.decorate(
     "authenticate",
     async (request: FastifyRequest, reply: FastifyReply) => {
       try {
         await request.jwtVerify();
       } catch {
-        reply.code(401).send({
+        return reply.code(401).send({
+          success: false,
+          message: "Unauthorized",
+        });
+      }
+    }
+  );
+
+  /**
+   * 👑 Admin‑only guard
+   */
+  app.decorate(
+    "requireAdmin",
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      try {
+        await request.jwtVerify();
+
+        if (request.user.role !== "ADMIN") {
+          return reply.code(403).send({
+            success: false,
+            message: "Admin access required",
+          });
+        }
+      } catch {
+        return reply.code(401).send({
           success: false,
           message: "Unauthorized",
         });
@@ -30,5 +58,5 @@ async function authPlugin(app: FastifyInstance) {
   );
 }
 
-// ✅ THIS is what makes decorators reliable
+// ✅ fastify‑plugin guarantees decorators exist before routes
 export default fp(authPlugin);

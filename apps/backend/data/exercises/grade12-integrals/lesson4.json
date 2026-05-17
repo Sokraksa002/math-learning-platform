@@ -1,0 +1,279 @@
+{
+  "lessonId": "math-grade12-lesson4-integrals",
+  "lessonTitle": "ព្រីមីទីវ និងអាំងតេក្រាល (Primitives and Integrals)",
+  "exercises": [
+    {
+      "id": "3ddc4fed-eda0-4ce6-9502-f5c8ca3be6d1",
+      "question": "គេមានអនុគមន៍ F(x) = x^3 + 3x^2 + 2x + 2025 និង f(x) = 3x^2 + 6x + 2។ តើ F(x) ជាព្រីមីទីវនៃ f(x) ដែរឬទេ?",
+      "choices": [
+        "ជាព្រីមីទីវ",
+        "មិនមែនជាព្រីមីទីវ",
+        "ជាដេរីវេ",
+        "មិនអាចកំណត់បាន"
+      ],
+      "correctIndex": 0,
+      "explanation": "គណនា F'(x) = 3x^2 + 6x + 2 (ដោយសារ 2025' = 0) ដែលស្មើនឹង f(x)។",
+      "externalId": "ex-001"
+    },
+    {
+      "id": "baeb48ab-7396-48b7-91d4-40d1e13b0a7f",
+      "question": "គណនាអាំងតេក្រាល I = Integral (5x^4 - 4x^3 + 1) dx",
+      "choices": [
+        "x^5 - x^4 + x + C",
+        "5x^5 - 4x^4 + x + C",
+        "x^5 - x^4 + C",
+        "20x^3 - 12x^2 + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្ត x^(n+1)/(n+1): Integral 5x^4 = x^5, -4x^3 = -x^4, 1 = x។",
+      "externalId": "ex-002"
+    },
+    {
+      "id": "757f38bf-96b0-484f-a005-082e09846002",
+      "question": "រកព្រីមីទីវនៃ f(x) = sin(2x)",
+      "choices": [
+        "-1/2 cos(2x) + C",
+        "1/2 cos(2x) + C",
+        "-cos(2x) + C",
+        "2 cos(2x) + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "Integral sin(ax) dx = -1/a cos(ax) + C។ ក្នុងករណីនេះ a=2។",
+      "externalId": "ex-003"
+    },
+    {
+      "id": "525921bc-030d-47c5-90b8-090db446349c",
+      "question": "គណនាអាំងតេក្រាល I = Integral (1 / (3x + 2)) dx",
+      "choices": [
+        "1/3 ln|3x + 2| + C",
+        "ln|3x + 2| + C",
+        "3 ln|3x + 2| + C",
+        "1/3 (3x + 2)^2 + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្ត Integral 1/(ax+b) dx = 1/a ln|ax+b| + C។",
+      "externalId": "ex-004"
+    },
+    {
+      "id": "130ed21e-f739-4a38-8e5f-75ebd4c7bd72",
+      "question": "គណនា I = Integral e^(2x) dx",
+      "choices": [
+        "1/2 e^(2x) + C",
+        "e^(2x) + C",
+        "2 e^(2x) + C",
+        "e^x + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "Integral e^(ax) dx = 1/a e^(ax) + C។",
+      "externalId": "ex-005"
+    },
+    {
+      "id": "8176c0f7-0cca-46b9-8a74-e2d0013bc8e9",
+      "question": "រកព្រីមីទីវនៃ f(x) = 1 / sqrt(x)",
+      "choices": [
+        "2 sqrt(x) + C",
+        "sqrt(x) + C",
+        "1/2 sqrt(x) + C",
+        "2x + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "x^(-1/2) នាំឱ្យព្រីមីទីវគឺ x^(1/2) / (1/2) = 2 sqrt(x) + C។",
+      "externalId": "ex-006"
+    },
+    {
+      "id": "9d83d913-6df5-4c57-8c9e-040f9f1f0783",
+      "question": "គណនា I = Integral (x^2 + 2)^2 dx",
+      "choices": [
+        "x^5/5 + 4x^3/3 + 4x + C",
+        "x^5/5 + 4x + C",
+        "(x^2 + 2)^3/3 + C",
+        "x^4 + 4x^2 + 4 + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "ពន្លាតសិន: (x^2+2)^2 = x^4 + 4x^2 + 4 រួចធ្វើអាំងតេក្រាលតាមតួ។",
+      "externalId": "ex-007"
+    },
+    {
+      "id": "b5ab6d43-07cc-4814-93c7-866d0cf918e7",
+      "question": "បើ Integral f(x) dx = F(x) + C តើ Integral f(ax + b) dx ស្មើនឹងអ្វី?",
+      "choices": [
+        "1/a F(ax + b) + C",
+        "F(ax + b) + C",
+        "a F(ax + b) + C",
+        "1/b F(ax + b) + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "នេះជាលក្ខណៈគ្រឹះនៃអាំងតេក្រាលសមាសនៃអនុគមន៍លីនេអ៊ែរ។",
+      "externalId": "ex-008"
+    },
+    {
+      "id": "709ad782-c651-401b-bee6-23fc39fbaa28",
+      "question": "គណនា I = Integral (cos(3x) - sin(4x)) dx",
+      "choices": [
+        "1/3 sin(3x) + 1/4 cos(4x) + C",
+        "3 sin(3x) - 4 cos(4x) + C",
+        "1/3 sin(3x) - 1/4 cos(4x) + C",
+        "-1/3 sin(3x) + C"
+      ],
+      "correctIndex": 0,
+      "explanation": " ∫cos(3x) dx = 1/3 sin(3x) និង ∫-sin(4x) dx = +1/4 cos(4x)។",
+      "externalId": "ex-009"
+    },
+    {
+      "id": "0bde7ead-6182-4ae4-97c5-813286f5ab74",
+      "question": "គណនា I = Integral (3^x) dx",
+      "choices": [
+        "3^x / ln(3) + C",
+        "3^x + C",
+        "3^x ln(3) + C",
+        "x 3^(x-1) + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្ត Integral a^x dx = a^x / ln(a) + C។",
+      "externalId": "ex-010"
+    },
+    {
+      "id": "8fade69e-d8ba-46ef-bf8d-71c724e03e07",
+      "question": "រកតម្លៃព្រីមីទីវនៃ f(x) = 1 / cos^2(2x)",
+      "choices": [
+        "1/2 tan(2x) + C",
+        "tan(2x) + C",
+        "-1/2 cot(2x) + C",
+        "2 tan(2x) + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "ដេរីវេនៃ tan(ax) គឺ a/cos^2(ax) នាំឱ្យអាំងតេក្រាលគឺ 1/a tan(ax)។",
+      "externalId": "ex-011"
+    },
+    {
+      "id": "33af3682-7a01-42f2-be6b-6a1a31625417",
+      "question": "គណនា I = Integral (x e^x) dx (ប្រើអាំងតេក្រាលដោយផ្នែក)",
+      "choices": [
+        "(x - 1)e^x + C",
+        "(x + 1)e^x + C",
+        "x e^x + C",
+        "x^2/2 e^x + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាង u=x, dv=e^x dx នាំឱ្យ I = uv - Integral v du = xe^x - e^x + C = (x-1)e^x + C។",
+      "externalId": "ex-012"
+    },
+    {
+      "id": "1397bc61-9711-412a-a564-a27da0408c3c",
+      "question": "រកព្រីមីទីវនៃ f(x) = 2x / (x^2 + 1)",
+      "choices": [
+        "ln(x^2 + 1) + C",
+        "2 ln(x^2 + 1) + C",
+        "x^2 + 1 + C",
+        "arctan(x) + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "ប្រើរូបមន្ត Integral u'/u dx = ln|u| + C។ ទីនេះ u = x^2+1 នាំឱ្យ u'=2x។",
+      "externalId": "ex-013"
+    },
+    {
+      "id": "af230f5d-0e62-4529-846f-f2ed4cab2914",
+      "question": "គណនា I = Integral (1 / (x^2 - 1)) dx",
+      "choices": [
+        "1/2 ln|(x-1)/(x+1)| + C",
+        "ln|x^2 - 1| + C",
+        "arctan(x) + C",
+        "1/2 ln|x^2 - 1| + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "បំបែកជា 1/(x^2-1) = 1/2 [1/(x-1) - 1/(x+1)] រួចគណនា។",
+      "externalId": "ex-014"
+    },
+    {
+      "id": "85618b49-047c-4325-9ca4-b180240f0c59",
+      "question": "រកព្រីមីទីវ F(x) នៃ f(x) = cos x ដែល F(pi/2) = 2",
+      "choices": [
+        "sin x + 1",
+        "sin x + 2",
+        "cos x + 2",
+        "-sin x + 3"
+      ],
+      "correctIndex": 0,
+      "explanation": "F(x) = sin x + C។ ជំនួស x=pi/2: sin(pi/2) + C = 2 => 1 + C = 2 => C = 1។",
+      "externalId": "ex-015"
+    },
+    {
+      "id": "1e6c510a-0829-4e1a-8deb-d509eaaf25de",
+      "question": "គណនា I = Integral (tan^2 x) dx",
+      "choices": [
+        "tan x - x + C",
+        "tan x + x + C",
+        "1/3 tan^3 x + C",
+        "sec x + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "ប្រើអត្តសញ្ញាណ tan²x = sec²x − 1។ ដូចនេះ ∫tan²x dx = ∫(sec²x − 1) dx = ∫sec²x dx − ∫1 dx = tan x − x + C។",
+      "externalId": "ex-016"
+    },
+    {
+      "id": "d5963440-0113-4aca-8b75-c623f19a3a20",
+      "question": "គណនា I = Integral (ln x) dx",
+      "choices": [
+        "x ln x - x + C",
+        "1/x + C",
+        "x ln x + C",
+        "x^2/2 ln x + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "ប្រើអាំងតេក្រាលដោយផ្នែក តាង u = ln x, dv = dx។",
+      "externalId": "ex-017"
+    },
+    {
+      "id": "f8f9a876-f1b6-4756-a3e7-e94e3295c1f0",
+      "question": "រកព្រីមីទីវនៃ f(x) = (2x + 1)^3",
+      "choices": [
+        "1/8 (2x + 1)^4 + C",
+        "1/4 (2x + 1)^4 + C",
+        "(2x + 1)^4 + C",
+        "1/2 (2x + 1)^4 + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "Integral (ax+b)^n = 1/(a(n+1)) * (ax+b)^(n+1) + C។ ទីនេះ 1/(2*4) = 1/8។",
+      "externalId": "ex-018"
+    },
+    {
+      "id": "50030c1f-7c04-4fe4-9e74-b8f6ce2083bd",
+      "question": "គណនា I = Integral (1 / (1 + x^2)) dx",
+      "choices": [
+        "arctan x + C",
+        "ln|1 + x^2| + C",
+        "arcsin x + C",
+        "-1/x + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "នេះជារូបមន្តមូលដ្ឋាននៃអនុគមន៍ត្រីកោណមាត្រច្រាស។",
+      "externalId": "ex-019"
+    },
+    {
+      "id": "167a44b3-2a17-4db8-8e2e-fc4227751bea",
+      "question": "រកអាំងតេក្រាល I = Integral (sin x cos x) dx",
+      "choices": [
+        "1/2 sin^2 x + C",
+        "sin^2 x + C",
+        "cos^2 x + C",
+        "-1/2 cos(2x) + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "ប្រើ u = sin x នាំឱ្យ du = cos x dx នោះ I = Integral u du = u^2/2 = 1/2 sin^2 x + C។",
+      "externalId": "ex-020"
+    },
+    {
+      "id": "43ae80bc-d635-4102-85ef-b5ad07c1999c",
+      "question": "គណនា I = Integral (e^x / (e^x + 2)) dx",
+      "choices": [
+        "ln(e^x + 2) + C",
+        "e^x + 2x + C",
+        "ln(e^x) + C",
+        "1/(e^x + 2) + C"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាង u = e^x + 2 នាំឱ្យ du = e^x dx។ វាក្លាយជា Integral 1/u du = ln|u| + C។",
+      "externalId": "ex-021"
+    }
+  ]
+}

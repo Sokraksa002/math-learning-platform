@@ -1,0 +1,131 @@
+{
+  "id": "grade12-functions-lesson6",
+  "chapterId": "grade12-functions",
+  "titleKm": "ការសិក្សាអនុគមន៍",
+  "content": {
+    "blocks": [
+      {
+        "type": "text",
+        "value": "មេរៀនទី ៦៖ ការសិក្សាអថេរភាព និងការសង់ក្រាបនៃអនុគមន៍ (ការពន្យល់លម្អិត)"
+      },
+      {
+        "type": "text",
+        "value": "១. ការសិក្សាអថេរភាព៖ ដើម្បីដឹងពីទិសដៅបំរែបំរួលនៃអនុគមន៍ យើងត្រូវពិនិត្យសញ្ញានៃដេរីវេទីមួយ f'(x)។"
+      },
+      {
+        "type": "text",
+        "value": "• បើ f'(x) > 0 នោះអនុគមន៍កើន (Increasing ↗️)"
+      },
+      {
+        "type": "text",
+        "value": "• បើ f'(x) < 0 នោះអនុគមន៍ចុះ (Decreasing ↘️)"
+      },
+      {
+        "type": "text",
+        "value": "តារាងអថេរភាព៖ បង្ហាញពីការប្រែប្រួលតម្លៃអនុគមន៍ និងចំណុចបរមារបស់វា។"
+      },
+      {
+        "type": "text",
+        "value": "ក្រាបអនុគមន៍ និងអាស៊ីមតូត៖ ការសិក្សាពីខ្សែោង និងបន្ទាត់ព្រំដែនអាស៊ីមតូត (Visual Understanding)"
+      },
+      {
+        "type": "text",
+        "value": "២. ចំណុចរបត់ និងភាពប៉ោងផត៖ យើងសិក្សាតាមសញ្ញានៃដេរីវេទីពីរ f''(x)។"
+      },
+      {
+        "type": "formula",
+        "value": "f''(x) > 0 \\Rightarrow \\text{ក្រាបមានភាពផត (Concave Up } \\cup)"
+      },
+      {
+        "type": "formula",
+        "value": "f''(x) < 0 \\Rightarrow \\text{ក្រាបមានភាពប៉ោង (Concave Down } \\cap)"
+      },
+      {
+        "type": "text",
+        "value": "លំហាត់ទី ១៦៖ ចូរគូសតារាងអថេរភាព និងសង់ក្រាបនៃអនុគមន៍ f(x) = x^2 - 4x + 3"
+      },
+      {
+        "type": "text",
+        "value": "ដំណោះស្រាយ៖ គណនាដេរីវេ f'(x) = 2x - 4។ ឱ្យ f'(x) = 0 \\Rightarrow x = 2។ ត្រង់ x = 2 នាំឱ្យ f(2) = -1 ជាតម្លៃអប្បបរមា។"
+      },
+      {
+        "type": "graph",
+        "config": {
+          "function": "x^2 - 4*x + 3",
+	"showDerivative": true,
+	"highlightCriticalPoints": true
+
+        }
+      },
+      {
+        "type": "text",
+        "value": "លំហាត់ទី ១៧៖ កំណត់ចន្លោះកើន និងចុះនៃអនុគមន៍ y = 1/x"
+      },
+      {
+        "type": "text",
+        "value": "ដំណោះស្រាយ៖ គណនាដេរីវេ y' = -\\frac{1}{x^2}។ ដោយសារ x^2 > 0 ជានិច្ច នាំឱ្យ y' < 0 គ្រប់ x \\neq 0។ ដូចនេះអនុគមន៍ចុះជានិច្ចលើដែនកំណត់។"
+      },
+      {
+        "type": "graph",
+        "config": {
+          "function": "1/x",
+	"showDerivative": true,
+	"highlightCriticalPoints": true
+
+        }
+      },
+      {
+        "type": "text",
+        "value": "លំហាត់ទី ១៨៖ រកកូអរដោនេចំណុចរបត់នៃ f(x) = x^3 - 3x"
+      },
+      {
+        "type": "text",
+        "value": "ដំណោះស្រាយ៖ រកដេរីវេទីពីរ f''(x) = 6x។ ឱ្យ f''(x) = 0 \\Rightarrow x = 0។ ជំនួសក្នុងអនុគមន៍ដើម f(0) = 0។ ដូចនេះចំណុចរបត់គឺ I(0, 0)។"
+      },
+      {
+        "type": "graph",
+        "config": {
+          "function": "x^3 - 3*x",
+	"showDerivative": true,
+	"highlightCriticalPoints": true
+
+        }
+      },
+      {
+        "type": "text",
+        "value": "លំហាត់ទី ១៩៖ រកតម្លៃអតិបរមានៃ y = -x^2 + 2x + 5"
+      },
+      {
+        "type": "text",
+        "value": "ដំណោះស្រាយ៖ គណនា y' = -2x + 2 = 0 \\Rightarrow x = 1។ តម្លៃអតិបរមាគឺ y(1) = 6។"
+      },
+      {
+        "type": "graph",
+        "config": {
+          "function": "-x^2 + 2*x + 5",
+	"showDerivative": true,
+	"highlightCriticalPoints": true
+
+        }
+      },
+      {
+        "type": "text",
+        "value": "លំហាត់ទី ២០៖ រកអាស៊ីមតូតឈរ និងអាស៊ីមតូតដេកនៃ y = \\frac{4x + 1}{2x - 2}"
+      },
+      {
+        "type": "text",
+        "value": "ដំណោះស្រាយ៖ អាស៊ីមតូតឈរ x = 1 (ព្រោះភាគបែងសូន្យ)។ អាស៊ីមតូតដេក y = \\frac{4}{2} = 2 (លីមីតត្រង់អនន្ត)។"
+      },
+{
+  "type": "graph",
+  "config": {
+    "function": "(4*x + 1) / (2*x - 2)",
+    "showDerivative": true,
+    "highlightCriticalPoints": true
+  }
+}
+    ]
+  }
+}
+
+

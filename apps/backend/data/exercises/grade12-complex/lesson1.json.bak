@@ -1,0 +1,565 @@
+{
+  "lessonId": "grade12-complex-lesson1",
+  "exercises": [
+      {
+      "id": "ex-001",
+      "question": "គណនា sqrt(-144) + sqrt(-100) ដោយប្រើ i^2 = -1",
+      "choices": ["22i", "2i", "22", "-22i"],
+      "correctIndex": 0,
+      "explanation": "sqrt(-144) = 12i និង sqrt(-100) = 10i។ ដូចនេះ 12i + 10i = 22i។"
+    },
+    {
+      "id": "ex-002",
+      "question": "គណនា sqrt(49) + sqrt(-343) + sqrt(-49)",
+      "choices": ["7 + 14i√7", "7 + 7i√7 + 7i", "7 + 8i√7", "14 + 7i√7"],
+      "correctIndex": 1,
+      "explanation": "sqrt(49) = 7, sqrt(-343) = sqrt(49 * 7 * i^2) = 7i*sqrt(7), និង sqrt(-49) = 7i។ លទ្ធផលគឺ 7 + 7i*sqrt(7) + 7i។"
+    },
+    {
+      "id": "ex-003",
+      "question": "សរសេរ z = (5-2i) - (3+12i) + (3-i) ជាទម្រង់ a+bi",
+      "choices": ["z = 5 - 15i", "z = 11 - 15i", "z = 5 + 15i", "z = 5 - 13i"],
+      "correctIndex": 0,
+      "explanation": "ផ្នែកពិត: 5 - 3 + 3 = 5។ ផ្នែកនិម្មិត: -2i - 12i - i = -15i។ ដូចនេះ z = 5 - 15i។"
+    },
+    {
+      "id": "ex-004",
+      "question": "បើ z = cos(theta) + i*sin(theta) គណនា 1/z",
+      "choices": ["cos(theta) - i*sin(theta)", "cos(theta) + i*sin(theta)", "-z", "1"],
+      "correctIndex": 0,
+      "explanation": "1/z = z^-1 = cos(-theta) + i*sin(-theta) = cos(theta) - i*sin(theta)។"
+    },
+    {
+  "id": "ex-005",
+  "question": "គណនា z = (2+10i) / (5-10i) * (3+2i)",
+  "choices": ["-3.28 + 0.24i", "-1 + 3i", "-1.8 + 3.4i", "1.8 - 3.4i"],
+  "correctIndex": 0,
+  "explanation": "(2+10i)/(5-10i) = -0.72 + 0.56i។ បន្ទាប់មកគុណនឹង (3+2i) ទទួលបាន -3.28 + 0.24i។"
+},
+    {
+      "id": "ex-006",
+      "question": "បើ z = cos(theta) + i*sin(theta) គណនា z^2",
+      "choices": ["cos(2*theta) + i*sin(2*theta)", "cos^2(theta) - sin^2(theta)", "1", "2z"],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្តដឺម័រ (De Moivre's Theorem): (cos(theta) + i*sin(theta))^n = cos(n*theta) + i*sin(n*theta)។"
+    },
+    {
+      "id": "ex-007",
+      "question": "គណនា z = (2+i) / (1-i)",
+      "choices": ["0.5 + 1.5i", "1 + i", "1.5 + 0.5i", "0.5 - 1.5i"],
+      "correctIndex": 0,
+      "explanation": "z = (2+i)(1+i) / (1^2 + 1^2) = (2 + 2i + i - 1) / 2 = (1 + 3i) / 2 = 0.5 + 1.5i។"
+    },
+    {
+      "id": "ex-008",
+      "question": "រកឫសនៃសមីការ z^2 + z + 1 = 0",
+      "choices": ["(-1 +/- i*sqrt(3))/2", "(1 +/- i*sqrt(3))/2", "-1 +/- i", "i"],
+      "correctIndex": 0,
+      "explanation": "Delta = 1 - 4 = -3 = (i*sqrt(3))^2។ ដូចនេះ z = (-1 +/- i*sqrt(3))/2។"
+    },
+    {
+      "id": "ex-009",
+      "question": "រកតម្លៃ x និង y បើ (x+yi) + 2(2-3i) = 6-2i",
+      "choices": ["x=2, y=4", "x=2, y=8", "x=10, y=4", "x=2, y=-8"],
+      "correctIndex": 0,
+      "explanation": "x + yi + 4 - 6i = 6 - 2i នាំឱ្យ x + 4 = 6 => x = 2 និង y - 6 = -2 => y = 4។"
+    },
+    {
+      "id": "ex-010",
+      "question": "សរសេរ z = sqrt(3) + i ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": ["2(cos(pi/6) + i*sin(pi/6))", "2(cos(pi/3) + i*sin(pi/3))", "sqrt(2)(cos(pi/6) + i*sin(pi/6))", "2(cos(pi/4) + i*sin(pi/4))"],
+      "correctIndex": 0,
+      "explanation": "r = sqrt(3 + 1) = 2។ cos(theta) = sqrt(3)/2, sin(theta) = 1/2 នាំឱ្យ theta = pi/6។"
+    },
+    {
+      "id": "ex-011",
+      "question": "រកកូអរដោនេចំណុចកណ្ដាលនៃអង្កត់ភ្ជាប់ z1 = 2 + 3i និង z2 = 4 - i",
+      "choices": ["3 + i", "3 + 2i", "6 + 2i", "1 + 2i"],
+      "correctIndex": 0,
+      "explanation": "z_mid = (z1 + z2) / 2 = (2 + 4 + i(3 - 1)) / 2 = (6 + 2i) / 2 = 3 + i។"
+    },
+    {
+      "id": "ex-012",
+      "question": "សរសេរ z = (7-6i) - (3-2i) + (2-i) ជាទម្រង់ a+bi",
+      "choices": ["z=6-5i", "z=6-9i", "z=12-9i", "z=2-5i"],
+      "correctIndex": 0,
+      "explanation": "ផ្នែកពិត: 7 - 3 + 2 = 6។ ផ្នែកនិម្មិត: -6i + 2i - i = -5i។ ដូចនេះ z = 6 - 5i។"
+    },
+    {
+      "id": "ex-013",
+      "question": "គណនា z = (5-3i) * (6-3i) រួចសរសេរជាទម្រង់ a+bi",
+      "choices": ["21-33i", "39-33i", "21+33i", "30+9i"],
+      "correctIndex": 0,
+      "explanation": "z = 30 - 15i - 18i + 9i^2 = 30 - 33i - 9 = 21 - 33i។"
+    },
+    {
+      "id": "ex-014",
+      "question": "សរសេរ z = (1+2i)(1+3i) ជាទម្រង់ a+bi",
+      "choices": ["-5+5i", "7+5i", "-5-5i", "1+6i"],
+      "correctIndex": 0,
+      "explanation": "z = 1 + 3i + 2i + 6i^2 = 1 + 5i - 6 = -5 + 5i។"
+    },
+    {
+      "id": "ex-015",
+      "question": "គណនា z = (sqrt(3)i - 1)^2 ជាទម្រង់ a+bi",
+      "choices": ["-2-2i*sqrt(3)", "-4-2i*sqrt(3)", "2+2i*sqrt(3)", "4-2i*sqrt(3)"],
+      "correctIndex": 0,
+      "explanation": "z = (sqrt(3)i)^2 - 2(sqrt(3)i)(1) + 1^2 = -3 - 2i*sqrt(3) + 1 = -2 - 2i*sqrt(3)។"
+    },
+    {
+      "id": "ex-016",
+      "question": "សរសេរ z = (i+3)^3 ជាទម្រង់ a+bi",
+      "choices": ["18+26i", "27+i", "18+27i", "26+18i"],
+      "correctIndex": 0,
+      "explanation": "ប្រើ (a+b)^3: z = i^3 + 3i^2(3) + 3i(3^2) + 27 = -i - 9 + 27i + 27 = 18 + 26i។"
+    },
+    {
+      "id": "ex-017",
+      "question": "រកតម្លៃ x, y បើ 2x + 4yi - 3 = (1-i)(3-3i)",
+      "choices": [
+        "x=1.5, y=-1.5",
+        "x=3, y=-6",
+        "x=1.5, y=-6",
+        "x=0, y=-1.5"
+      ],
+      "correctIndex": 0,
+      "explanation": "(1-i)(3-3i) = 3 - 3i - 3i + 3i^2 = -6i។ នាំឱ្យសមីការក្លាយជា 2x - 3 + 4yi = -6i។ ផ្នែកពិត: 2x - 3 = 0 => x = 1.5 និងផ្នែកនិម្មិត: 4y = -6 => y = -1.5។"
+    },
+    {
+      "id": "ex-018",
+      "question": "សរសេរ z = sqrt(3) + 3i ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": [
+        "2*sqrt(3)(cos(pi/3) + i*sin(pi/3))",
+        "2*sqrt(3)(cos(pi/6) + i*sin(pi/6))",
+        "3*sqrt(2)(cos(pi/3) + i*sin(pi/3))",
+        "sqrt(12)(cos(pi/4) + i*sin(pi/4))"
+      ],
+      "correctIndex": 0,
+      "explanation": "r = 2*sqrt(3) និង theta = pi/3។"
+    },
+    {
+      "id": "ex-019",
+      "question": "សរសេរ z = 1 + i*sqrt(3) ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": [
+        "2(cos(pi/3) + i*sin(pi/3))",
+        "2(cos(pi/6) + i*sin(pi/6))",
+        "sqrt(2)(cos(pi/3) + i*sin(pi/3))",
+        "2(cos(2*pi/3) + i*sin(2*pi/3))"
+      ],
+      "correctIndex": 0,
+      "explanation": "r = 2 និង theta = pi/3។"
+    },
+    {
+      "id": "ex-020",
+      "question": "រកចម្ងាយរវាងចំណុចរូបភាពនៃ z1 = 1 + i និង z2 = 4 + 5i",
+      "choices": ["5", "25", "sqrt(41)", "7"],
+      "correctIndex": 0,
+      "explanation": "ចម្ងាយ d = |z2 - z1| = |(4-1) + i(5-1)| = |3 + 4i|។ តាមរូបមន្តម៉ូឌុល d = sqrt(3^2 + 4^2) = sqrt(25) = 5។"
+    },
+    {
+      "id": "ex-021",
+      "question": "រកម៉ូឌុលនៃ w = 1 + cos(pi/7) + i*sin(pi/7)",
+      "choices": ["2*cos(pi/14)", "2*sin(pi/14)", "cos(pi/7)", "1"],
+      "correctIndex": 0,
+      "explanation": "ប្រើរូបមន្ត 1 + cos(A) = 2*cos^2(A/2) និង sin(A) = 2*sin(A/2)cos(A/2)។ នាំឱ្យ r = 2*cos(pi/14)។"
+    },
+    {
+      "id": "ex-022",
+      "question": "សរសេរ z = sqrt(2) + i*sqrt(2) ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": [
+        "2(cos(pi/4) + i*sin(pi/4))",
+        "2(cos(pi/2) + i*sin(pi/2))",
+        "sqrt(2)(cos(pi/4) + i*sin(pi/4))",
+        "4(cos(pi/4) + i*sin(pi/4))"
+      ],
+      "correctIndex": 0,
+      "explanation": "ម៉ូឌុល r = sqrt(2 + 2) = 2។ ដោយ cos(theta) = sqrt(2)/2 និង sin(theta) = sqrt(2)/2 នាំឱ្យ theta = pi/4។"
+    },
+    {
+      "id": "ex-023",
+      "question": "សរសេរ z = 2026i ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": [
+        "2026(cos(0) + i*sin(0))",
+        "2026(cos(pi) + i*sin(pi))",
+        "2026(cos(pi/2) + i*sin(pi/2))",
+        "2026(cos(-pi/2) + i*sin(-pi/2))"
+      ],
+      "correctIndex": 2,
+      "explanation": "ចំនួននិម្មិតសុទ្ធវិជ្ជមានមានអាគុយម៉ង់ theta = pi/2 និងម៉ូឌុល r = 2026។"
+    },
+    {
+      "id": "ex-024",
+      "question": "សរសេរ w = -1 + i*sqrt(3) ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": [
+        "2(cos(2*pi/3) + i*sin(2*pi/3))",
+        "2(cos(pi/3) + i*sin(pi/3))",
+        "2(cos(5*pi/6) + i*sin(5*pi/6))",
+        "2(cos(4*pi/3) + i*sin(4*pi/3))"
+      ],
+      "correctIndex": 0,
+      "explanation": "ម៉ូឌុល r = 2។ ដោយ cos(theta) = -1/2 និង sin(theta) = sqrt(3)/2 នាំឱ្យ theta = 2*pi/3។"
+    },
+    {
+      "id": "ex-025",
+      "question": "សរសេរ w = -sqrt(3) - 3i ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": [
+        "2*sqrt(3)(cos(4*pi/3) + i*sin(4*pi/3))",
+        "2*sqrt(3)(cos(7*pi/6) + i*sin(7*pi/6))",
+        "sqrt(12)(cos(5*pi/3) + i*sin(5*pi/3))",
+        "2*sqrt(3)(cos(2*pi/3) + i*sin(2*pi/3))"
+      ],
+      "correctIndex": 1,
+      "explanation": "r = sqrt(3 + 9) = sqrt(12) = 2*sqrt(3)។ cos(theta) = -sqrt(3)/(2*sqrt(3)) = -1/2 និង sin(theta) = -3/(2*sqrt(3)) = -sqrt(3)/2 នាំឱ្យ theta = pi + pi/6 = 7*pi/6។"
+    },
+    {
+      "id": "ex-026",
+      "question": "សរសេរ z = -5*cos(pi/11) + 5i*sin(pi/11) ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": [
+        "5(cos(10*pi/11) + i*sin(10*pi/11))",
+        "5(cos(pi/11) + i*sin(pi/11))",
+        "5(cos(12*pi/11) + i*sin(12*pi/11))",
+        "5(cos(-pi/11) + i*sin(-pi/11))"
+      ],
+      "correctIndex": 0,
+      "explanation": "z = 5(-cos(pi/11) + i*sin(pi/11)) = 5(cos(pi - pi/11) + i*sin(pi - pi/11)) = 5(cos(10*pi/11) + i*sin(10*pi/11))។"
+    },
+    {
+      "id": "ex-027",
+      "question": "គណនា (2+3i) + (4-5i)",
+      "choices": ["6-2i", "6+8i", "-2-2i", "2-8i"],
+      "correctIndex": 0,
+      "explanation": "បូកផ្នែកពិត និងនិម្មិត: 2+4=6 និង 3i-5i=-2i ដូចនេះ 6-2i។"
+    },
+    {
+      "id": "ex-028",
+      "question": "គណនា (3+2i) - (1+5i)",
+      "choices": ["2-3i", "4+7i", "2+3i", "-2-3i"],
+      "correctIndex": 0,
+      "explanation": "ដកផ្នែកពិត និងនិម្មិត: 3-1=2 និង 2i-5i=-3i ដូចនេះ 2-3i។"
+    },
+    {
+      "id": "ex-029",
+      "question": "គណនា (1+i)^2",
+      "choices": ["2i", "1+2i", "-1+2i", "2+2i"],
+      "correctIndex": 0,
+      "explanation": "(1+i)^2 = 1 + 2i + i^2 = 1 + 2i - 1 = 2i។"
+    },
+    {
+      "id": "ex-030",
+      "question": "គណនា i^4",
+      "choices": ["1", "-1", "i", "-i"],
+      "correctIndex": 0,
+      "explanation": "i^2 = -1 ⟹ i^4 = (i^2)^2 = (-1)^2 = 1។"
+    },
+    {
+      "id": "ex-031",
+      "question": "បើ z1 = 1 + i*sqrt(3) និង z2 = 3 + i*sqrt(3) គណនា z1/z2 ជាទម្រង់ពិជគណិត",
+      "choices": [
+        "1/2 + i*sqrt(3)/6",
+        "sqrt(3)/4 + i/4",
+        "1/2 + i/2",
+        "3/4 + i/4"
+      ],
+      "correctIndex": 0,
+      "explanation": "z1/z2 = (1+i*sqrt(3))(3-i*sqrt(3)) / (3^2+(sqrt(3))^2) = (3 - i*sqrt(3) + 3i*sqrt(3) + 3) / 12 = (6 + 2i*sqrt(3)) / 12 = 1/2 + i*sqrt(3)/6។"
+    },
+    {
+      "id": "ex-032",
+      "question": "រកតម្លៃប្រាកដនៃ cos(pi/12) តាមរយៈ z = z1/z2 ដែល z1 = (sqrt(6)-sqrt(2)i)/2 និង z2 = 1-i",
+      "choices": [
+        "(sqrt(6)+sqrt(2))/4",
+        "(sqrt(6)-sqrt(2))/4",
+        "sqrt(3)/2",
+        "1/2"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរយៈការប្រៀបធៀបទម្រង់ពិជគណិត និងត្រីកោណមាត្រនៃ z1/z2 នាំឱ្យ cos(pi/12) = (sqrt(6)+sqrt(2))/4។"
+    },
+    {
+      "id": "ex-033",
+      "question": "រកចំនួនវិជ្ជមាន n តូចបំផុតដែល z^n ជាចំនួនពិត បើ z = (sqrt(3)+i) / (1+i*sqrt(3))",
+      "choices": [
+        "n = 3",
+        "n = 6",
+        "n = 12",
+        "n = 2"
+      ],
+      "correctIndex": 1,
+      "explanation": "z = [2(cos(pi/6)+i*sin(pi/6))] / [2(cos(pi/3)+i*sin(pi/3))] = cos(-pi/6) + i*sin(-pi/6)។ z^n ជាចំនួនពិត លុះត្រាតែផ្នែកនិម្មិត sin(-n*pi/6) = 0 នាំឱ្យ n*pi/6 = k*pi ដូចនេះ n តូចបំផុតគឺ 6 (ចំពោះ k=1)។"
+    },
+    {
+      "id": "ex-034",
+      "question": "គណនា (z1 * z2)^8 បើ z1 = 1+i និង z2 = 1-i*sqrt(3)",
+      "choices": [
+        "2^8(cos(4*pi/3) + i*sin(4*pi/3))",
+        "2^12(cos(4*pi/3) + i*sin(4*pi/3))",
+        "2^12(cos(2*pi/3) + i*sin(2*pi/3))",
+        "256"
+      ],
+      "correctIndex": 1,
+      "explanation": "ដំបូងរក z1*z2: |z1|=sqrt(2), |z2|=2 នាំឱ្យ |z1*z2|=2*sqrt(2) = 2^(3/2)។ អាគុយម៉ង់ arg(z1)=pi/4, arg(z2)=-pi/3 នាំឱ្យ arg(z1*z2)=pi/4 - pi/3 = -pi/12។ តាមរូបមន្តដឺម័រ: (z1*z2)^8 មានម៉ូឌុល (2^(3/2))^8 = 2^12 និងអាគុយម៉ង់ 8*(-pi/12) = -2pi/3 ដែលស្មើនឹង 4pi/3។"
+    },
+    {
+      "id": "ex-035",
+      "question": "សរសេរ z/w ជាទម្រង់ពិជគណិត បើ z = 1+i និង w = sqrt(3)+i",
+      "choices": [
+        "(sqrt(3)+1)/4 + i(sqrt(3)-1)/4",
+        "(sqrt(3)-1)/4 + i(sqrt(3)+1)/4",
+        "sqrt(3)/2 + i/2",
+        "1/2 + i*sqrt(3)/2"
+      ],
+      "correctIndex": 0,
+      "explanation": "z/w = (1+i)(sqrt(3)-i) / 4 = (sqrt(3) - i + i*sqrt(3) + 1) / 4 = (sqrt(3)+1)/4 + i(sqrt(3)-1)/4។"
+    },
+    {
+      "id": "ex-036",
+      "question": "រកទម្រង់ត្រីកោណមាត្រនៃ U = z^2 + w^2 បើ z = sqrt(3)-i និង w = 3i+sqrt(3)",
+      "choices": [
+        "8(cos(pi/3) + i*sin(pi/3))",
+        "4(cos(pi/3) + i*sin(pi/3))",
+        "8(cos(2*pi/3) + i*sin(2*pi/3))",
+        "16(cos(pi/3) + i*sin(pi/3))"
+      ],
+      "correctIndex": 2,
+      "explanation": "z^2 = 2-2i*sqrt(3) និង w^2 = -6+6i*sqrt(3)។ U = -4 + 4i*sqrt(3) = 8(cos(2*pi/3) + i*sin(2*pi/3))។"
+    },
+    {
+      "id": "ex-037",
+      "question": "គណនា V = z * w បើ z = sqrt(2)-i*sqrt(2) និង w = (sqrt(3)-1)/2 + i(sqrt(3)+1)/2",
+      "choices": [
+        "(sqrt(6)+sqrt(2))/2 + i(sqrt(6)-sqrt(2))/2",
+        "sqrt(2) + i*sqrt(6)",
+        "sqrt(6) + i*sqrt(2)",
+        "1 + i*sqrt(3)"
+      ],
+      "correctIndex": 2,
+      "explanation": "V = (sqrt(2)-i*sqrt(2)) * [(sqrt(3)-1)/2 + i(sqrt(3)+1)/2] = 1/2 * [sqrt(2)(sqrt(3)-1) + i*sqrt(2)(sqrt(3)+1) - i*sqrt(2)(sqrt(3)-1) - i^2*sqrt(2)(sqrt(3)+1)] = 1/2 * [sqrt(6)-sqrt(2) + i*sqrt(6)+i*sqrt(2) - i*sqrt(6)+i*sqrt(2) + sqrt(6)+sqrt(2)] = 1/2 * [2*sqrt(6) + i(2*sqrt(2))] = sqrt(6) + i*sqrt(2)។"
+    },
+    {
+      "id": "ex-038",
+      "question": "គណនា z^2 ជាទម្រង់ពិជគណិត បើ z = sqrt(2-sqrt(2)) + i*sqrt(2+sqrt(2))",
+      "choices": [
+        "-2√2 + 2i√2",
+        "sqrt(2) + i*sqrt(2)",
+        "2 + 2i",
+        "0"
+      ],
+      "correctIndex": 0,
+      "explanation": "z^2 = (2-sqrt(2)) - (2+sqrt(2)) + 2i*sqrt((2-sqrt(2))(2+sqrt(2))) = -2*sqrt(2) + 2i*sqrt(2)។"
+    },
+    {
+      "id": "ex-039",
+      "question": "បង្ហាញតម្លៃ Sn = z^n + conj(z^n) បើ z = 2(cos(pi/24) + i*sin(pi/24))",
+      "choices": [
+        "2^(n+1) * cos(n*pi/24)",
+        "2^n * cos(n*pi/24)",
+        "2 * cos(n*pi/24)",
+        "2^(n+1) * sin(n*pi/24)"
+      ],
+      "correctIndex": 0,
+      "explanation": "z^n + conj(z^n) = 2^n(cos(n*pi/24) + i*sin(n*pi/24)) + 2^n(cos(n*pi/24) - i*sin(n*pi/24)) = 2^(n+1) * cos(n*pi/24)។"
+    },
+    {
+  "id": "ex-040",
+  "question": "រក x, y បើ (3x-y) + (2x+y)i = conj(z+w) ដែល z=2+3i, w=4+7i",
+  "choices": ["x=-0.8, y=-8.4", "x=1, y=-4", "x=2, y=-1", "x=0.5, y=-5"],
+  "correctIndex": 0,
+  "explanation": "z+w = 6+10i នាំឱ្យ conj(z+w) = 6-10i។ តាមសមីការ 3x-y = 6 និង 2x+y = -10។ បូកសមីការទាំងពីរបាន 5x = -4 => x = -0.8 និង y = -8.4។"
+    },
+    {
+      "id": "ex-041",
+      "question": "គណនា (1+i)z + (3+2i)conj(z) = 4i+9 រក z",
+      "choices": ["z = 2-3i", "z = 3-2i", "z = 1+i", "z = 2+i"],
+      "correctIndex": 3,
+      "explanation": "តាង z = x+iy។ ជំនួសចូលសមីការបាន (4x+y) + i(3x-2y) = 9+4i។ នាំឱ្យ 4x+y=9 និង 3x-2y=4។ ដោះស្រាយប្រព័ន្ធសមីការបាន x=2, y=1 ដូចនេះ z=2+i។"
+    },
+    {
+      "id": "ex-042",
+      "question": "សរសេរ z = 16*sqrt(3) + 16i ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": [
+        "32(cos(pi/6) + i*sin(pi/6))",
+        "32(cos(pi/3) + i*sin(pi/3))",
+        "16(cos(pi/6) + i*sin(pi/6))",
+        "32(cos(pi/4) + i*sin(pi/4))"
+      ],
+      "correctIndex": 0,
+      "explanation": "r = sqrt(16^2 * 3 + 16^2) = 32។ cos(theta) = sqrt(3)/2 នាំឱ្យ theta = pi/6។"
+    },
+    {
+      "id": "ex-043",
+      "question": "សរសេរ w = 8 - 8i*sqrt(3) ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": [
+        "16(cos(-pi/3) + i*sin(-pi/3))",
+        "16(cos(pi/3) + i*sin(pi/3))",
+        "8(cos(-pi/3) + i*sin(-pi/3))",
+        "16(cos(5*pi/3) + i*sin(5*pi/3))"
+      ],
+      "correctIndex": 0,
+      "explanation": "r = 16។ cos(theta) = 1/2 និង sin(theta) = -sqrt(3)/2 នាំឱ្យ theta = -pi/3។"
+    },
+    {
+      "id": "ex-044",
+      "question": "រកអាគុយម៉ង់នៃ z = 2*sin(pi/5) + 2i*cos(pi/5)",
+      "choices": [
+        "3*pi/10",
+        "pi/5",
+        "pi/10",
+        "2*pi/5"
+      ],
+      "correctIndex": 0,
+      "explanation": "z = 2(cos(pi/2-pi/5) + i*sin(pi/2-pi/5)) = 2(cos(3*pi/10) + i*sin(3*pi/10))។"
+    },
+    {
+      "id": "ex-045",
+      "question": "សរសេរ z = 2 - sqrt(2) - i*sqrt(2) ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": [
+        "(2*sqrt(2-sqrt(2)))(cos(-pi/8) + i*sin(-pi/8))",
+        "2(cos(-pi/4) + i*sin(-pi/4))",
+        "sqrt(2)(cos(-pi/8) + i*sin(-pi/8))",
+        "2(cos(pi/8) + i*sin(pi/8))"
+      ],
+      "correctIndex": 0,
+      "explanation": "រកម៉ូឌុល r = sqrt[(2-sqrt(2))^2 + (-sqrt(2))^2] = sqrt[4 - 4*sqrt(2) + 2 + 2] = sqrt[8 - 4*sqrt(2)] = 2*sqrt(2-sqrt(2))។ ចំពោះអាគុយម៉ង់ ប្រើរូបមន្តពាក់កណ្តាលមុំ: ដោយ cos(-pi/8) = sqrt(2+sqrt(2))/2 និង sin(-pi/8) = -sqrt(2-sqrt(2))/2 នាំឱ្យយើងទាញបានទម្រង់ត្រីកោណមាត្រនេះ។"
+    },
+    {
+      "id": "ex-046",
+      "question": "គណនាតម្លៃនៃ i^2024 + i^2025 + i^2026 + i^2027",
+      "choices": ["0", "i", "-1", "1"],
+      "correctIndex": 0,
+      "explanation": "ផលបូកនៃស្វ័យគុណបួនបន្តបន្ទាប់នៃ i គឺតែងតែស្មើ 0 ព្រោះ i^0 + i^1 + i^2 + i^3 = 1 + i - 1 - i = 0។"
+    },
+    {
+      "id": "ex-047",
+      "question": "គណនា z = (1 + i)^4 ជាទម្រង់ពិជគណិត",
+      "choices": ["-4", "4i", "4", "-4i"],
+      "correctIndex": 0,
+      "explanation": "(1+i)^2 = 1 + 2i + i^2 = 2i។ ដូចនេះ (1+i)^4 = (2i)^2 = 4i^2 = -4។"
+    },
+    {
+      "id": "ex-048",
+      "question": "គណនា z = (1 - i)^6 ជាទម្រង់ពិជគណិត",
+      "choices": ["8i", "-8i", "8", "-8"],
+      "correctIndex": 0,
+      "explanation": "(1-i)^2 = -2i។ ដូចនេះ (1-i)^6 = (-2i)^3 = -8i^3 = -8(-i) = 8i។"
+    },
+    {
+      "id": "ex-049",
+      "question": "រកម៉ូឌុលនៃចំនួនកុំផ្លិច z = (3 + 4i)(5 - 12i)",
+      "choices": ["65", "17", "7", "13"],
+      "correctIndex": 0,
+      "explanation": "|z| = |3+4i| * |5-12i| = sqrt(3^2 + 4^2) * sqrt(5^2 + (-12)^2) = 5 * 13 = 65។"
+    },
+    {
+      "id": "ex-050",
+      "question": "រកម៉ូឌុលនៃ z = (1 + 2i) / (2 - i)",
+      "choices": ["1", "sqrt(5)", "5", "0.5"],
+      "correctIndex": 0,
+      "explanation": "|z| = |1+2i| / |2-i| = sqrt(1+4) / sqrt(4+1) = sqrt(5) / sqrt(5) = 1។"
+    },
+    {
+      "id": "ex-051",
+      "question": "រកអាគុយម៉ង់នៃ z = -1 - i",
+      "choices": ["5*pi/4", "3*pi/4", "pi/4", "-pi/4"],
+      "correctIndex": 0,
+      "explanation": "z ស្ថិតក្នុងកាដ្រង់ទី 3។ r = sqrt(2), cos(theta) = -1/sqrt(2), sin(theta) = -1/sqrt(2) នាំឱ្យ theta = pi + pi/4 = 5*pi/4។"
+    },
+    {
+      "id": "ex-052",
+      "question": "សរសេរ z = -i ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": ["cos(-pi/2) + i*sin(-pi/2)", "cos(pi) + i*sin(pi)", "cos(pi/2) + i*sin(pi/2)", "cos(0) + i*sin(0)"],
+      "correctIndex": 0,
+      "explanation": "ម៉ូឌុល r = 1។ ដោយ z ស្ថិតនៅលើអ័ក្សនិម្មិតអវិជ្ជមាន នាំឱ្យ theta = -pi/2។"
+    },
+    {
+      "id": "ex-053",
+      "question": "សរសេរ z = 5 ជាទម្រង់ត្រីកោណមាត្រ",
+      "choices": ["5(cos(0) + i*sin(0))", "5(cos(pi) + i*sin(pi))", "5(cos(pi/2) + i*sin(pi/2))", "5(cos(2*pi) + i*sin(2*pi))"],
+      "correctIndex": 0,
+      "explanation": "ចំនួនពិតវិជ្ជមានមានអាគុយម៉ង់ theta = 0 និងម៉ូឌុល r = 5។"
+    },
+    {
+      "id": "ex-054",
+      "question": "សរសេរ z = 2(cos(pi/6) + i*sin(pi/6)) ជាទម្រង់ពិជគណិត",
+      "choices": ["sqrt(3) + i", "1 + i*sqrt(3)", "sqrt(2) + i*sqrt(2)", "2 + i"],
+      "correctIndex": 0,
+      "explanation": "z = 2(sqrt(3)/2 + i*1/2) = sqrt(3) + i។"
+    },
+    {
+      "id": "ex-055",
+      "question": "សរសេរ z = 4(cos(2*pi/3) + i*sin(2*pi/3)) ជាទម្រង់ពិជគណិត",
+      "choices": ["-2 + 2i*sqrt(3)", "2 - 2i*sqrt(3)", "-2*sqrt(3) + 2i", "2 + 2i"],
+      "correctIndex": 0,
+      "explanation": "cos(2*pi/3) = -1/2 និង sin(2*pi/3) = sqrt(3)/2។ ដូចនេះ z = 4(-1/2 + i*sqrt(3)/2) = -2 + 2i*sqrt(3)។"
+    },
+    {
+      "id": "ex-056",
+      "question": "រកចំនួនកុំផ្លិចឆ្លាស់នៃ z = 1 / i",
+      "choices": ["i", "-i", "1", "-1"],
+      "correctIndex": 0,
+      "explanation": "z = 1/i = -i។ ដូចនេះ ចំនួនឆ្លាស់នៃ z គឺ conj(-i) = i។"
+    },
+    {
+      "id": "ex-057",
+      "question": "គណនា z = (1 + i)^10",
+      "choices": ["32i", "-32i", "32", "-32"],
+      "correctIndex": 0,
+      "explanation": "z = ((1+i)^2)^5 = (2i)^5 = 32i^5 = 32i។"
+    },
+    {
+      "id": "ex-058",
+      "question": "រកចំនួនកុំផ្លិច z ដែល z^2 = -5 + 12i",
+      "choices": ["2 + 3i ឬ -2 - 3i", "3 + 2i ឬ -3 - 2i", "2 - 3i ឬ -2 + 3i", "4 + 3i ឬ -4 - 3i"],
+      "correctIndex": 0,
+      "explanation": "តាង z = x + iy។ x^2 - y^2 = -5 និង 2xy = 12។ នាំឱ្យបាន x^2 = 4, y^2 = 9។ ដោយ xy > 0 នាំឱ្យ z = 2+3i ឬ z = -2-3i។"
+    },
+    {
+      "id": "ex-059",
+      "question": "រកផ្នែកពិតនៃ z = (1 + 2i)^3",
+      "choices": ["-11", "11", "-2", "2"],
+      "correctIndex": 0,
+      "explanation": "z = 1^3 + 3(1)^2(2i) + 3(1)(2i)^2 + (2i)^3 = 1 + 6i - 12 - 8i = -11 - 2i។ ផ្នែកពិតគឺ -11។"
+    },
+    {
+      "id": "ex-060",
+      "question": "រកផ្នែកនិម្មិតនៃ z = (i - 1) / (i + 1)",
+      "choices": ["1", "-1", "0", "i"],
+      "correctIndex": 0,
+      "explanation": "z = (i-1)(-i+1) / 2 = (-i^2 + i + i - 1) / 2 = (1 + 2i - 1) / 2 = i។ ផ្នែកនិម្មិតគឺ 1។"
+    },
+    {
+      "id": "ex-061",
+      "question": "រកម៉ូឌុលនៃ z = cos(theta) - i*sin(theta)",
+      "choices": ["1", "cos(theta)", "sin(theta)", "0"],
+      "correctIndex": 0,
+      "explanation": "|z| = sqrt(cos^2(theta) + (-sin(theta))^2) = sqrt(cos^2(theta) + sin^2(theta)) = 1។"
+    },
+    {
+      "id": "ex-062",
+      "question": "គណនា z * conj(z) បើ z = 3 - 4i",
+      "choices": ["25", "7", "-7", "5"],
+      "correctIndex": 0,
+      "explanation": "z * conj(z) = |z|^2 = 3^2 + (-4)^2 = 9 + 16 = 25។"
+    },
+    {
+      "id": "ex-063",
+      "question": "រកអាគុយម៉ង់នៃ z = (1 + i*sqrt(3))^5",
+      "choices": ["5*pi/3", "pi/3", "pi/6", "5*pi/6"],
+      "correctIndex": 0,
+      "explanation": "arg(1 + i*sqrt(3)) = pi/3។ នាំឱ្យ arg(z) = 5 * (pi/3) = 5*pi/3 (ឬ -pi/3)។"
+    },
+    {
+      "id": "ex-064",
+      "question": "ដោះស្រាយសមីការ z + 2*conj(z) = 3 - i រក z",
+      "choices": ["z = 1 + i", "z = 1 - i", "z = -1 + i", "z = 3 - i"],
+      "correctIndex": 0,
+      "explanation": "តាង z = x + iy។ (x+iy) + 2(x-iy) = 3x - iy = 3 - i។ នាំឱ្យ 3x = 3 => x = 1 និង -y = -1 => y = 1។ ដូចនេះ z = 1 + i។"
+    },
+    {
+      "id": "ex-065",
+      "question": "សម្រួលកន្សោម (1 + i*tan(a)) / (1 - i*tan(a))",
+      "choices": ["cos(2a) + i*sin(2a)", "cos(a) + i*sin(a)", "tan(2a)", "1"],
+      "correctIndex": 0,
+      "explanation": "សរសេរ tan(a) = sin(a)/cos(a) រួចសម្រួលបាន (cos(a)+i*sin(a)) / (cos(a)-i*sin(a)) = (cos(a)+i*sin(a))^2 = cos(2a) + i*sin(2a)។"
+    }
+  ]
+}

@@ -1,0 +1,325 @@
+{
+  "lessonId": "grade12-probability-lesson8",
+  "lessonTitle": "ប្រូបាប (Probability)",
+  "exercises": [
+    {
+      "id": "ex-001",
+      "question": "ក្នុងអាងចិញ្ចឹមត្រីមួយមានត្រីពណ៌ក្រហម 4 ក្បាល និងត្រីពណ៌ស 3 ក្បាល។ គេចាប់យកត្រី 2 ក្បាលក្នុងពេលតែមួយដោយចៃដន្យ។ រកប្រូបាបដែលគេចាប់បានត្រីពណ៌ក្រហមទាំង 2 ក្បាល។",
+      "choices": [
+        "2/7",
+        "4/7",
+        "3/7",
+        "1/7"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Classical Probability",
+      "exerciseTypeImage": "prob_fish_bowl_icon",
+      "explanation": "ចំនួនករណីអាចគឺ C(7, 2) = 21។ ចំនួនករណីស្រប (ក្រហមទាំង២) គឺ C(4, 2) = 6។ ដូចនេះ P = 6/21 = 2/7។"
+    },
+    {
+      "id": "ex-002",
+      "question": "គេបោះកាក់មិនលំអៀងមួយចំនួន 3 ដង។ រកប្រូបាបដែលកាក់ផ្ងារខាងលេខ (H) យ៉ាងតិចមួយដង។",
+      "choices": [
+        "7/8",
+        "1/8",
+        "1/2",
+        "3/8"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Independent Events",
+      "exerciseTypeImage": "prob_coin_flip_icon",
+      "explanation": "ប្រូបាបដែលមិនចេញលេខសោះ (គឺចេញខ្នងទាំង៣ដង) គឺ (1/2)^3 = 1/8។ ដូចនេះប្រូបាបយ៉ាងតិចចេញលេខមួយដងគឺ 1 - 1/8 = 7/8។"
+    },
+    {
+      "id": "ex-003",
+      "question": "ក្នុងថង់មួយមានបាល់ពណ៌ស 5 និងខ្មៅ 3។ គេទាញយកបាល់ 2 បន្តបន្ទាប់ដោយមិនដាក់ចូលវិញ។ រកប្រូបាបដែលបាល់ទីមួយពណ៌ស និងបាល់ទីពីរពណ៌ខ្មៅ។",
+      "choices": [
+        "15/56",
+        "15/64",
+        "5/8",
+        "3/8"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Conditional Probability",
+      "exerciseTypeImage": "prob_marble_bag_icon",
+      "explanation": "P(ស១) = 5/8។ ក្រោយយកសចេញមួយ ក្នុងថង់សល់បាល់ 7 (ស4 ខ្មៅ3)។ P(ខ្មៅ២|ស១) = 3/7។ ដូចនេះ P = (5/8)*(3/7) = 15/56។"
+    },
+    {
+      "id": "ex-004",
+      "question": "បើ P(A) = 0.4, P(B) = 0.5 និង P(A intersection B) = 0.2។ គណនា P(A union B)។",
+      "choices": [
+        "0.7",
+        "0.9",
+        "0.1",
+        "0.2"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Probability Rules",
+      "exerciseTypeImage": "prob_venn_diagram_icon",
+      "explanation": "តាមរូបមន្ត P(A ∪ B) = P(A) + P(B) - P(A ∩ B) = 0.4 + 0.5 - 0.2 = 0.7។"
+    },
+    {
+      "id": "ex-005",
+      "question": "ក្នុងថង់មួយមានបាល់លេខ 1 ដល់ 10។ គេដកយកបាល់មួយដោយចៃដន្យ។ រកប្រូបាបដែលបានបាល់លេខបឋម។",
+      "choices": [
+        "2/5",
+        "1/2",
+        "3/10",
+        "1/5"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Classical Probability",
+      "exerciseTypeImage": "prob_numbered_balls_icon",
+      "explanation": "លេខបឋមចន្លោះ 1 ដល់ 10 មាន {2, 3, 5, 7} សរុប 4 ចំនួន។ ដូចនេះ P = 4/10 = 2/5។"
+    },
+    {
+      "id": "ex-006",
+      "question": "គេបោះគ្រាប់ឡុកឡាក់មួយគ្រាប់។ រកប្រូបាបដែលចេញលេខធំជាង 4។",
+      "choices": [
+        "1/3",
+        "1/2",
+        "1/6",
+        "2/3"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Dice Probability",
+      "exerciseTypeImage": "prob_dice_icon",
+      "explanation": "លេខដែលធំជាង 4 មាន {5, 6} គឺមាន 2 ករណី។ P = 2/6 = 1/3។"
+    },
+    {
+      "id": "ex-007",
+      "question": "ម៉ាស៊ីនមួយផលិតវត្ថុខូច 2%។ បើគេយកវត្ថុ 3 មកពិនិត្យ តើប្រូបាបដែលវត្ថុទាំង 3 មិនខូចសោះស្មើនឹងប៉ុន្មាន?",
+      "choices": [
+        "(0.98)^3",
+        "0.02^3",
+        "1 - 0.02^3",
+        "3 * 0.98"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Independent Events",
+      "exerciseTypeImage": "prob_manufacturing_icon",
+      "explanation": "ប្រូបាបវត្ថុមិនខូចគឺ 1 - 0.02 = 0.98។ សម្រាប់ 3 វត្ថុគឺ 0.98 * 0.98 * 0.98 = (0.98)^3។"
+    },
+    {
+      "id": "ex-008",
+      "question": "បើ A និង B ជាព្រឹត្តិការណ៍មិនចុះសម្រុងគ្នា (Mutually Exclusive) ដែល P(A)=0.3 និង P(B)=0.4។ រក P(A intersection B)។",
+      "choices": [
+        "0",
+        "0.7",
+        "0.12",
+        "0.1"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Mutually Exclusive Events",
+      "exerciseTypeImage": "prob_disjoint_sets_icon",
+      "explanation": "ព្រឹត្តិការណ៍មិនចុះសម្រុងគ្នា មិនអាចកើតឡើងព្រមគ្នាបានទេ នាំឱ្យប្រូបាបប្រសព្វគ្នាស្មើ 0។"
+    },
+    {
+      "id": "ex-009",
+      "question": "គេមានថង់ពីរ៖ ថង់ទី1 មានបាល់ក្រហម 2 ខៀវ 1, ថង់ទី2 មានក្រហម 1 ខៀវ 3។ គេបោះកាក់ បើចេញរូបជ្រើសថង់1 បើចេញលេខជ្រើសថង់2 រួចទាញបាល់មួយ។ រកប្រូបាបបានបាល់ក្រហម។",
+      "choices": [
+        "11/24",
+        "1/2",
+        "3/8",
+        "5/12"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Total Probability",
+      "exerciseTypeImage": "prob_tree_diagram_icon",
+      "explanation": "P(ក្រហម) = P(កាក់រូប)*P(ក្រហម|ថង់1) + P(កាក់លេខ)*P(ក្រហម|ថង់2) = (1/2)*(2/3) + (1/2)*(1/4) = 1/3 + 1/8 = 11/24។"
+    },
+    {
+      "id": "ex-010",
+      "question": "ក្នុងថ្នាក់មួយមានសិស្ស 30 នាក់ ស្រី 12 នាក់។ គេជ្រើសសិស្ស 2 នាក់ជាប្រធាន និងអនុប្រធាន។ រកប្រូបាបដែលសិស្សទាំង 2 ជាស្រី។",
+      "choices": [
+        "22/145",
+        "4/25",
+        "2/5",
+        "11/15"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Permutation Probability",
+      "exerciseTypeImage": "prob_student_group_icon",
+      "explanation": "P = (12/30) * (11/29) = (2/5) * (11/29) = 22/145។"
+    },{
+      "id": "ex-011",
+      "question": "ក្នុងថង់មួយមានបាល់ពណ៌ក្រហម 6 និងពណ៌ខៀវ 4។ គេដកយកបាល់ 3 ក្នុងពេលតែមួយ។ រកប្រូបាបដែលបានបាល់ពណ៌ក្រហមយ៉ាងតិច 1។",
+      "choices": ["29/30", "1/30", "5/6", "1/6"],
+      "correctIndex": 0,
+      "exerciseType": "Complementary Probability",
+      "exerciseTypeImage": "prob_complement_event",
+      "explanation": "ប្រូបាបដែលមិនបានក្រហមសោះ (គឺខៀវទាំង៣) គឺ C(4,3)/C(10,3) = 4/120 = 1/30។ ដូចនេះ P(យ៉ាងតិចក្រហម១) = 1 - 1/30 = 29/30។"
+    },
+    {
+      "id": "ex-012",
+      "question": "គេបោះគ្រាប់ឡុកឡាក់ពីរគ្រាប់ព្រមគ្នា។ រកប្រូបាបដែលផលបូកគ្រាប់ទាំងពីរស្មើនឹង 7។",
+      "choices": ["1/6", "1/12", "5/36", "1/36"],
+      "correctIndex": 0,
+      "exerciseType": "Dice Probability",
+      "exerciseTypeImage": "prob_double_dice",
+      "explanation": "ករណីអាចមាន 36។ ករណីផលបូកស្មើ 7 មាន (1,6), (2,5), (3,4), (4,3), (5,2), (6,1) សរុប 6 ករណី។ P = 6/36 = 1/6។"
+    },
+    {
+      "id": "ex-013",
+      "question": "បើ P(A) = 0.6 និង P(B) = 0.2 ហើយ A និង B ជាព្រឹត្តិការណ៍មិនទាក់ទងគ្នា (Independent)។ គណនា P(A intersection B)។",
+      "choices": ["0.12", "0.8", "0.4", "0"],
+      "correctIndex": 0,
+      "exerciseType": "Independent Events",
+      "exerciseTypeImage": "prob_independent_circles",
+      "explanation": "ចំពោះព្រឹត្តិការណ៍មិនទាក់ទងគ្នា P(A ∩ B) = P(A) * P(B) = 0.6 * 0.2 = 0.12។"
+    },
+    {
+      "id": "ex-014",
+      "question": "ក្នុងក្រុមមនុស្ស 10 នាក់ មានម្នាក់ជាគ្រូពេទ្យ។ បើគេជ្រើសរើសមនុស្ស 2 នាក់ដោយចៃដន្យ រកប្រូបាបដែលគ្រូពេទ្យត្រូវបានជ្រើសរើស។",
+      "choices": ["1/5", "1/10", "2/9", "1/45"],
+      "correctIndex": 0,
+      "exerciseType": "Combination Probability",
+      "exerciseTypeImage": "prob_selection_group",
+      "explanation": "ចំនួនករណីអាច C(10,2) = 45។ ករណីដែលគ្រូពេទ្យជាប់ (ជ្រើសគ្រូពេទ្យ១ និងម្នាក់ទៀតពី៩នាក់សល់) គឺ C(1,1)*C(9,1) = 9។ P = 9/45 = 1/5។"
+    },
+    {
+      "id": "ex-015",
+      "question": "គេមានអក្សរក្នុងពាក្យ 'PROBABILITY'។ គេរើសយកអក្សរមួយដោយចៃដន្យ។ រកប្រូបាបដែលរើសបានស្រៈ។",
+      "choices": ["4/11", "3/11", "5/11", "2/11"],
+      "correctIndex": 0,
+      "exerciseType": "Classical Probability",
+      "exerciseTypeImage": "prob_letter_selection",
+      "explanation": "ចំនួនអក្សរសរុបមាន 11។ ស្រៈមាន {O, A, I, I} សរុប 4។ ដូចនេះ P = 4/11។"
+    },
+    {
+      "id": "ex-016",
+      "question": "ក្នុងប្រអប់មួយមានអំពូលល្អ 8 និងអំពូលខូច 2។ គេយកអំពូល 2 មកប្រើ។ រកប្រូបាបដែលអំពូលទាំង 2 សុទ្ធតែល្អ។",
+      "choices": ["28/45", "16/25", "4/5", "1/45"],
+      "correctIndex": 0,
+      "exerciseType": "Combination Probability",
+      "exerciseTypeImage": "prob_bulb_selection",
+      "explanation": "ករណីអាច C(10,2) = 45។ ករណីស្រប C(8,2) = 28។ P = 28/45។"
+    },
+    {
+      "id": "ex-017",
+      "question": "រក P(A|B) បើ P(B) = 0.5 និង P(A intersection B) = 0.1។",
+      "choices": ["0.2", "0.05", "0.6", "0.4"],
+      "correctIndex": 0,
+      "exerciseType": "Conditional Probability",
+      "exerciseTypeImage": "prob_conditional_formula",
+      "explanation": "P(A|B) = P(A ∩ B) / P(B) = 0.1 / 0.5 = 0.2។"
+    },
+    {
+      "id": "ex-018",
+      "question": "បោះកាក់មួយ 2 ដង។ រកប្រូបាបដែលចេញមុខដូចគ្នាទាំងពីរដង។",
+      "choices": ["1/2", "1/4", "3/4", "1"],
+      "correctIndex": 0,
+      "exerciseType": "Coin Probability",
+      "exerciseTypeImage": "prob_coin_sequences",
+      "explanation": "ករណីអាច {HH, HT, TH, TT} សរុប 4។ មុខដូចគ្នាមាន {HH, TT} សរុប 2។ P = 2/4 = 1/2។"
+    },
+    {
+      "id": "ex-019",
+      "question": "ក្នុងរោងចក្រមួយ ម៉ាស៊ីន A ផលិតបាន 60% នៃផលិតផលសរុប។ ប្រូបាបដែលម៉ាស៊ីន A ផលិតបានរបស់ខូចគឺ 5%។ រកប្រូបាបដែលផលិតផលមួយយកចេញមកជាផលិតផលខូច និងផលិតដោយម៉ាស៊ីន A។",
+      "choices": ["0.03", "0.06", "0.65", "0.11"],
+      "correctIndex": 0,
+      "exerciseType": "Intersection Probability",
+      "exerciseTypeImage": "prob_factory_quality",
+      "explanation": "P(A intersection ខូច) = P(A) * P(ខូច|A) = 0.60 * 0.05 = 0.03។"
+    },
+    {
+      "id": "ex-020",
+      "question": "គេបោះគ្រាប់ឡុកឡាក់មួយគ្រាប់។ រកប្រូបាបដែលចេញលេខជាពហុគុណនៃ 3។",
+      "choices": ["1/3", "1/6", "1/2", "2/3"],
+      "correctIndex": 0,
+      "exerciseType": "Dice Probability",
+      "exerciseTypeImage": "prob_multiples_dice",
+      "explanation": "ពហុគុណនៃ 3 ក្នុងគ្រាប់ឡុកឡាក់មាន {3, 6} សរុប 2 ករណី។ P = 2/6 = 1/3។"
+    },
+    {
+      "id": "ex-021",
+      "question": "ក្នុងបៀរមួយហ៊ូ (52 សន្លឹក) គេដកយកមួយសន្លឹក។ រកប្រូបាបដែលបានសន្លឹកអាត់ (Ace)។",
+      "choices": ["1/13", "1/52", "4/13", "1/4"],
+      "correctIndex": 0,
+      "exerciseType": "Card Probability",
+      "exerciseTypeImage": "prob_poker_deck",
+      "explanation": "សន្លឹកអាត់មាន 4 ក្នុងចំណោម 52 សន្លឹក។ P = 4/52 = 1/13។"
+    },
+    {
+      "id": "ex-022",
+      "question": "បើ P(A) = 0.3, P(B) = 0.4 និង A, B មិនចុះសម្រុងគ្នា។ រក P(A union B)។",
+      "choices": ["0.7", "0.12", "0.1", "0.5"],
+      "correctIndex": 0,
+      "exerciseType": "Mutually Exclusive",
+      "exerciseTypeImage": "prob_exclusive_events",
+      "explanation": "P(A union B) = P(A) + P(B) = 0.3 + 0.4 = 0.7។"
+    },
+    {
+      "id": "ex-023",
+      "question": "ក្នុងថង់មានបាល់ខៀវ 5 និងក្រហម 3។ គេដកបាល់ 2 ម្តងម្នាក់ដោយដាក់ចូលវិញ។ រកប្រូបាបដែលបានបាល់ខៀវទាំងពីរ។",
+      "choices": ["25/64", "5/14", "15/64", "10/64"],
+      "correctIndex": 0,
+      "exerciseType": "With Replacement",
+      "exerciseTypeImage": "prob_replacement_draw",
+      "explanation": "លើកទី១ P(ខៀវ) = 5/8។ លើកទី២ P(ខៀវ) = 5/8 ដដែល។ P = (5/8)*(5/8) = 25/64។"
+    },
+    {
+      "id": "ex-024",
+      "question": "ក្នុងថ្នាក់រៀនមានសិស្ស 40 នាក់ ចូលចិត្តគណិត 25 នាក់ និងរូបវិទ្យា 20 នាក់។ បើមាន 10 នាក់ចូលចិត្តទាំងពីរ តើប្រូបាបដែលរើសសិស្សម្នាក់មិនចូលចិត្តទាំងពីរស្មើនឹងប៉ុន្មាន?",
+      "choices": ["5/40", "10/40", "35/40", "15/40"],
+      "correctIndex": 0,
+      "exerciseType": "Venn Diagram Probability",
+      "exerciseTypeImage": "prob_venn_students",
+      "explanation": "ចូលចិត្តយ៉ាងតិចមួយមុខ = 25 + 20 - 10 = 35។ មិនចូលចិត្តទាំងពីរ = 40 - 35 = 5។ P = 5/40 = 1/8។"
+    },
+    {
+      "id": "ex-025",
+      "question": "គេបោះកាក់ 3។ រកប្រូបាបដែលចេញមុខដូចគ្នាទាំងអស់។",
+      "choices": ["1/4", "1/8", "1/2", "3/8"],
+      "correctIndex": 0,
+      "exerciseType": "Coin Probability",
+      "exerciseTypeImage": "prob_three_coins",
+      "explanation": "ករណីអាច 2^3 = 8។ មុខដូចគ្នាមាន {HHH, TTT} សរុប 2។ P = 2/8 = 1/4។"
+    },
+    {
+      "id": "ex-026",
+      "question": "ជ្រើសរើសលេខមួយពី 1 ដល់ 20។ រកប្រូបាបដែលលេខនោះចែកដាច់នឹង 5។",
+      "choices": ["1/5", "1/4", "4/20", "5/20"],
+      "correctIndex": 0,
+      "exerciseType": "Classical Probability",
+      "exerciseTypeImage": "prob_number_grid",
+      "explanation": "លេខចែកដាច់នឹង 5 រួមមាន {5, 10, 15, 20} សរុប 4 លេខ។ P = 4/20 = 1/5។"
+    },
+    {
+      "id": "ex-027",
+      "question": "ក្នុងហ៊ូបៀរ 52 សន្លឹក រកប្រូបាបដែលដកបានសន្លឹក 'ការ៉ូ' (Diamond)។",
+      "choices": ["1/4", "1/13", "13/52", "1/2"],
+      "correctIndex": 0,
+      "exerciseType": "Card Probability",
+      "exerciseTypeImage": "prob_card_suits",
+      "explanation": "បៀរមាន 4 ប្រភេទ (Suit) ស្មើៗគ្នា។ ការ៉ូមាន 13 សន្លឹក។ P = 13/52 = 1/4។"
+    },
+    {
+      "id": "ex-028",
+      "question": "បើ P(A) = 0.7 រកប្រូបាបនៃព្រឹត្តិការណ៍បដិសេធ P(A bar)។",
+      "choices": ["0.3", "0.7", "1", "0"],
+      "correctIndex": 0,
+      "exerciseType": "Complementary Probability",
+      "exerciseTypeImage": "prob_complement_graph",
+      "explanation": "P(A bar) = 1 - P(A) = 1 - 0.7 = 0.3។"
+    },
+    {
+      "id": "ex-029",
+      "question": "ក្នុងប្រអប់មានបាល់លេខពី 1 ដល់ 5។ គេដក 2 បាល់ព្រមគ្នា។ រកប្រូបាបដែលផលបូកលេខទាំងពីរជាលេខសេស។",
+      "choices": ["6/10", "4/10", "1/2", "3/5"],
+      "correctIndex": 0,
+      "exerciseType": "Combination Probability",
+      "exerciseTypeImage": "prob_sum_parity",
+      "explanation": "ករណីអាច C(5,2) = 10។ ផលបូកសេសលុះត្រាតែ (គូ១, សេស១) => C(2,1)*C(3,1) = 6។ P = 6/10 = 0.6។"
+    },
+    {
+      "id": "ex-030",
+      "question": "គេបោះកាក់ 1 និងឡុកឡាក់ 1 ព្រមគ្នា។ រកប្រូបាបដែលកាក់ចេញ 'រូប' (H) និងឡុកឡាក់ចេញលេខ 6។",
+      "choices": ["1/12", "1/2", "1/6", "1/8"],
+      "correctIndex": 0,
+      "exerciseType": "Independent Events",
+      "exerciseTypeImage": "prob_combined_experiment",
+      "explanation": "P(H) = 1/2, P(6) = 1/6។ ដោយសារវាជាព្រឹត្តិការណ៍មិនទាក់ទងគ្នា P = (1/2)*(1/6) = 1/12។"
+    }
+  ]
+}

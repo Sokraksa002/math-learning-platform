@@ -1,0 +1,326 @@
+{
+  "lessonId": "math-grade12-lesson5-differential",
+  "lessonTitle": "សមីការឌីផេរ៉ង់ស្យែល (Differential Equations)",
+  "exercises": [
+    {
+      "id": "ex-001",
+      "question": "ដោះស្រាយសមីការឌីផេរ៉ង់ស្យែល y' = 2x^2 - x + 1",
+      "choices": [
+        "y = (2/3)x^3 - (1/2)x^2 + x + C",
+        "y = 4x - 1 + C",
+        "y = x^3 - x^2 + x + C",
+        "y = 2x^3 - x^2 + x + C"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Direct Integration",
+      "exerciseTypeImage": "de_first_order_icon",
+      "explanation": "ធ្វើអាំងតេក្រាលដោយផ្ទាល់លើអង្គខាងស្តាំ៖ Integral (2x^2 - x + 1) dx = (2/3)x^3 - (1/2)x^2 + x + C។"
+    },
+    {
+      "id": "ex-002",
+      "question": "ដោះស្រាយសមីការ y' = e^(-2x)",
+      "choices": [
+        "y = -1/2 e^(-2x) + C",
+        "y = 2 e^(-2x) + C",
+        "y = -2 e^(-2x) + C",
+        "y = e^(-2x) + C"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Exponential",
+      "exerciseTypeImage": "de_exponential_icon",
+      "explanation": "តាមរូបមន្ត Integral e^(ax) dx = (1/a)e^(ax) + C។ ទីនេះ a = -2។"
+    },
+    {
+      "id": "ex-003",
+      "question": "ដោះស្រាយសមីការ y' = 2x / (x^2 + 1)",
+      "choices": [
+        "y = ln(x^2 + 1) + C",
+        "y = ln|x| + C",
+        "y = arctan(x) + C",
+        "y = x^2 + 1 + C"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Logarithmic",
+      "exerciseTypeImage": "de_log_icon",
+      "explanation": "ប្រើរូបមន្ត Integral u'/u dx = ln|u| + C ដែល u = x^2 + 1។"
+    },
+    {
+      "id": "ex-004",
+      "question": "ដោះស្រាយសមីការ y' + 2y = 0",
+      "choices": [
+        "y = Ce^(-2x)",
+        "y = Ce^(2x)",
+        "y = -2x + C",
+        "y = ln|2x| + C"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Homogeneous",
+      "exerciseTypeImage": "de_linear_homogeneous_icon",
+      "explanation": "សមីការ y' + ay = 0 មានចម្លើយទូទៅ y = Ce^(-ax)។ ទីនេះ a = 2។"
+    },
+    {
+      "id": "ex-005",
+      "question": "ដោះស្រាយសមីការ y\" - 3y' + 2y = 0",
+      "choices": [
+        "y = Ae^x + Be^(2x)",
+        "y = Ae^(-x) + Be^(-2x)",
+        "y = (Ax + B)e^x",
+        "y = A cos x + B sin x"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Second Order - Linear Homogeneous",
+      "exerciseTypeImage": "de_second_order_icon",
+      "explanation": "សមីការលក្ខណៈ r^2 - 3r + 2 = 0 មានឫស r1 = 1, r2 = 2។ ដូចនេះ y = Ae^x + Be^(2x)។"
+    },
+    {
+      "id": "ex-006",
+      "question": "ដោះស្រាយសមីការ y\" + 4y = 0",
+      "choices": [
+        "y = A cos(2x) + B sin(2x)",
+        "y = A e^(2x) + B e^(-2x)",
+        "y = (Ax + B)e^(2x)",
+        "y = A cos(4x) + B sin(4x)"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Second Order - Trigonometric",
+      "exerciseTypeImage": "de_oscillation_icon",
+      "explanation": "សមីការលក្ខណៈ r^2 + 4 = 0 នាំឱ្យ r = +-2i (ឫសលេខកុំផ្លិច)។ ចម្លើយគឺ y = A cos(2x) + B sin(2x)។"
+    },
+    {
+      "id": "ex-007",
+      "question": "រកចម្លើយពិសេសនៃ y' = 3x^2 បើ y(0) = 5",
+      "choices": [
+        "y = x^3 + 5",
+        "y = x^3",
+        "y = 3x^3 + 5",
+        "y = x^2 + 5"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Initial Value Problem",
+      "exerciseTypeImage": "de_ivp_icon",
+      "explanation": "y = Integral 3x^2 dx = x^3 + C។ ដោយ y(0)=5 នាំឱ្យ 0^3 + C = 5 នោះ C = 5។"
+    },
+    {
+      "id": "ex-008",
+      "question": "ដោះស្រាយសមីការ y\" - 4y' + 4y = 0",
+      "choices": [
+        "y = (Ax + B)e^(2x)",
+        "y = Ae^(2x) + Be^(-2x)",
+        "y = Ae^(2x)",
+        "y = (Ax + B)e^(-2x)"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Second Order - Repeated Root",
+      "exerciseTypeImage": "de_repeated_root_icon",
+      "explanation": "សមីការលក្ខណៈ r^2 - 4r + 4 = 0 => (r-2)^2 = 0 មានឫសឌុប r = 2។"
+    },
+    {
+      "id": "ex-009",
+      "question": "ដោះស្រាយសមីការ y' = y",
+      "choices": [
+        "y = Ce^x",
+        "y = x + C",
+        "y = x^2/2 + C",
+        "y = ln|x| + C"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Basic",
+      "exerciseTypeImage": "de_exponential_growth_icon",
+      "explanation": "សមីការដែលដេរីវេស្មើខ្លួនវា គឺជាអនុគមន៍អិចស្ប៉ូណង់ស្យែល e^x។"
+    },
+    {
+      "id": "ex-010",
+      "question": "រកចម្លើយទូទៅនៃ y' + 3y = 6",
+      "choices": [
+        "y = Ce^(-3x) + 2",
+        "y = Ce^(3x) + 2",
+        "y = Ce^(-3x) - 2",
+        "y = 2e^(-3x)"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Non-Homogeneous",
+      "exerciseTypeImage": "de_linear_nonhomo_icon",
+      "explanation": "ចម្លើយរួមមាន ចម្លើយសមីការអូម៉ូសែន Ce^(-3x) បូកនឹងចម្លើយពិសេស y=2 (ព្រោះ 0 + 3(2) = 6)។"
+    },
+    {
+      "id": "ex-011",
+      "question": "ដោះស្រាយសមីការឌីផេរ៉ង់ស្យែល dy/dx = 4x + 3",
+      "choices": ["y = 2x^2 + 3x + C", "y = 4x^2 + 3x + C", "y = 2x^2 + C", "y = 4 + C"],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Direct Integration",
+      "exerciseTypeImage": "de_linear_basic",
+      "explanation": "ធ្វើអាំងតេក្រាលអង្គទាំងពីរ: Integral (4x + 3) dx = 2x^2 + 3x + C។"
+    },
+    {
+      "id": "ex-012",
+      "question": "ដោះស្រាយសមីការ y' = x / (x^2 + 1)",
+      "choices": ["y = 1/2 ln(x^2 + 1) + C", "y = ln(x^2 + 1) + C", "y = arctan(x) + C", "y = x^2 + C"],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Logarithmic",
+      "exerciseTypeImage": "de_log_integration",
+      "explanation": "ប្រើ u = x^2 + 1 នោះ du = 2x dx។ នាំឱ្យ y = 1/2 Integral (1/u) du = 1/2 ln(u) + C។"
+    },
+    {
+      "id": "ex-013",
+      "question": "ដោះស្រាយសមីការ xy' = 1 ចំពោះ x > 0",
+      "choices": ["y = ln x + C", "y = x + C", "y = 1/x + C", "y = e^x + C"],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Separable",
+      "exerciseTypeImage": "de_separable_variables",
+      "explanation": "y' = 1/x នាំឱ្យ y = Integral (1/x) dx = ln x + C (ដោយ x > 0)។"
+    },
+    {
+      "id": "ex-014",
+      "question": "ដោះស្រាយសមីការ y' + 5y = 0",
+      "choices": ["y = Ce^(-5x)", "y = Ce^(5x)", "y = 5e^x + C", "y = -5x + C"],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Homogeneous",
+      "exerciseTypeImage": "de_exponential_decay",
+      "explanation": "សមីការទម្រង់ y' + ay = 0 មានចម្លើយ y = Ce^(-ax)។ ទីនេះ a = 5។"
+    },
+    {
+      "id": "ex-015",
+      "question": "ដោះស្រាយសមីការ y\" - 5y' + 6y = 0",
+      "choices": ["y = Ae^(2x) + Be^(3x)", "y = Ae^(-2x) + Be^(-3x)", "y = (Ax+B)e^(2x)", "y = Ae^x + Be^x"],
+      "correctIndex": 0,
+      "exerciseType": "Second Order - Homogeneous",
+      "exerciseTypeImage": "de_second_order_linear",
+      "explanation": "សមីការលក្ខណៈ r^2 - 5r + 6 = 0 មានឫស r=2, r=3។ ដូចនេះ y = Ae^(2x) + Be^(3x)។"
+    },
+    {
+      "id": "ex-016",
+      "question": "រកចម្លើយពិសេសនៃ y' = 2x បើក្រាបកាត់តាម (1, 2)",
+      "choices": ["y = x^2 + 1", "y = x^2 + 2", "y = 2x^2", "y = x^2 - 1"],
+      "correctIndex": 0,
+      "exerciseType": "Initial Value Problem",
+      "exerciseTypeImage": "de_particular_solution",
+      "explanation": "y = x^2 + C។ ជំនួស x=1, y=2: 2 = 1^2 + C នាំឱ្យ C = 1។"
+    },
+    {
+      "id": "ex-017",
+      "question": "ដោះស្រាយសមីការ y\" + 9y = 0",
+      "choices": ["y = A cos 3x + B sin 3x", "y = A cos 9x + B sin 9x", "y = Ae^(3x) + Be^(-3x)", "y = (Ax+B)e^(3x)"],
+      "correctIndex": 0,
+      "exerciseType": "Second Order - Trigonometric",
+      "exerciseTypeImage": "de_harmonic_oscillator",
+      "explanation": "r^2 + 9 = 0 នាំឱ្យ r = +-3i។ ចម្លើយគឺ y = A cos 3x + B sin 3x។"
+    },
+    {
+      "id": "ex-018",
+      "question": "ដោះស្រាយសមីការ y' - 3y = 0",
+      "choices": ["y = Ce^(3x)", "y = Ce^(-3x)", "y = 3x + C", "y = x^3 + C"],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Exponential Growth",
+      "exerciseTypeImage": "de_exponential_growth",
+      "explanation": "y' = 3y នាំឱ្យ y = Ce^(3x)។"
+    },
+    {
+      "id": "ex-019",
+      "question": "ដោះស្រាយសមីការ y\" - 2y' + y = 0",
+      "choices": ["y = (Ax + B)e^x", "y = Ae^x + Be^x", "y = Ae^x + Be^(-x)", "y = A cos x + B sin x"],
+      "correctIndex": 0,
+      "exerciseType": "Second Order - Repeated Root",
+      "exerciseTypeImage": "de_critical_damping",
+      "explanation": "r^2 - 2r + 1 = 0 => (r-1)^2 = 0 មានឫសឌុប r = 1។"
+    },
+    {
+      "id": "ex-020",
+      "question": "ដោះស្រាយសមីការ y' = sin x",
+      "choices": ["y = -cos x + C", "y = cos x + C", "y = sin x + C", "y = -sin x + C"],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Trig Integration",
+      "exerciseTypeImage": "de_trig_function",
+      "explanation": "y = Integral sin x dx = -cos x + C។"
+    },
+   {
+     "id": "ex-021",
+     "question": "រកសមីការលក្ខណៈនៃ y'' + 3y' - 4y = 0",
+     "choices": ["r^2 + 3r - 4 = 0", "r^2 - 3r + 4 = 0", "r^2 + 3r + 4 = 0", "3r^2 - 4r = 0"],
+     "correctIndex": 0,
+     "exerciseType": "Characteristic Equation",
+     "exerciseTypeImage": "de_equation_setup",
+     "explanation": "សន្មត់ចម្លើយទម្រង់ y = e^(rx) នោះ y' = r e^(rx) និង y'' = r^2 e^(rx)។ ជំនួសចូលក្នុងសមីការ៖ r^2 e^(rx) + 3r e^(rx) - 4 e^(rx) = 0 ⇒ r^2 + 3r - 4 = 0។"
+    },
+    {
+      "id": "ex-022",
+      "question": "ដោះស្រាយសមីការ y' = 2y + 4",
+      "choices": ["y = Ce^(2x) - 2", "y = Ce^(2x) + 2", "y = Ce^(-2x) - 2", "y = 2e^x + C"],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Non-Homogeneous",
+      "exerciseTypeImage": "de_linear_model",
+      "explanation": "ចម្លើយអូម៉ូសែនគឺ Ce^(2x) និងចម្លើយពិសេសគឺ y = -2 (ព្រោះ 2(-2)+4 = 0)។"
+    },
+    {
+      "id": "ex-023",
+      "question": "ដោះស្រាយសមីការ y\" + y' = 0",
+      "choices": ["y = A + Be^(-x)", "y = Ae^x + B", "y = (Ax+B)e^(-x)", "y = A cos x + B sin x"],
+      "correctIndex": 0,
+      "exerciseType": "Second Order - Basic",
+      "exerciseTypeImage": "de_falling_velocity",
+      "explanation": "r^2 + r = 0 => r(r+1) = 0 នាំឱ្យ r=0, r=-1។ y = Ae^0 + Be^(-x) = A + Be^(-x)។"
+    },
+    {
+      "id": "ex-024",
+      "question": "រកចម្លើយពិសេសនៃ y' + y = 0 បើ y(0) = 1",
+      "choices": ["y = e^(-x)", "y = e^x", "y = -e^x", "y = e^(-x) + 1"],
+      "correctIndex": 0,
+      "exerciseType": "Initial Value Problem",
+      "exerciseTypeImage": "de_decay_curve",
+      "explanation": "y = Ce^(-x)។ ជំនួស x=0, y=1: 1 = C * e^0 នាំឱ្យ C = 1។"
+    },
+    {
+      "id": "ex-025",
+      "question": "ដោះស្រាយសមីការ y' = 1 / (1 + x^2)",
+      "choices": ["y = arctan x + C", "y = ln(1+x^2) + C", "y = arcsin x + C", "y = tan x + C"],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Inverse Trig",
+      "exerciseTypeImage": "de_atan_graph",
+      "explanation": "y = Integral 1/(1+x^2) dx = arctan x + C។"
+    },
+    {
+      "id": "ex-026",
+      "question": "ដោះស្រាយសមីការ y\" - 4y = 0",
+      "choices": ["y = Ae^(2x) + Be^(-2x)", "y = A cos 2x + B sin 2x", "y = (Ax+B)e^(2x)", "y = Ae^(4x) + Be^(-4x)"],
+      "correctIndex": 0,
+      "exerciseType": "Second Order - Distinct Roots",
+      "exerciseTypeImage": "de_hyperbolic_growth",
+      "explanation": "r^2 - 4 = 0 => r = +-2។ ចម្លើយគឺ y = Ae^(2x) + Be^(-2x)។"
+    },
+    {
+      "id": "ex-027",
+      "question": "ដោះស្រាយសមីការ y' = e^x + x",
+      "choices": ["y = e^x + x^2/2 + C", "y = e^x + x + C", "y = xe^x + C", "y = e^x + 1 + C"],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Direct Integration",
+      "exerciseTypeImage": "de_combined_functions",
+      "explanation": "y = Integral (e^x + x) dx = e^x + x^2/2 + C។"
+    },
+    {
+      "id": "ex-028",
+      "question": "រកតម្លៃ m ដើម្បីឱ្យ y = e^(mx) ជាចម្លើយនៃ y' - 4y = 0",
+      "choices": ["m = 4", "m = -4", "m = 2", "m = 0"],
+      "correctIndex": 0,
+      "exerciseType": "Verification",
+      "exerciseTypeImage": "de_substitution_method",
+      "explanation": "y' = me^(mx)។ ជំនួសក្នុងសមីការ: me^(mx) - 4e^(mx) = 0 => m - 4 = 0 => m = 4។"
+    },
+    {
+      "id": "ex-029",
+      "question": "ដោះស្រាយសមីការ y\" + 2y' + 5y = 0",
+      "choices": ["y = e^(-x)(A cos 2x + B sin 2x)", "y = e^x(A cos 2x + B sin 2x)", "y = Ae^(-x) + Be^(-2x)", "y = e^(-2x)(A cos x + B sin x)"],
+      "correctIndex": 0,
+      "exerciseType": "Second Order - Complex Roots",
+      "exerciseTypeImage": "de_damped_oscillation",
+      "explanation": "r^2 + 2r + 5 = 0 មាន Delta' = 1 - 5 = -4 នាំឱ្យ r = -1 ± 2i។"
+    },
+    {
+      "id": "ex-030",
+      "question": "ដោះស្រាយសមីការ y' = 3x^2 - 2",
+      "choices": ["y = x^3 - 2x + C", "y = 6x + C", "y = x^3 + C", "y = 3x^3 - 2x + C"],
+      "correctIndex": 0,
+      "exerciseType": "First Order - Polynomial",
+      "exerciseTypeImage": "de_cubic_integration",
+      "explanation": "y = Integral (3x^2 - 2) dx = x^3 - 2x + C។"
+    }
+  ]
+}

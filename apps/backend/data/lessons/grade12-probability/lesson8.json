@@ -1,0 +1,121 @@
+{
+  "id": "grade12-probability-lesson8",
+  "chapterId": "grade12-probability",
+  "titleKm": "ប្រូបាប",
+  "content": {
+    "blocks": [
+      {
+        "type": "text",
+        "value": "មេរៀនទី ៨៖ ប្រូបាប"
+      },
+      {
+        "type": "text",
+        "value": "១. លំហសំណាក (Sample Space): សំណុំលទ្ធផលដែលអាចកើតមានទាំងអស់ក្នុងពិសោធន៍ចៃដន្យ។"
+      },
+      {
+        "type": "text",
+        "value": "២. ព្រឹត្តិការណ៍មិនចុះសម្រុងគ្នា: ព្រឹត្តិការណ៍ពីរដែលមិនអាចកើតឡើងក្នុងពេលតែមួយបាន។"
+      },
+      {
+        "type": "formula",
+        "value": "A ∩ B = ∅"
+      },
+      {
+        "type": "text",
+        "value": "៣. លំនាំប្តូរ និង បន្សំ (Permutation and Combination)"
+      },
+      {
+        "type": "formula",
+        "value": "P(n, r) = n! / (n - r)!"
+      },
+      {
+        "type": "formula",
+        "value": "C(n, r) = n! / (r!(n - r)!)"
+      },
+      {
+        "type": "text",
+        "value": "៤. ប្រូបាប (Probability)"
+      },
+      {
+        "type": "formula",
+        "value": "P(A) = \\frac{n(A)}{n(S)}"
+      },
+      {
+        "type": "text",
+        "value": "៥. វិធានបូក (Addition Rule)"
+      },
+      {
+        "type": "formula",
+        "value": "P(A ∪ B) = P(A) + P(B) - P(A ∩ B)"
+      },
+      {
+        "type": "text",
+        "value": "លំហាត់អនុវត្ត (Practice Exercises)"
+      },
+      {
+        "type": "text",
+        "value": "1. បោះគ្រាប់ឡុកឡាក់មួយគ្រាប់។ រកប្រូបាបដែលចេញលេខគូ។"
+      },
+      {
+        "type": "text",
+        "value": "ដំណោះស្រាយ៖ P = 3/6 = 0.5"
+      },
+      {
+        "type": "text",
+        "value": "2. តើមានប៉ុន្មានរបៀបក្នុងការរៀបមនុស្ស ៥ នាក់ជាជួរដេក? → 5! = 120"
+      },
+      {
+        "type": "text",
+        "value": "3. ជ្រើសរើសសិស្ស ២ នាក់ពី ១០ នាក់ → C(10, 2) = 45"
+      },
+      {
+        "type": "text",
+        "value": "4. បាល់ស ៥ ចេញពីសរុប ៨ → P = 5/8"
+      },
+      {
+        "type": "text",
+        "value": "5. P(A̅) = 0.7"
+      },
+      {
+        "type": "text",
+        "value": "6. P(A ∪ B) = 0.9"
+      },
+      {
+        "type": "text",
+        "value": "7. គណិតវិទ្យា (MATH) → 4! = 24"
+      },
+      {
+        "type": "text",
+        "value": "8. C(5, 0) = 1"
+      },
+      {
+        "type": "text",
+        "value": "9. ប្រូបាប (Probability) ដែលចេញមុខដូចគ្នា = 0.5"
+      },
+      {
+        "type": "text",
+        "value": "10. P(A ∩ B) = 0"
+      },
+      {
+        "type": "text",
+        "value": "11. រៀបមនុស្សជុំវិញតុមូល (4-1)! = 6"
+      },
+      {
+        "type": "text",
+        "value": "12. P(6, 2) = 30"
+      },
+      {
+        "type": "text",
+        "value": "13. ប្រូបាប (Probability) សិស្សប្រុស = 4/10 = 0.4"
+      },
+      {
+        "type": "text",
+        "value": "14. C(5, 3) = 10"
+      },
+      {
+        "type": "text",
+        "value": "15. P(A ∩ B) = 0.1"
+      }
+    ]
+  }
+}

@@ -56,13 +56,14 @@ model Lesson {
   titleKm     String   @map("title_km")
   orderIndex  Int      @map("order_index")
   contentJson Json?    @map("content_json")
+  isPublished Boolean  @default(false) @map("is_published")
   createdAt   DateTime @default(now()) @map("created_at")
 
   chapter           Chapter           @relation(fields: [chapterId], references: [id])
-  quizQuestions     QuizQuestion[]
   quizSessions      QuizSession[]
   lessonCompletions LessonCompletion[]
   userProgress      UserProgress[]
+  exercises   Exercise[]
 
   @@map("lessons")
 }
@@ -81,26 +82,6 @@ model LessonCompletion {
   @@map("lesson_completions")
 }
 
-/* ===================== QUIZ QUESTION ===================== */
-model QuizQuestion {
-  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  lessonId      String   @map("lesson_id") @db.Uuid
-  questionKm    String   @map("question_km")
-  choiceAKm     String   @map("choice_a_km")
-  choiceBKm     String   @map("choice_b_km")
-  choiceCKm     String   @map("choice_c_km")
-  choiceDKm     String   @map("choice_d_km")
-  correctChoice String   @map("correct_choice")
-  solutionKm    String   @map("solution_km")
-  difficulty    Int      @default(1)
-  createdAt     DateTime @default(now()) @map("created_at")
-
-  lesson Lesson            @relation(fields: [lessonId], references: [id])
-  items  QuizSessionItem[]
-
-  @@map("quiz_questions")
-}
-
 /* ===================== QUIZ SESSION ===================== */
 model QuizSession {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
@@ -108,6 +89,7 @@ model QuizSession {
   lessonId  String   @map("lesson_id") @db.Uuid
   score     Float?
   createdAt DateTime @default(now()) @map("created_at")
+  completedAt DateTime? @map("completed_at")
 
   user   User              @relation(fields: [userId], references: [id])
   lesson Lesson            @relation(fields: [lessonId], references: [id])
@@ -120,12 +102,13 @@ model QuizSession {
 model QuizSessionItem {
   id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   sessionId      String   @map("session_id") @db.Uuid
-  questionId     String   @map("question_id") @db.Uuid
+  exerciseId     String   @map("exercise_id") @db.Uuid 
+
   selectedChoice String?  @map("selected_choice")
   isCorrect      Boolean? @map("is_correct")
 
-  session  QuizSession  @relation(fields: [sessionId], references: [id])
-  question QuizQuestion @relation(fields: [questionId], references: [id])
+  session  QuizSession @relation(fields: [sessionId], references: [id])
+  exercise Exercise    @relation(fields: [exerciseId], references: [id]) 
 
   @@map("quiz_session_items")
 }
@@ -231,4 +214,19 @@ model Certificate {
 
   @@unique([userId, course])
   @@map("certificates")
+}
+/* ===================== EXERCISE ===================== */
+model Exercise {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  lessonId      String   @map("lesson_id") @db.Uuid
+  questionKm    String   @map("question_km")
+  solutionKm    String   @map("solution_km")
+  correctAnswer String   @map("correct_answer")
+  externalId    String?  @map("external_id")
+  difficulty    Int      @default(1)
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  lesson Lesson @relation(fields: [lessonId], references: [id])
+  quizItems QuizSessionItem[]
+  @@map("exercises")
 }

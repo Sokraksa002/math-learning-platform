@@ -1,0 +1,265 @@
+{
+  "lessonId": "grade12-derivatives-lesson3",
+  "exercises": [
+    {
+      "id": "31226e17-1208-4726-bf27-127e25537a8f",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = 99",
+      "choices": [
+        "y' = 0",
+        "y' = 99",
+        "y' = 1",
+        "y' = x"
+      ],
+      "correctIndex": 0,
+      "explanation": "ដេរីវេនៃចំនួនថេរគឺស្មើនឹង 0។",
+      "externalId": "ex-001"
+    },
+    {
+      "id": "9d5a002a-e2c6-445c-9195-f90be0ce33eb",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = 3x",
+      "choices": [
+        "y' = 3",
+        "y' = 3x",
+        "y' = 0",
+        "y' = x"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្ត (ax)' = a នាំឱ្យ (3x)' = 3។",
+      "externalId": "ex-002"
+    },
+    {
+      "id": "e14274f5-5903-4099-b03f-46a48396fb48",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = x^5",
+      "choices": [
+        "y' = 5x^4",
+        "y' = x^4",
+        "y' = 5x^5",
+        "y' = 4x^5"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្ត (x^n)' = n*x^(n-1) នាំឱ្យ (x^5)' = 5x^4។",
+      "externalId": "ex-003"
+    },
+    {
+      "id": "af697bac-7339-4abc-a895-3edcc549af82",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = 1/x",
+      "choices": [
+        "y' = -1/x^2",
+        "y' = 1/x^2",
+        "y' = ln(x)",
+        "y' = -1/x"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្ត (1/x)' = -1/x^2។",
+      "externalId": "ex-004"
+    },
+    {
+      "id": "e504397d-ccc2-40bf-9d5d-2f9160172a5c",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = 1/x^2",
+      "choices": [
+        "y' = -2/x^3",
+        "y' = 2/x^3",
+        "y' = -1/x^3",
+        "y' = -2/x^2"
+      ],
+      "correctIndex": 0,
+      "explanation": "y = x^-2 នាំឱ្យ y' = -2x^-3 = -2/x^3។",
+      "externalId": "ex-005"
+    },
+    {
+      "id": "4eceed68-f021-4b24-81af-bc4dc8e08d08",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = x+2",
+      "choices": [
+        "y' = 1",
+        "y' = 2",
+        "y' = x",
+        "y' = 0"
+      ],
+      "correctIndex": 0,
+      "explanation": "(x+2)' = x' + 2' = 1 + 0 = 1។",
+      "externalId": "ex-006"
+    },
+    {
+      "id": "85e0d995-085f-4052-bb9a-33a6baab144b",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = (x+1)^2",
+      "choices": [
+        "y' = 2(x+1)",
+        "y' = 2x",
+        "y' = x+1",
+        "y' = 2x+1"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្ត (u^n)' = n*u' * u^(n-1) នាំឱ្យ y' = 2(x+1)'(x+1) = 2(1)(x+1) = 2(x+1)។",
+      "externalId": "ex-007"
+    },
+    {
+      "id": "3b06e7c8-733d-42eb-891d-d3dfd626d1cb",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = 1/(x+1)",
+      "choices": [
+        "y' = -1/(x+1)^2",
+        "y' = 1/(x+1)^2",
+        "y' = -1/(x+1)",
+        "y' = ln(x+1)"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្ត (1/u)' = -u' / u^2 នាំឱ្យ y' = -(x+1)' / (x+1)^2 = -1 / (x+1)^2។",
+      "externalId": "ex-008"
+    },
+    {
+      "id": "c09263e2-c22e-4816-9e4b-bd4cde3a5982",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = sqrt(x)",
+      "choices": [
+        "y' = 1/(2*sqrt(x))",
+        "y' = 2*sqrt(x)",
+        "y' = 1/sqrt(x)",
+        "y' = sqrt(x)/2"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្ត (sqrt(x))' = 1/(2*sqrt(x))។",
+      "externalId": "ex-009"
+    },
+    {
+      "id": "7edd7004-b600-443a-976c-734e17958903",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = (x+1)(x+5)",
+      "choices": [
+        "y' = 2x + 6",
+        "y' = x + 6",
+        "y' = 2x + 5",
+        "y' = 2x"
+      ],
+      "correctIndex": 0,
+      "explanation": "y = x^2 + 6x + 5 នាំឱ្យ y' = 2x + 6។",
+      "externalId": "ex-010"
+    },
+    {
+      "id": "f557e5e3-2048-4bef-8884-27e5524cf3d7",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = (x+1)/(x+5)",
+      "choices": [
+        "y' = 4/(x+5)^2",
+        "y' = -4/(x+5)^2",
+        "y' = 6/(x+5)^2",
+        "y' = 1/(x+5)^2"
+      ],
+      "correctIndex": 0,
+      "explanation": "y' = [(x+1)'(x+5)-(x+1)(x+5)']/(x+5)^2 = (x+5-x-1)/(x+5)^2 = 4/(x+5)^2។",
+      "externalId": "ex-011"
+    },
+    {
+      "id": "f3dd1d50-a25b-449b-a2b8-1bf0c21869ae",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = e^x",
+      "choices": [
+        "y' = e^x",
+        "y' = xe^(x-1)",
+        "y' = 1/e^x",
+        "y' = e"
+      ],
+      "correctIndex": 0,
+      "explanation": "ដេរីវេនៃអនុគមន៍អិចស្ប៉ូណង់ស្យែល e^x គឺនៅដដែល។",
+      "externalId": "ex-012"
+    },
+    {
+      "id": "c4bbacd2-4642-4d6d-a086-8732e8219939",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = e^(x+1)",
+      "choices": [
+        "y' = e^(x+1)",
+        "y' = e^x",
+        "y' = (x+1)e^x",
+        "y' = 1"
+      ],
+      "correctIndex": 0,
+      "explanation": "y' = (x+1)' * e^(x+1) = 1 * e^(x+1) = e^(x+1)។",
+      "externalId": "ex-013"
+    },
+    {
+      "id": "48f6f4ac-be3f-4f11-af14-2850d84c201e",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = 2^x",
+      "choices": [
+        "y' = 2^x * ln(2)",
+        "y' = 2^x",
+        "y' = x*2^(x-1)",
+        "y' = ln(2)"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្ត (a^x)' = a^x * ln(a) នាំឱ្យ (2^x)' = 2^x * ln(2)។",
+      "externalId": "ex-014"
+    },
+    {
+      "id": "3c4d5bcd-c925-4a5f-a950-88116e9ab7b8",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = ln(x)",
+      "choices": [
+        "y' = 1/x",
+        "y' = e^x",
+        "y' = 1/ln(x)",
+        "y' = x"
+      ],
+      "correctIndex": 0,
+      "explanation": "ដេរីវេនៃ ln(x) គឺ 1/x ចំពោះ x > 0។",
+      "externalId": "ex-015"
+    },
+    {
+      "id": "ec9c2c51-0e50-4381-96f6-9c6fd630a4f6",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = ln(x+1)",
+      "choices": [
+        "y' = 1/(x+1)",
+        "y' = 1/x",
+        "y' = x+1",
+        "y' = -1/(x+1)^2"
+      ],
+      "correctIndex": 0,
+      "explanation": "y' = (x+1)' / (x+1) = 1 / (x+1)។",
+      "externalId": "ex-016"
+    },
+    {
+      "id": "72e85b59-404c-4f8b-874c-7f30e4b22f05",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = sin(x)",
+      "choices": [
+        "y' = cos(x)",
+        "y' = -cos(x)",
+        "y' = sin(x)",
+        "y' = -sin(x)"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្តដេរីវេត្រីកោណមាត្រ (sin x)' = cos x។",
+      "externalId": "ex-017"
+    },
+    {
+      "id": "87781ec4-67a2-425e-a329-62c1d7e524d2",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = cos(x)",
+      "choices": [
+        "y' = -sin(x)",
+        "y' = sin(x)",
+        "y' = cos(x)",
+        "y' = -cos(x)"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្តដេរីវេត្រីកោណមាត្រ (cos x)' = -sin x។",
+      "externalId": "ex-018"
+    },
+    {
+      "id": "04512949-7674-4f22-b3e0-2d0a6529e6a5",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = cos(2x+1)",
+      "choices": [
+        "y' = -2*sin(2x+1)",
+        "y' = -sin(2x+1)",
+        "y' = 2*sin(2x+1)",
+        "y' = -2*cos(2x+1)"
+      ],
+      "correctIndex": 0,
+      "explanation": "y' = -(2x+1)' * sin(2x+1) = -2*sin(2x+1)។",
+      "externalId": "ex-019"
+    },
+    {
+      "id": "2117d971-69db-4351-9750-e32d3ea15432",
+      "question": "គណនាដេរីវេនៃអនុគមន៍: y = tan(x)",
+      "choices": [
+        "y' = 1 + tan^2(x)",
+        "y' = cot(x)",
+        "y' = 1/cos(x)",
+        "y' = -tan^2(x)"
+      ],
+      "correctIndex": 0,
+      "explanation": "ដេរីវេនៃ tan(x) គឺ 1/cos^2(x) ឬ 1 + tan^2(x)។",
+      "externalId": "ex-020"
+    }
+  ]
+}

@@ -1,0 +1,597 @@
+{
+  "lessonId": "grade12-limits-and-continuity-lesson2",
+  "exercises": [
+    {
+      "id": "ex-001",
+      "question": "គណនាលីមីត lim (x -> 1) (x^3 - 1) / (x - 1)",
+      "choices": ["1", "2", "3", "0"],
+      "correctIndex": 2,
+      "explanation": "ប្រើរូបមន្តផលដកគូប x^3 - 1 = (x - 1)(x^2 + x + 1)។ សម្រួល (x - 1) ចោល រួចជំនួស x = 1 ចូលក្នុង x^2 + x + 1 យើងបាន 1 + 1 + 1 = 3។"
+    },
+    {
+      "id": "ex-002",
+      "question": "គណនាលីមីត lim (x -> 0) x / |x|",
+      "choices": ["1", "-1", "0", "មិនមានលីមីត"],
+      "correctIndex": 3,
+      "explanation": "លីមីតខាងឆ្វេង (x -> 0-) គឺ -1 និងលីមីតខាងស្តាំ (x -> 0+) គឺ 1។ ដោយលីមីតសងខាងមិនស្មើគ្នា នោះអនុគមន៍មិនមានលីមីតត្រង់ 0 ទេ។"
+    },
+    {
+      "id": "ex-003",
+      "question": "គណនាលីមីត lim (x -> 1) (1 - x^2) / (x^2 - 2x + 1)",
+      "choices": ["No limit", "-infinity", "infinity", "0"],
+      "correctIndex": 0,
+      "explanation": "សម្រួលបាន -(x+1)/(x-1)។ពេល x → 1 ខាងឆ្វេង លីមីតទៅ +∞ និងខាងស្តាំទៅ -∞។ដោយលីមីតសងខាងខុសគ្នា ⇒ មិនមានលីមីត។"
+    },
+    {
+      "id": "ex-004",
+      "question": "គណនាលីមីត lim (x -> 3) (x - 3) / (x^2 - 9)",
+      "choices": ["1/6", "1/3", "0", "6"],
+      "correctIndex": 0,
+      "explanation": "x^2 - 9 = (x - 3)(x + 3)។ សម្រួល (x - 3) ចោល នៅសល់ 1 / (x + 3)។ ជំនួស x = 3 ចូល បាន 1/6។"
+    },
+    {
+  "id": "ex-005",
+  "question": "គណនាលីមីត lim (x -> -1) (x^2 - x - 2) / (x + 1)^2",
+  "choices": ["-3", "-infinity", "infinity", "0"],
+  "correctIndex": 1,
+  "explanation": "x^2 - x - 2 = (x + 1)(x - 2)។ ដូចនេះកន្សោមស្មើ (x - 2) / (x + 1)។ ខណៈដែល x → -1, x - 2 → -3 (< 0) និង (x + 1)^2 > 0 ជានិច្ច។ ដូចនេះលីមីតខិតទៅរក -infinity។"
+    },
+    {
+      "id": "ex-006",
+      "question": "គណនាលីមីត lim (x -> 0) (x^2 - x) / (x^2 + x)",
+      "choices": ["1", "-1", "0", "infinity"],
+      "correctIndex": 1,
+      "explanation": "ដាក់ x ជាកត្តារួម រួចសម្រួលចោល បាន (x - 1) / (x + 1)។ ជំនួស x = 0 ចូល បាន -1/1 = -1។"
+    },
+    {
+      "id": "ex-007",
+      "question": "គណនាលីមីត lim (x -> 0) x^5 / (2x^4 + 3x^2 - x)",
+      "choices": ["0", "1", "2", "infinity"],
+      "correctIndex": 0,
+      "explanation": "ដាក់ x ជាកត្តារួមនៅភាគបែង រួចសម្រួលជាមួយភាគយក បាន x^4 / (2x^3 + 3x - 1)។ ជំនួស x = 0 ចូល បាន 0 / -1 = 0។"
+    },
+    {
+      "id": "ex-008",
+      "question": "គណនាលីមីត lim (x -> 1) (x^4 - 1) / (x^5 - 1)",
+      "choices": ["4/5", "1", "0", "5/4"],
+      "correctIndex": 0,
+      "explanation": "ប្រើរូបមន្ត x^n - 1 = (x-1)(x^{n-1} + ... + 1)។ សម្រួល (x-1) ចោល រួចជំនួស x=1 ចូល បាន 4/5។"
+    },
+    {
+      "id": "ex-009",
+      "question": "គណនាលីមីត lim (x -> 1) (x^2026 - 1) / (x^2027 - 1)",
+      "choices": ["2026/2027", "1", "0", "2027/2026"],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្ត lim (x -> 1) (x^n - 1) / (x^m - 1) = n/m។ ដូចនេះលទ្ធផលគឺ 2026/2027។"
+    },
+    {
+      "id": "ex-010",
+      "question": "គណនាលីមីត lim (x -> 2) (x^2 - 4) / (x^2 - 2x)",
+      "choices": ["2", "4", "0", "1"],
+      "correctIndex": 0,
+      "explanation": "(x^2 - 4) / (x^2 - 2x) = (x-2)(x+2) / x(x-2) = (x+2)/x។ ជំនួស x=2 ចូល បាន 4/2 = 2។"
+    },
+    {
+      "id": "ex-011",
+      "question": "គណនាលីមីត lim (x -> 1) (x^3 - 1) / (sqrt(x) - 1)",
+      "choices": ["6", "3", "1", "0"],
+      "correctIndex": 0,
+      "explanation": "គុណនឹងកន្សោមឆ្លាស់ (sqrt(x)+1) បាន (x-1)(x^2+x+1)(sqrt(x)+1) / (x-1) = (x^2+x+1)(sqrt(x)+1)។ ជំនួស x=1 ចូល បាន 3 * 2 = 6។"
+    },
+    {
+      "id": "ex-012",
+      "question": "ឱ្យ f(x) = (1 - cos(4x)) / x^2 ចំពោះ x != 0 និង f(0) = ln(m - 2)។ រក m ដើម្បីឱ្យ f ជាប់ត្រង់ x = 0។",
+      "choices": ["m = e^8 + 2", "m = 8", "m = e^2 + 2", "m = 10"],
+      "correctIndex": 0,
+      "explanation": "lim (x -> 0) f(x) = lim (x -> 0) 2sin^2(2x) / x^2 = 8។ ដើម្បីឱ្យ f ជាប់ត្រង់ 0 លុះត្រាតែ f(0) = 8 នាំឱ្យ ln(m - 2) = 8 ដូចនេះ m - 2 = e^8 ឬ m = e^8 + 2។"
+    },
+    {
+      "id": "ex-013",
+      "question": "ឱ្យ f(x) = (sin^2(4x)) / x^2 ចំពោះ x != 0 និង f(0) = a^2 + 5a + 16។ រក a ដើម្បីឱ្យ f ជាប់ត្រង់ x = 0។",
+      "choices": ["a = 0 ឬ a = -5", "a = 4", "a = -4", "a = 5"],
+      "correctIndex": 0,
+      "explanation": "lim (x -> 0) f(x) = 16។ ដើម្បីឱ្យ f ជាប់ លុះត្រាតែ a^2 + 5a + 16 = 16 នាំឱ្យ a(a + 5) = 0 ដូចនេះ a = 0 ឬ a = -5។"
+    },
+  {
+      "id": "ex-014",
+      "question": "គណនាលីមីត L = lim (x -> 1) [sqrt(n, x) - 1] / [sqrt(m, x) - 1]",
+      "choices": ["m/n", "n/m", "1", "0"],
+      "correctIndex": 0,
+      "explanation": "ប្រើដេរីវេត្រង់ x=1 (L'Hopital Rule)៖ f(x) = x^(1/n) នាំឱ្យ f'(1) = 1/n។ g(x) = x^(1/m) នាំឱ្យ g'(1) = 1/m។ ដូចនេះ L = (1/n) / (1/m) = m/n។"
+    },
+
+    {
+      "id": "ex-015",
+      "question": "គណនាលីមីត lim (x -> 3) (sqrt(2x+3) - 3) / (x^2 - 3x)",
+      "choices": [
+        "1/9",
+        "1/3",
+        "1/6",
+        "0"
+      ],
+      "correctIndex": 0,
+      "explanation": "គុណនឹងកន្សោមឆ្លាស់ (sqrt(2x+3)+3) បាន (2x-6) / [x(x-3)(sqrt(2x+3)+3)] = 2(x-3) / [x(x-3)(sqrt(2x+3)+3)]។ សម្រួល (x-3) ចោល រួចជំនួស x=3 បាន 2 / (3 * 6) = 1/9។"
+    },
+    {
+      "id": "ex-016",
+      "question": "គណនាលីមីត lim (x -> 0) (sqrt(x+4) - sqrt(4+3x)) / (sqrt(x+4) - 2)",
+      "choices": [
+        "-4",
+        "-2",
+        "2",
+        "4"
+      ],
+      "correctIndex": 0,
+      "explanation": "គុណនឹងកន្សោមឆ្លាស់ទាំងភាគយក និងភាគបែង រួចសម្រួលកត្តា x ចោល យើងនឹងទទួលបានលទ្ធផល -4។"
+    },
+    {
+      "id": "ex-017",
+      "question": "គណនាលីមីត lim (x -> 0) (1 - cos(2x)) / (x * sin(x))",
+      "choices": [
+        "2",
+        "1",
+        "0",
+        "4"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្ត 1 - cos(2x) = 2sin^2(x)។ នាំឱ្យកន្សោមទៅជា 2sin^2(x) / (x * sin(x)) = 2sin(x) / x។ កាលណា x ខិតជិត 0 លីមីតនេះស្មើ 2 * 1 = 2។"
+    },
+    {
+      "id": "ex-018",
+      "question": "គណនាលីមីត lim (x -> 0) (tan(ax) / sin(bx))",
+      "choices": [
+        "a/b",
+        "b/a",
+        "1",
+        "ab"
+      ],
+      "correctIndex": 0,
+      "explanation": "lim (x -> 0) (tan(ax)/(ax) * (ax)) / (sin(bx)/(bx) * (bx)) = (1 * ax) / (1 * bx) = a/b។"
+    },
+    {
+      "id": "ex-019",
+      "question": "គណនាលីមីត lim (x -> 0) (sin(5x) - sin(4x)) / x",
+      "choices": ["1", "9", "0", "5/4"],
+      "correctIndex": 0,
+      "explanation": "ប្រើអត្តសញ្ញាណ sinA − sinB = 2cos((A+B)/2)sin((A−B)/2)។យើងបានកន្សោម = 2cos(4.5x)sin(0.5x)/x។ពេល x → 0, cos(4.5x) → 1 និង sin(0.5x)/x → 1/2។ដូចនេះលីមីត = 2 × 1 × 1/2 = 1។"
+    },
+    {
+      "id": "ex-020",
+      "question": "គណនាលីមីត lim (x -> infinity) ((x - 1) / (x + 2))^x",
+      "choices": ["e^-3", "e^3", "e", "1"],
+      "correctIndex": 0,
+      "explanation": "តាង L = lim ((x+2-3)/(x+2))^x = lim (1 - 3/(x+2))^x។ តាមរូបមន្ត lim (1 + a/x)^x = e^a យើងបាន e^-3។"
+    },
+    {
+      "id": "ex-021",
+      "question": "គណនាលីមីត lim (x -> 0) (e^sin(2x) + sin(3x) - 1) / sin(5x)",
+      "choices": [
+        "1",
+        "0",
+        "1/5",
+        "-1"
+      ],
+      "correctIndex": 0,
+      "explanation": "បំបែកជា [ (e^sin(2x) - 1)/sin(2x) * sin(2x)/x + sin(3x)/x ] / (sin(5x)/x)។ លីមីតគឺ (1*2 + 3) / 5 = 1។"
+    },
+    {
+      "id": "ex-022",
+      "question": "គណនាលីមីត lim (x -> 1) (x^n - 1) / (x^m - 1)",
+      "choices": [
+        "n/m",
+        "m/n",
+        "1",
+        "nm"
+      ],
+      "correctIndex": 0,
+      "explanation": "តាមរូបមន្តគ្រឹះនៃលីមីត ចម្លើយគឺ n/m។"
+    },
+    {
+      "id": "ex-023",
+      "question": "រកតម្លៃ m ដើម្បីឱ្យ f(x) = (1 - cos(2x)) / (x(1 - e^(2x))) ជាប់ត្រង់ x = 0 បើ f(0) = ln(m - 1)",
+      "choices": ["m = 2", "m = e + 1", "m = e^-1 + 1", "m = 1"],
+      "correctIndex": 2,
+      "explanation": "រកលីមីត៖ lim (x->0) [2sin^2(x)/x^2 * x / (1-e^(2x)) * x] = 2 * (1)^2 * (-1/2) = -1។ ដូចនេះ ln(m-1) = -1 នាំឱ្យ m-1 = e^-1 ឬ m = e^-1 + 1។"
+    },
+    {
+      "id": "ex-024",
+      "question": "គណនាលីមីត lim (x -> 0) (sqrt(1+tan(x)) - sqrt(1+sin(x))) / x^3",
+      "choices": [
+        "1/2",
+        "1/4",
+        "0",
+        "1"
+      ],
+      "correctIndex": 1,
+      "explanation": "គុណនឹងកន្សោមឆ្លាស់ រួចប្រើការបំបែក tan(x) - sin(x) = sin(x)(1-cos(x))/cos(x)។ លីមីតនឹងទទួលបាន 1/4។"
+    },
+    {
+      "id": "ex-025",
+      "question": "គណនាលីមីត lim (x -> infinity) (sqrt(x^2+2x) - x)",
+      "choices": [
+        "1",
+        "0",
+        "2",
+        "infinity"
+      ],
+      "correctIndex": 0,
+      "explanation": "គុណនឹងកន្សោមឆ្លាស់ បាន (x^2+2x-x^2) / (sqrt(x^2+2x)+x) = 2x / (x(sqrt(1+2/x)+1))។ លីមីតគឺ 2/2 = 1។"
+    },
+    {
+      "id": "ex-026",
+      "question": "គណនាលីមីត lim (x -> 0) (5^x - 4^x) / (x^2 - x)",
+      "choices": [
+        "ln(4/5)",
+        "ln(5/4)",
+        "0",
+        "ln(20)"
+      ],
+      "correctIndex": 0,
+      "explanation": "lim (x -> 0) [ (5^x-1)/x - (4^x-1)/x ] / (x-1) = (ln 5 - ln 4) / (-1) = -ln(5/4) = ln(4/5)។"
+    },
+    {
+      "id": "ex-027",
+      "question": "រកតម្លៃ a, b ដើម្បីឱ្យ lim (x -> 1) (x^2+ax+b) / (x^2-x) = 3",
+      "choices": [
+        "a = 1, b = -2",
+        "a = -1, b = 0",
+        "a = 2, b = -3",
+        "a = 0, b = -1"
+      ],
+      "correctIndex": 0,
+      "explanation": "ដើម្បីឱ្យលីមីតមានតម្លៃថេរ ភាគយកត្រូវមានឫស x=1 នាំឱ្យ 1+a+b=0 ឬ b=-a-1។ ជំនួសចូល រួចសម្រួល (x-1) ចោល នាំឱ្យបាន (1+a+1)/1 = 3 នាំឱ្យ a=1 និង b=-2។"
+    },
+    {
+      "id": "ex-028",
+      "question": "គណនាលីមីត lim (x -> 0) (1 - cos(3x)) / (sqrt(2)x^2)",
+      "choices": [
+        "9/(2*sqrt(2))",
+        "3/sqrt(2)",
+        "0",
+        "9/2"
+      ],
+      "correctIndex": 0,
+      "explanation": "lim (x -> 0) [ 2sin^2(3x/2) / (sqrt(2)x^2) ] = 2 * (3/2)^2 / sqrt(2) = 4.5 / sqrt(2) = 9/(2*sqrt(2))។"
+    },
+    {
+      "id": "ex-029",
+      "question": "គណនាលីមីត lim (x -> 0) (sin(x) - 5x) / (x - 3sin(x))",
+      "choices": [
+        "2",
+        "-2",
+        "4",
+        "-4"
+      ],
+      "correctIndex": 0,
+      "explanation": "ចែកភាគយក និងភាគបែងនឹង x បាន (sin(x)/x - 5) / (1 - 3sin(x)/x)។ ជំនួសលីមីតបាន (1-5)/(1-3) = -4/-2 = 2។"
+    },
+    {
+      "id": "ex-030",
+      "question": "គណនាលីមីត lim (x -> 1) (x^8 - 2x + 1) / (x^6 + 5x - 6)",
+      "choices": [
+        "6/11",
+        "1",
+        "0",
+        "8/6"
+      ],
+      "correctIndex": 0,
+      "explanation": "ប្រើដេរីវេ (L'Hopital's Rule) បាន (8x^7 - 2) / (6x^5 + 5)។ ជំនួស x = 1 បាន (8-2)/(6+5) = 6/11។"
+    },
+    {
+      "id": "ex-031",
+      "question": "គណនាលីមីត lim (x -> 0) (1+sin(x))^(1/x)",
+      "choices": [
+        "e",
+        "1",
+        "0",
+        "e^2"
+      ],
+      "correctIndex": 0,
+      "explanation": "នេះជាទម្រង់ 1^infinity។ លីមីតគឺ e^(lim (x->0) sin(x)/x) = e^1 = e។"
+    },
+    {
+      "id": "ex-032",
+      "question": "គណនាលីមីត lim (x -> 0) (tan^2(x) - sin^2(x)) / (1 - cos^2(x))",
+      "choices": [
+        "0",
+        "1",
+        "infinity",
+        "1/2"
+      ],
+      "correctIndex": 0,
+      "explanation": "កន្សោមស្មើ sin^2(x)(1/cos^2(x) - 1) / sin^2(x) = 1/cos^2(x) - 1 = tan^2(x)។ កាលណា x ខិតជិត 0 លីមីតគឺ 0។"
+    },
+    {
+      "id": "ex-033",
+      "question": "រកតម្លៃ m ដើម្បីឱ្យ f(x) = (3-sqrt(2x+5))/(x-2) ជាប់ត្រង់ x=2 បើ f(2)=3m+1",
+      "choices": [
+        "m = -4/9",
+        "m = -1/3",
+        "m = 0",
+        "m = 1"
+      ],
+      "correctIndex": 0,
+      "explanation": "lim (x -> 2) f(x) = lim (x -> 2) (9-(2x+5)) / [(x-2)(3+sqrt(2x+5))] = -2/6 = -1/3។ នាំឱ្យ 3m+1 = -1/3 នាំឱ្យ 3m = -4/3 ឬ m = -4/9។"
+    },
+    {
+    "id": "ex-034",
+    "question": "គណនាលីមីត L = lim (x -> 2) [sqrt(x+7)-3] / [sqrt(x+2)-2]",
+    "choices": ["2/3", "1/2", "3/2", "0"],
+    "correctIndex": 0,
+    "explanation": "គុណកន្សោមឆ្លាស់ទាំងភាគយក និងភាគបែង៖ L = lim (x -> 2) [(x+7-9)(sqrt(x+2)+2)] / [(x+2-4)(sqrt(x+7)+3)] = lim (x -> 2) [(x-2)(sqrt(x+2)+2)] / [(x-2)(sqrt(x+7)+3)] = (sqrt(2+2)+2) / (sqrt(2+7)+3) = 4/6 = 2/3។"
+  },
+  {
+    "id": "ex-035",
+    "question": "គណនាលីមីត L = lim (x -> -1) [1-sqrt(x+2)] / [1-sqrt(3x^2-2)]",
+    "choices": ["-1/6", "1/6", "-1/3", "0"],
+    "correctIndex": 0,
+    "explanation": "គុណកន្សោមឆ្លាស់៖ L = lim (x -> -1) [(1-(x+2))(1+sqrt(3x^2-2))] / [(1-(3x^2-2))(1+sqrt(x+2))] = lim (x -> -1) [-(x+1)(1+sqrt(3x^2-2))] / [-3(x-1)(x+1)(1+sqrt(x+2))]។ សម្រួល -(x+1) រួចជំនួស x = -1 បាន (1+1) / [3(-2)(1+1)] = 2/(-12) = -1/6។"
+  },
+  {
+    "id": "ex-036",
+    "question": "គណនាលីមីត L = lim (x -> 1) [sqrt(x^2+x+3)-sqrt(5)] / [(x-1)sqrt(x+2)]",
+    "choices": ["sqrt(15)/10", "3/2sqrt(15)", "sqrt(15)/5", "0"],
+    "correctIndex": 0,
+    "explanation": "គុណកន្សោមឆ្លាស់នៅភាគយក៖ L = lim (x -> 1) (x^2+x-2) / [(x-1)sqrt(x+2)(sqrt(x^2+x+3)+sqrt(5))] = lim (x -> 1) [(x-1)(x+2)] / [(x-1)sqrt(x+2)(sqrt(x^2+x+3)+sqrt(5))]។ សម្រួល (x-1) រួចជំនួស x = 1 បាន 3 / [sqrt(3)(2sqrt(5))] = 3 / (2sqrt(15)) = sqrt(15)/10។"
+  },
+  {
+    "id": "ex-037",
+    "question": "គណនាលីមីត L = lim (x -> 1) [root3(x)-1] / (x-1)",
+    "choices": ["1/3", "1", "0", "1/2"],
+    "correctIndex": 0,
+    "explanation": "ប្រើរូបមន្ត a^3 - b^3 = (a-b)(a^2+ab+b^2) នាំឱ្យ x-1 = (root3(x)-1)(root3(x^2)+root3(x)+1)។ ដូចនេះ L = lim (x -> 1) 1 / (root3(x^2)+root3(x)+1) = 1/(1+1+1) = 1/3។"
+  },
+  {
+    "id": "ex-038",
+    "question": "គណនាលីមីត L = lim (x -> 0) [root5((2x+1)^3)-1] / x",
+    "choices": ["6/5", "3/5", "2/5", "1"],
+    "correctIndex": 0,
+    "explanation": "ប្រើដេរីវេត្រង់ x=0 នៃអនុគមន៍ f(x) = (2x+1)^(3/5)។ យើងបាន f'(x) = 3/5 * (2x+1)^(-2/5) * 2។ ជំនួស x=0 បាន L = f'(0) = 6/5។"
+  },
+  {
+    "id": "ex-039",
+    "question": "គណនាលីមីត L = lim (x -> 1) (x^2+x-2) / [root3(x+7)-2]",
+    "choices": ["36", "12", "18", "9"],
+    "correctIndex": 0,
+    "explanation": "ភាគយកបំបែកជា (x-1)(x+2)។ ភាគបែងគុណកន្សោមឆ្លាស់បាន (x+7-8) / [root3((x+7)^2)+2root3(x+7)+4]។ នាំឱ្យ L = lim (x -> 1) (x+2)(root3((x+7)^2)+2root3(x+7)+4) = 3(4+4+4) = 36។"
+  },
+  {
+    "id": "ex-040",
+    "question": "គណនាលីមីត L = lim (x -> 0) sin(3x) / sin(5x)",
+    "choices": ["3/5", "5/3", "1", "0"],
+    "correctIndex": 0,
+    "explanation": "ប្រើលក្ខណៈ lim (x -> 0) sin(ax)/x = a។ យើងបាន L = lim (x -> 0) [sin(3x)/3x] * [5x/sin(5x)] * (3/5) = 1 * 1 * 3/5 = 3/5។"
+  },
+  {
+    "id": "ex-041",
+    "question": "គណនាលីមីត L = lim (x -> pi/4) [cos(x)-sin(x)] / cos(2x)",
+    "choices": ["sqrt(2)/2", "sqrt(2)", "1/2", "0"],
+    "correctIndex": 0,
+    "explanation": "ប្រើរូបមន្ត cos(2x) = cos^2(x) - sin^2(x) = (cos(x)-sin(x))(cos(x)+sin(x))។ សម្រួលកន្សោមចោល បាន L = lim (x -> pi/4) 1 / (cos(x) + sin(x)) = 1 / (sqrt(2)/2 + sqrt(2)/2) = 1/sqrt(2) = sqrt(2)/2។"
+  },
+  {
+    "id": "ex-042",
+    "question": "គណនាលីមីត L = lim (x -> 0) [cos(2x)-cos^2(2x)] / x",
+    "choices": ["0", "2", "-2", "1"],
+    "correctIndex": 0,
+    "explanation": "L = lim (x -> 0) [cos(2x)(1-cos(2x))] / x។ ដោយ lim (x -> 0) cos(2x) = 1 និង lim (x -> 0) (1-cos(2x))/x = 0 ដូចនេះ L = 1 * 0 = 0។"
+  },
+  {
+    "id": "ex-043",
+    "question": "គណនាលីមីត L = lim (x -> 0) [sin^2(10x)+sin^2(x)] / x^2",
+    "choices": ["101", "11", "100", "20"],
+    "correctIndex": 0,
+    "explanation": "L = lim (x -> 0) [(sin(10x)/x)^2 + (sin(x)/x)^2] = 10^2 + 1^2 = 101។"
+  },
+  {
+    "id": "ex-044",
+    "question": "គណនាលីមីត L = lim (x -> 0) [sin(3x)-2x] / [sin(2x)-3x]",
+    "choices": ["-1", "1", "3/2", "-2/3"],
+    "correctIndex": 0,
+    "explanation": "ចែកភាគយក និងភាគបែងនឹង x បាន L = lim (x -> 0) [(sin(3x)/x) - 2] / [(sin(2x)/x) - 3] = (3-2)/(2-3) = 1/(-1) = -1។"
+  },
+  {
+    "id": "ex-045",
+    "question": "គណនាលីមីត L = lim (x -> 0) [x+sin(2x)] / [3x-sin(2x)]",
+    "choices": ["3", "1/3", "0", "1"],
+    "correctIndex": 0,
+    "explanation": "ចែកភាគយក និងភាគបែងនឹង x បាន L = (1+2)/(3-2) = 3/1 = 3។"
+  },
+  {
+    "id": "ex-046",
+    "question": "គណនាលីមីត L = lim (x -> 0) [cos(x)-1+sin(x)] / 2x",
+    "choices": ["1/2", "0", "1", "-1/2"],
+    "correctIndex": 0,
+    "explanation": "L = lim (x -> 0) [cos(x)-1]/2x + lim (x -> 0) sin(x)/2x = 0 + 1/2 = 1/2 (ដោយសារ (1-cos(x))/x -> 0)។"
+  },
+  {
+    "id": "ex-047",
+    "question": "គណនាលីមីត L = lim (x -> 0) [tan(x)-sin(x)] / x^3",
+    "choices": ["1/2", "1", "0", "1/3"],
+    "correctIndex": 0,
+    "explanation": "L = lim (x -> 0) [sin(x)(1-cos(x))] / (x^3 * cos(x)) = lim (x -> 0) [sin(x)/x * (1-cos(x))/x^2 * 1/cos(x)] = 1 * 1/2 * 1 = 1/2។"
+  },
+  {
+    "id": "ex-048",
+    "question": "គណនាលីមីត L = lim (x -> 0) sin(sin(sin(x))) / x",
+    "choices": ["1", "0", "sin(1)", "មិនមានលីមីត"],
+    "correctIndex": 0,
+    "explanation": "ប្រើការបំបែក L = lim (x -> 0) [sin(sin(sin(x)))/sin(sin(x)) * sin(sin(x))/sin(x) * sin(x)/x] = 1 * 1 * 1 = 1។"
+  },
+  {
+    "id": "ex-049",
+    "question": "គណនាលីមីត L = lim (x -> 0) [(1-cos(3x))sin(x)] / tan^3(x)",
+    "choices": ["9/2", "3/2", "0", "9"],
+    "correctIndex": 0,
+    "explanation": "L = lim (x -> 0) [(1-cos(3x))/x^2 * sin(x)/x * x^3/tan^3(x)] = (3^2)/2 * 1 * 1 = 9/2។"
+  },
+  {
+    "id": "ex-050",
+    "question": "គណនាលីមីត L = lim (x -> +infinity) (3x-1) / 2x",
+    "choices": ["3/2", "3", "0", "infinity"],
+    "correctIndex": 0,
+    "explanation": "យកស្វ័យគុណខ្ពស់បំផុត L = lim (x -> +infinity) 3x/2x = 3/2។"
+  },
+  {
+    "id": "ex-051",
+    "question": "គណនាលីមីត L = lim (x -> -infinity) (x^2-x+2) / (x^2+2x+3)",
+    "choices": ["1", "-1", "2/3", "0"],
+    "correctIndex": 0,
+    "explanation": "លីមីតនៃប្រភាគអនុគមន៍សនិទាននៅអនន្ត គឺស្មើនឹងលីមីតនៃតួដែលមានដឺក្រេខ្ពស់បំផុត L = lim (x -> -infinity) x^2/x^2 = 1។"
+  },
+  {
+    "id": "ex-052",
+    "question": "គណនាលីមីត L = lim (x -> +/- infinity) (2x^2-3x+1) / (x^2-9)",
+    "choices": ["2", "-1/9", "0", "infinity"],
+    "correctIndex": 0,
+    "explanation": "L = lim (x -> +/- infinity) 2x^2/x^2 = 2។"
+  },
+  {
+    "id": "ex-053",
+    "question": "គណនាលីមីត L = lim (x -> +/- infinity) (3x^2-x+1) / [(x+1)(x-2)]",
+    "choices": ["3", "-1/2", "0", "-3"],
+    "correctIndex": 0,
+    "explanation": "ពន្លាតភាគបែងបាន x^2-x-2។ ដូចនេះ L = lim (x -> +/- infinity) 3x^2/x^2 = 3។"
+  },
+  {
+    "id": "ex-054",
+    "question": "គណនាលីមីត L = lim (x -> +infinity) [sqrt(x)+2x] / [3sqrt(x)-2x]",
+    "choices": ["-1", "1", "2/3", "0"],
+    "correctIndex": 0,
+    "explanation": "ចែកភាគយក និងភាគបែងនឹង x បាន L = lim (x -> +infinity) [(1/sqrt(x) + 2) / (3/sqrt(x) - 2)] = (0+2)/(0-2) = -1។"
+  },
+  {
+    "id": "ex-055",
+    "question": "គណនាលីមីត L = lim (x -> +infinity) sqrt(x+sqrt(x+sqrt(x))) / sqrt(x)",
+    "choices": ["1", "0", "infinity", "1/2"],
+    "correctIndex": 0,
+    "explanation": "L = lim (x -> +infinity) sqrt([x+sqrt(x+sqrt(x))]/x) = lim (x -> +infinity) sqrt(1 + sqrt([x+sqrt(x)]/x^2)) = sqrt(1+0) = 1។"
+  },
+  {
+    "id": "ex-056",
+    "question": "គណនាលីមីត L = lim (x -> +infinity) (x+1-x^3)",
+    "choices": ["-infinity", "+infinity", "0", "1"],
+    "correctIndex": 0,
+    "explanation": "L = lim (x -> +infinity) -x^3(1 - 1/x^2 - 1/x^3) = -infinity។"
+  },
+  {
+    "id": "ex-057",
+    "question": "គណនាលីមីត L = lim (x -> +infinity) (sqrt(x^2+2x)-x)",
+    "choices": ["1", "0", "2", "infinity"],
+    "correctIndex": 0,
+    "explanation": "គុណកន្សោមឆ្លាស់៖ L = lim (x -> +infinity) (x^2+2x-x^2) / (sqrt(x^2+2x)+x) = lim (x -> +infinity) 2x / [x(sqrt(1+2/x)+1)] = 2/(1+1) = 1។"
+  },
+  {
+    "id": "ex-058",
+    "question": "គណនាលីមីត L = lim (x -> +infinity) (sqrt(x+sqrt(x))-sqrt(x))",
+    "choices": ["1/2", "1", "0", "infinity"],
+    "correctIndex": 0,
+    "explanation": "គុណកន្សោមឆ្លាស់៖ L = lim (x -> +infinity) (x+sqrt(x)-x) / (sqrt(x+sqrt(x))+sqrt(x)) = lim (x -> +infinity) sqrt(x) / [sqrt(x)(sqrt(1+1/sqrt(x))+1)] = 1/(1+1) = 1/2។"
+  },
+  {
+    "id": "ex-059",
+    "question": "គណនាលីមីត L = lim (x -> infinity) x * sin(pi/x)",
+    "choices": ["pi", "1", "0", "infinity"],
+    "correctIndex": 0,
+    "explanation": "តាង u = pi/x។ កាលណា x -> infinity នោះ u -> 0។ លីមីតទៅជា L = lim (u -> 0) (pi/u) * sin(u) = pi * 1 = pi។"
+  },
+  {
+      "id": "ex-060",
+      "question": "គណនាលីមីត L = lim (x -> 0+) [e^(3x)-e^(-3x)] / [1-cos(2x)]",
+      "choices": ["+infinity", "3", "0", "6"],
+      "correctIndex": 0,
+      "explanation": "ប្រើការប៉ាន់ស្មាន៖ e^(3x)-e^(-3x) ≈ 6x និង 1-cos(2x) ≈ 2x^2។ នាំឱ្យ L = lim (x -> 0+) 6x / 2x^2 = lim (x -> 0+) 3/x = +infinity។"
+},
+  {
+    "id": "ex-061",
+    "question": "គណនាលីមីត L = lim (x -> 0) [e^(4x)-4x-1] / sin^2(3x)",
+    "choices": ["8/9", "4/9", "16/9", "0"],
+    "correctIndex": 0,
+    "explanation": "ប្រើដេរីវេ L'Hopital ពីរដង ឬស៊េរីម៉ាកឡូរាំង e^(4x) approx 1+4x+8x^2។ នាំឱ្យ L = lim (x -> 0) 8x^2 / (3x)^2 = 8/9។"
+  },
+  {
+    "id": "ex-062",
+    "question": "គណនាលីមីត L = lim (x -> infinity) [(2x+1)/(2x-1)]^(3x+1)",
+    "choices": ["e^3", "e^6", "e", "1"],
+    "correctIndex": 0,
+    "explanation": "L = lim (x -> infinity) [1 + 2/(2x-1)]^(3x+1)។ លីមីតគឺ e^[lim (x -> infinity) (3x+1) * 2/(2x-1)] = e^(6/2) = e^3។"
+  },
+  {
+    "id": "ex-063",
+    "question": "គណនាលីមីត L = lim (x -> 1) (x + x^2 + ... + x^n - n) / (x-1)",
+    "choices": ["n(n+1)/2", "n", "n^2", "n-1"],
+    "correctIndex": 0,
+    "explanation": "L = lim (x -> 1) sum_{k=1 to n} (x^k-1)/(x-1) = sum_{k=1 to n} k = 1+2+...+n = n(n+1)/2។"
+  },
+  {
+    "id": "ex-064",
+    "question": "គណនាលីមីត L = lim (x -> 1) [m/(1-x^m) - n/(1-x^n)]",
+    "choices": ["(m-n)/2", "0", "(m+n)/2", "1"],
+    "correctIndex": 0,
+    "explanation": "ប្រើដេរីវេ ឬពន្លាត Taylor ជុំវិញ 1។ លទ្ធផលចុងក្រោយគឺ (m-n)/2។"
+  },
+  {
+    "id": "ex-065",
+    "question": "រក m, n បើ lim (x -> 2) (x^2-mx+8) / (x^2-(n+2)x+2) គឺជាចំនួនថេរខុសពីសូន្យ។",
+    "choices": ["m=6, n=1", "m=4, n=2", "m=2, n=1", "m=6, n=3"],
+    "correctIndex": 0,
+    "explanation": "ដើម្បីឱ្យលីមីតមានតួ 0/0 ភាគយក និងភាគបែងត្រូវមានឫស 2។ 2^2-2m+8=0 => m=6។ 2^2-2(n+2)+2=0 => 6-2n-4=0 => n=1។"
+  },
+  {
+    "id": "ex-066",
+    "question": "រក a, b ដើម្បីឱ្យ lim (x -> 1) (x^2+ax+b) / (x-1)^2 = 1។",
+    "choices": ["a=-2, b=1", "a=2, b=1", "a=0, b=1", "a=-2, b=0"],
+    "correctIndex": 0,
+    "explanation": "ដើម្បីឱ្យលីមីតស្មើ 1 ភាគយកត្រូវតែជា (x-1)^2 = x^2-2x+1។ ដូចនេះ a=-2, b=1។"
+  },
+  {
+    "id": "ex-067",
+    "question": "សិក្សាភាពជាប់នៃ f(x) = (3x^2+|x|) / x ត្រង់ x=0 បើ f(0)=1។",
+    "choices": ["មិនជាប់", "ជាប់", "ជាប់ខាងស្តាំ", "ជាប់ខាងឆ្វេង"],
+    "correctIndex": 0,
+    "explanation": "lim (x -> 0+) f(x) = lim (x -> 0+) (3x+1) = 1។ lim (x -> 0-) f(x) = lim (x -> 0-) (3x-1) = -1។ ដោយលីមីតសងខាងខុសគ្នា នោះអនុគមន៍មិនជាប់ត្រង់ 0 ទេ។"
+  },
+  {
+    "id": "ex-068",
+    "question": "គណនាលីមីត L = lim (x -> 1) sin(pi*x) / (x-1)។",
+    "choices": ["-pi", "pi", "0", "1"],
+    "correctIndex": 0,
+    "explanation": "តាង t = x-1 នាំឱ្យ x=1+t។ L = lim (t -> 0) sin(pi + pi*t) / t = lim (t -> 0) -sin(pi*t) / t = -pi។"
+  },
+  {
+    "id": "ex-069",
+    "question": "រក a ដើម្បីឱ្យ f(x) = {a^2*x^2 បើ x <= 2; (a-1)x បើ x > 2} ជាប់ត្រង់ 2។",
+    "choices": ["គ្មានតម្លៃ a", "a=1/2", "a=0", "a=1"],
+    "correctIndex": 0,
+    "explanation": "លក្ខខណ្ឌជាប់៖ 4a^2 = 2(a-1) => 2a^2-a+1=0។ ឌីសគ្រីមីណង់ Delta = 1 - 8 = -7 < 0 ដូចនេះគ្មានតម្លៃ a ពិតដែលធ្វើឱ្យអនុគមន៍ជាប់ទេ។"
+  },
+  {
+    "id": "ex-070",
+    "question": "រក m ដើម្បីឱ្យ g(x) = {4004x/sin(2x) បើ x != 0; m បើ x = 0} ជាប់ត្រង់ x=0។",
+    "choices": ["2002", "4004", "0", "1001"],
+    "correctIndex": 0,
+    "explanation": "m = lim (x -> 0) 4004x/sin(2x) = 4004 * 1/2 = 2002។"
+  },
+  {
+      "id": "ex-071",
+      "question": "រកចំនួន c ក្នុងចន្លោះ [2, 3] ដែល f(c) = 13 ចំពោះ f(x) = x^3 - x^2 + x - 2",
+      "choices": ["c = 1", "c = 2", "c = 2.5", "c = 2.58... (តម្លៃក្នុងចន្លោះ 2 និង 3)"],
+      "correctIndex": 3,
+      "explanation": "f(2) = 8-4+2-2 = 4 និង f(3) = 27-9+3-2 = 19។ ដោយ 4 < 13 < 19 តាមទ្រឹស្តីបទតម្លៃកណ្តាល នាំឱ្យមាន c ក្នុងចន្លោះ (2, 3) ដែល f(c) = 13។"
+  },
+  {
+    "id": "ex-072",
+    "question": "គណនាលីមីត L = lim (x -> 0) [sin(2x)+e^(5x)-1] / (x^2+x)",
+    "choices": ["7", "1", "5", "2"],
+    "correctIndex": 0,
+    "explanation": "L = lim (x -> 0) [sin(2x)/x + (e^(5x)-1)/x] / (x+1) = (2+5)/(0+1) = 7។"
+  },
+  {
+    "id": "ex-073",
+    "question": "គណនាលីមីត L = lim (x -> 0) (cos(x))^(1/sin(x))",
+    "choices": ["1", "e", "0", "infinity"],
+    "correctIndex": 0,
+    "explanation": "L = e^[lim (x -> 0) ln(cos(x))/sin(x)] = e^[lim (x -> 0) -tan(x)/cos(x)] = e^0 = 1 (ប្រើ L'Hopital លើស្វ័យគុណ)។"
+  }
+  ]
+}

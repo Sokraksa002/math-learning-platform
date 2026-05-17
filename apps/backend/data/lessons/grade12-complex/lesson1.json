@@ -1,0 +1,127 @@
+{
+  "id": "grade12-complex-lesson1",
+  "chapterId": "grade12-complex",
+  "titleKm": "ចំនួនកុំផ្លិច",
+  "content": {
+	"blocks": [
+  	{
+    	"type": "text",
+    	"value": "មេរៀនទី ១៖ ចំនួនកុំផ្លិច"
+  	},
+  	{
+    	"type": "text",
+    	"value": "១. និយមន័យ និងឯកតានិម្មិត៖ ក្នុងពិភពចំនួនពិត យើងមិនអាចរកឬសការេនៃចំនួនអវិជ្ជមានបានទេ។ ដូចនេះគេបង្កើត i ដែលមានលក្ខណៈ i² = -1។"
+  	},
+  	{
+    	"type": "formula",
+    	"value": "z = a + bi \\quad (i^2 = -1)"
+  	},
+  	{
+    	"type": "text",
+    	"value": "ឧទាហរណ៍៖ z = 3 - 5i → ផ្នែកពិត = 3 និងផ្នែកនិម្មិត = -5"
+  	},
+  	{
+    	"type": "text",
+    	"value": "២. ប្រមាណវិធី៖ បូក/ដកគឺបូក/ដកផ្នែកពិត និងផ្នែកនិម្មិត"
+  	},
+  	{
+    	"type": "text",
+    	"value": "ឧទាហរណ៍៖ (2 + 3i)(1 - 2i) = 8 - i"
+  	},
+  	{
+    	"type": "text",
+    	"value": "៣. ចំនួនកុំផ្លិចឆ្លាស់៖ z̄ = a - bi"
+  	},
+  	{
+    	"type": "text",
+    	"value": "ឧទាហរណ៍៖ 1/(1+i) = 1/2 - (1/2)i"
+  	},
+  	{
+    	"type": "text",
+    	"value": "៤. ស្វ័យគុណនៃ i"
+  	},
+  	{
+    	"type": "formula",
+    	"value": "i^2 = -1, i^3 = -i, i^4 = 1"
+  	},
+  	{
+    	"type": "text",
+    	"value": "ឧទាហរណ៍៖ i^{2026} = -1"
+  	},
+  	{
+    	"type": "text",
+    	"value": "៥. ម៉ូឌុល៖ |z| = √(a² + b²)"
+  	},
+  	{
+    	"type": "formula",
+    	"value": "|z| = \\sqrt{a^2 + b^2}"
+  	},
+  	{
+    	"type": "text",
+    	"value": "ឧទាហរណ៍៖ |1+i| = √2"
+  	},
+  	{
+    	"type": "text",
+    	"value": "៦. ទម្រង់ត្រីកោណមាត្រ"
+  	},
+  	{
+    	"type": "formula",
+    	"value": "z = r(cosθ + i sinθ)"
+  	},
+  	{
+    	"type": "text",
+    	"value": "៧. សមីការដឺក្រេទី២៖ x² + x + 1 = 0"
+  	},
+  	{
+    	"type": "text",
+    	"value": "ដំណោះស្រាយ៖ x = (-1 ± i√3) / 2"
+  	},
+  	{
+    	"type": "text",
+    	"value": "៨. ឬសទី n នៃចំនួនកុំផ្លិច"
+  	},
+  	{
+    	"type": "text",
+    	"value": "ឧទាហរណ៍៖ √i"
+  	},
+  	{
+    	"type": "text",
+    	"value": "លំហាត់សង្ខេប"
+  	},
+  	{
+    	"type": "text",
+    	"value": "1. បូក (1+2i)+(3-4i)"
+  	},
+  	{
+    	"type": "text",
+    	"value": "Answer: 4 - 2i"
+  	},
+  	{
+    	"type": "text",
+    	"value": "2. រក z បើ \u0304z = 2+3i → z = 2-3i"
+  	},
+  	{
+    	"type": "text",
+    	"value": "3. i^9 + i^{10} + i^{11} + i^{12} = 0"
+  	},
+  	{
+    	"type": "text",
+    	"value": "4. ទម្រង់ត្រីកោណមាត្រ៖ -1 + i√3 = 2(cos2π/3 + isin2π/3)"
+  	},
+  	{
+    	"type": "text",
+    	"value": "5. ម៉ូឌុល (3+4i)/(1-i) = 5√2 / 2"
+  	},
+  	{
+    	"type": "text",
+    	"value": "6. ដោះស្រាយ z² + 4 = 0 → z = ±2i"
+  	},
+  	{
+    	"type": "text",
+    	"value": "7. (cosπ/6 + isinπ/6)^3 = i"
+  	}
+
+]
+  }
+}
+

@@ -7,14 +7,11 @@ import {
   Typography,
   Avatar,
   Button,
-  LinearProgress,
 } from "@mui/material";
 import {
   BookOpen,
-  BarChart3,
   Edit3,
   Clock,
-  Award,
   TrendingUp,
   CheckCircle,
 } from "lucide-react";
@@ -25,9 +22,9 @@ export default function DashboardLayout() {
   const { t, locale } = useLocale();
 
   const stats = [
-    { label: "Chapters Done", value: "12", icon: BookOpen, color: "#3B82F6" },
-    { label: "Quiz Accuracy", value: "89%", icon: TrendingUp, color: "#10B981" },
-    { label: "Daily Streak", value: "6 days", icon: Clock, color: "#F59E0B" },
+    { label: t("pages.Dashboard.chapters_done", "Chapters Done"), value: "12", icon: BookOpen, color: "#3B82F6" },
+    { label: t("pages.Dashboard.quiz_accuracy", "Quiz Accuracy"), value: "89%", icon: TrendingUp, color: "#10B981" },
+    { label: t("pages.Dashboard.daily_streak", "Daily Streak"), value: "6 days", icon: Clock, color: "#F59E0B" },
   ];
 
   const features = [
@@ -55,9 +52,9 @@ export default function DashboardLayout() {
   ];
 
   const recentActivity = [
-    { title: "Completed Chapter 5", time: "2 hours ago", icon: CheckCircle },
-    { title: "Score: 92% in Algebra Quiz", time: "Yesterday", icon: TrendingUp },
-    { title: "Studied for 45 minutes", time: "2 days ago", icon: Clock },
+    { title: t("pages.Dashboard.completed_chapter_5", "Completed Chapter 5"), time: t("pages.Dashboard.two_hours_ago", "2 hours ago"), icon: CheckCircle },
+    { title: t("pages.Dashboard.score_in_algebra_quiz", "Score: 92% in Algebra Quiz"), time: t("pages.Dashboard.yesterday", "Yesterday"), icon: TrendingUp },
+    { title: t("pages.Dashboard.studied_for_45_minutes", "Studied for 45 minutes"), time: t("pages.Dashboard.two_days_ago", "2 days ago"), icon: Clock },
   ];
 
   return (
@@ -77,7 +74,7 @@ export default function DashboardLayout() {
                 variant="h4"
                 sx={{ fontWeight: 700, color: "#1E40AF", mb: 1 }}
               >
-                Hello, Student!
+                {t("pages.Dashboard.hello_student", "Hello, Student!")}
               </Typography>
               <Typography sx={{ color: "#6B7280", fontSize: "14px" }}>
                 {new Date().toLocaleDateString("en-US", {
@@ -105,10 +102,10 @@ export default function DashboardLayout() {
                 <CardContent sx={{ p: 3, display: "flex", gap: 3 }}>
                   <Box sx={{ flex: 1 }}>
                     <Typography variant="h6" sx={{ fontWeight: 600, mb: 1 }}>
-                      Welcome back...
+                      {t("pages.Dashboard.welcome_back", "Welcome back...")}
                     </Typography>
                     <Typography sx={{ opacity: 0.9, mb: 2, fontSize: "14px" }}>
-                      You're on a 6-day learning streak! Keep it up! 🔥
+                      {t("pages.Dashboard.learning_streak_message", "You're on a 6-day learning streak! Keep it up! 🔥")}
                     </Typography>
                     <Button
                       variant="contained"
@@ -120,7 +117,7 @@ export default function DashboardLayout() {
                         "&:hover": { backgroundColor: "#F3F4F6" },
                       }}
                     >
-                      Continue Learning
+                      {t("pages.Dashboard.continue_learning", "Continue Learning")}
                     </Button>
                   </Box>
                   <Box
@@ -205,7 +202,7 @@ export default function DashboardLayout() {
                   mb: 2,
                 }}
               >
-                Your Learning Path
+                {t("pages.Dashboard.your_learning_path", "Your Learning Path")}
               </Typography>
               <Grid container spacing={2}>
                 {features.map((feature, idx) => (
@@ -290,13 +287,9 @@ export default function DashboardLayout() {
     >
       {locale === "km" ? "ប្រតិទិន" : "Calendar"}
     </Typography>
-<Calendar
-  value={new Date()}
-  style={{
-    border: "none",
-    width: "100%",
-  }}
-/>
+    <Box sx={{ width: "100%", "& .react-calendar": { border: "none", width: "100%" } }}>
+      <Calendar value={new Date()} />
+    </Box>
   </CardContent>
 </Card>
 

@@ -24,6 +24,7 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import AdminShell from './AdminShell';
 import { createBlankExercise, createBlankQuiz, loadQuizBank, saveQuizBank, type QuizBankItem, type QuizExercise } from '../../data/adminContent';
+import { useLocale } from '../../hooks/useLocale';
 
 const CHAPTER_STORAGE_KEY = 'math-admin-chapters';
 
@@ -58,6 +59,7 @@ export default function ManageQuizzes() {
   const [editingLessonId, setEditingLessonId] = useState<string | null>(null);
   const [form, setForm] = useState<QuizBankItem>(createBlankQuiz());
   const [newChapterName, setNewChapterName] = useState('');
+  const { t } = useLocale();
 
   useEffect(() => {
     saveQuizBank(quizzes);
@@ -140,8 +142,8 @@ export default function ManageQuizzes() {
 
   return (
     <AdminShell
-      title="Manage Quizzes"
-      subtitle="Edit the quiz bank by lesson ID and update the exercises used by the student quiz flow."
+      title={t('pages.AdminManageQuizzes.title', 'Manage Quizzes')}
+      subtitle={t('pages.AdminManageQuizzes.subtitle', 'Edit the quiz bank by lesson ID and update the exercises used by the student quiz flow.')}
     >
       <Stack spacing={3}>
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>

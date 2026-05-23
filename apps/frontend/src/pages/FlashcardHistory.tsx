@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Box, Button, Card, CardContent, Chip, Divider, Paper, Stack, Typography } from '@mui/material';
+import { useLocale } from '../hooks/useLocale';
 
 interface FlashcardCard {
   front: string;
@@ -83,6 +84,7 @@ const formatDate = (dateString: string) =>
 
 export default function FlashcardHistory() {
   const navigate = useNavigate();
+  const { t } = useLocale();
   const [openSessionId, setOpenSessionId] = useState<string | null>(flashcardHistory[0]?.id ?? null);
 
   const averageMastery = Math.round(
@@ -108,14 +110,13 @@ export default function FlashcardHistory() {
             }}
           >
             <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 1.2 }}>
-              Flashcard history
+              {t('pages.FlashcardHistory.flashcard_history', 'Flashcard history')}
             </Typography>
             <Typography variant="h4" fontWeight={800} mt={1} mb={1}>
-              Your revision sessions
+              {t('pages.FlashcardHistory.your_revision_sessions', 'Your revision sessions')}
             </Typography>
             <Typography sx={{ maxWidth: 720, opacity: 0.9 }}>
-              Track the flashcards you reviewed, how much you mastered, and the notes you left for
-              each study session.
+              {t('pages.FlashcardHistory.subtitle', 'Track the flashcards you reviewed, how much you mastered, and the notes you left for each study session.')}
             </Typography>
           </Paper>
 
@@ -129,7 +130,7 @@ export default function FlashcardHistory() {
           >
             <Paper sx={{ p: 2.5, borderRadius: 3 }}>
               <Typography color="text.secondary" fontSize="0.9rem">
-                Sessions
+                {t('pages.FlashcardHistory.sessions', 'Sessions')}
               </Typography>
               <Typography variant="h4" fontWeight={800}>
                 {flashcardHistory.length}
@@ -138,7 +139,7 @@ export default function FlashcardHistory() {
 
             <Paper sx={{ p: 2.5, borderRadius: 3 }}>
               <Typography color="text.secondary" fontSize="0.9rem">
-                Average mastery
+                {t('pages.FlashcardHistory.average_mastery', 'Average mastery')}
               </Typography>
               <Typography variant="h4" fontWeight={800}>
                 {averageMastery}%
@@ -147,7 +148,7 @@ export default function FlashcardHistory() {
 
             <Paper sx={{ p: 2.5, borderRadius: 3 }}>
               <Typography color="text.secondary" fontSize="0.9rem">
-                Recent review
+                {t('pages.FlashcardHistory.recent_review', 'Recent review')}
               </Typography>
               <Typography variant="h4" fontWeight={800}>
                 {flashcardHistory[0]?.lesson ?? '-'}
@@ -159,14 +160,14 @@ export default function FlashcardHistory() {
             <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} justifyContent="space-between" alignItems={{ sm: 'center' }}>
               <Box>
                 <Typography fontWeight={800} color="#0f172a">
-                  Jump back into flashcards
+                  {t('pages.FlashcardHistory.jump_back_into_flashcards', 'Jump back into flashcards')}
                 </Typography>
                 <Typography color="text.secondary">
-                  Open the learning page directly instead of staying in the history view.
+                  {t('pages.FlashcardHistory.flashcard_page_hint', 'Open the learning page directly instead of staying in the history view.')}
                 </Typography>
               </Box>
               <Button variant="contained" onClick={() => navigate('/flashcard')}>
-                Go to Flashcards
+                {t('pages.FlashcardHistory.go_to_flashcards', 'Go to Flashcards')}
               </Button>
             </Stack>
           </Paper>
@@ -238,7 +239,7 @@ export default function FlashcardHistory() {
                           {session.cards.map((card, ci) => (
                             <Paper key={`${session.id}-${ci}`} variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
                               <Typography fontWeight={700} mb={1}>
-                                Flashcard
+                                  {t('pages.FlashcardHistory.flashcard', 'Flashcard')}
                               </Typography>
                               <Typography color="text.secondary" fontSize="0.9rem" mb={1}>
                                 {card.front}
@@ -247,7 +248,7 @@ export default function FlashcardHistory() {
                               <Divider sx={{ my: 1 }} />
 
                               <Typography fontWeight={700} mb={1}>
-                                Answer
+                                {t('pages.FlashcardHistory.answer', 'Answer')}
                               </Typography>
                               <Typography color="text.secondary" fontSize="0.9rem" mb={1}>
                                 {card.back}

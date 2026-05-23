@@ -1,6 +1,7 @@
 import { Box, Button, Container, Paper, Stack, Typography } from '@mui/material';
 import { ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocale } from '../../hooks/useLocale';
 
 interface AdminShellProps {
   title: string;
@@ -9,16 +10,17 @@ interface AdminShellProps {
 }
 
 const navItems = [
-  { label: 'Overview', path: '/admin' },
-  { label: 'Users', path: '/admin/users' },
-  { label: 'Quizzes', path: '/admin/quizzes' },
-  { label: 'Lessons', path: '/admin/lessons' },
-  { label: 'Certificates', path: '/admin/certificates' },
+  { label: 'Overview', labelKey: 'pages.AdminShell.overview', path: '/admin' },
+  { label: 'Users', labelKey: 'pages.AdminShell.users', path: '/admin/users' },
+  { label: 'Quizzes', labelKey: 'pages.AdminShell.quizzes', path: '/admin/quizzes' },
+  { label: 'Lessons', labelKey: 'pages.AdminShell.lessons', path: '/admin/lessons' },
+  { label: 'Certificates', labelKey: 'pages.AdminShell.certificates', path: '/admin/certificates' },
 ];
 
 export default function AdminShell({ title, subtitle, children }: AdminShellProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useLocale();
 
   return (
     <Box sx={{ minHeight: '100vh', background: 'linear-gradient(180deg, #eff6ff 0%, #f8fbff 42%, #ffffff 100%)', py: { xs: 2, md: 4 } }}>
@@ -34,7 +36,7 @@ export default function AdminShell({ title, subtitle, children }: AdminShellProp
           }}
         >
           <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 1.2 }}>
-            Admin console
+            {t('pages.AdminShell.admin_console', 'Admin console')}
           </Typography>
           <Typography variant="h4" fontWeight={900} sx={{ mt: 1 }}>
             {title}
@@ -56,7 +58,7 @@ export default function AdminShell({ title, subtitle, children }: AdminShellProp
                   onClick={() => navigate(item.path)}
                   sx={{ borderRadius: 999, px: 2.25, fontWeight: 700, whiteSpace: 'nowrap' }}
                 >
-                  {item.label}
+                  {t(item.labelKey, item.label)}
                 </Button>
               );
             })}

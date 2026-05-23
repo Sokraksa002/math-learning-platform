@@ -1,5 +1,6 @@
 import { Box, Button, Container, Paper, Stack, Typography, Chip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { useLocale } from "../hooks/useLocale";
 
 const COMPLETED_LESSON_STORAGE_KEY = 'math-learning-completed-lessons';
 
@@ -20,6 +21,7 @@ const areAllLessonsCompleted = (): boolean => {
 
 export default function Certificate() {
   const navigate = useNavigate();
+  const { t } = useLocale();
   const allLessonsCompleted = areAllLessonsCompleted();
 
   return (
@@ -35,14 +37,13 @@ export default function Certificate() {
           }}
         >
           <Typography variant="overline" sx={{ letterSpacing: 1.2, opacity: 0.85 }}>
-            Review center
+            {t('pages.Certificate.review_center', 'Review center')}
           </Typography>
           <Typography variant="h4" fontWeight={900} sx={{ mt: 1 }}>
-            Chapter review history
+            {t('pages.Certificate.chapter_review_history', 'Chapter review history')}
           </Typography>
           <Typography sx={{ mt: 1, opacity: 0.9, maxWidth: 720 }}>
-            Open a chapter to review the quiz answers. Chapters stay locked until the quiz score is at
-            least 80% and all lessons are complete.
+            {t('pages.Certificate.subtitle', 'Open a chapter to review the quiz answers. Chapters stay locked until the quiz score is at least 80% and all lessons are complete.')}
           </Typography>
         </Paper>
 
@@ -73,15 +74,15 @@ export default function Certificate() {
             >
               <Box sx={{ flex: 1 }}>
                 <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mb: 1 }}>
-                  <Chip label={unlocked ? "Open" : "Locked"} color={unlocked ? "success" : "default"} size="small" />
-                  <Chip label={`${item.score}% score`} color={item.score >= 80 ? "success" : "warning"} size="small" />
+                  <Chip label={unlocked ? t('pages.Certificate.open', 'Open') : t('pages.Certificate.locked', 'Locked')} color={unlocked ? "success" : "default"} size="small" />
+                  <Chip label={`${item.score}% ${t('pages.Certificate.score', 'score')}`} color={item.score >= 80 ? "success" : "warning"} size="small" />
                 </Stack>
 
                 <Typography fontWeight={900} color="#0f172a">
                   {item.title}
                 </Typography>
                 <Typography sx={{ mt: 0.5, color: "text.secondary" }}>
-                  {unlocked ? "Open to review the answer details for this chapter." : "Locked until all lessons are completed and the score reaches 80%."}
+                  {unlocked ? t('pages.Certificate.open_message', 'Open to review the answer details for this chapter.') : t('pages.Certificate.locked_message', 'Locked until all lessons are completed and the score reaches 80%.')}
                 </Typography>
               </Box>
 
@@ -96,7 +97,7 @@ export default function Certificate() {
                     minWidth: 120,
                   }}
                 >
-                  Open
+                  {t('pages.Certificate.open', 'Open')}
                 </Button>
               ) : (
                 <Box
@@ -108,7 +109,7 @@ export default function Certificate() {
                     color: "#64748b",
                   }}
                 >
-                  Locked
+                  {t('pages.Certificate.locked', 'Locked')}
                 </Box>
               )}
             </Paper>
@@ -119,13 +120,13 @@ export default function Certificate() {
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="space-between" alignItems={{ sm: "center" }}>
             <Box>
               <Typography fontWeight={800} color="#0f172a">
-                Need the answer review?
+                {t('pages.Certificate.need_answer_review', 'Need the answer review?')}
               </Typography>
               <Typography color="text.secondary">
-                The quiz history page contains the full answer breakdown for each attempt.
+                {t('pages.Certificate.quiz_history_note', 'The quiz history page contains the full answer breakdown for each attempt.')}
               </Typography>
             </Box>
-            <Button variant="contained" onClick={() => navigate("/quiz-history")}>Open Quiz History</Button>
+            <Button variant="contained" onClick={() => navigate("/quiz-history")}>{t('pages.Certificate.open_quiz_history', 'Open Quiz History')}</Button>
           </Stack>
         </Paper>
       </Container>

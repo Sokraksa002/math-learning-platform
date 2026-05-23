@@ -215,22 +215,22 @@ export default function Header() {
       >
         <MenuItem onClick={() => { navigate("/profile"); handleProfileClose(); }}>
           <ListItemIcon><AccountCircle /></ListItemIcon>
-          My profile
+          {t("menu.myProfile", "My profile")}
         </MenuItem>
 
         <MenuItem onClick={() => { navigate("/quiz-history"); handleProfileClose(); }}>
           <ListItemIcon><Quiz /></ListItemIcon>
-          My quiz attempts
+          {t("nav.quizHistory", "My quiz attempts")}
         </MenuItem>
 
         <MenuItem onClick={() => { navigate("/flashcard-history"); handleProfileClose(); }}>
           <ListItemIcon><Style /></ListItemIcon>
-          Flashcard history
+          {t("nav.flashcardHistory", "Flashcard history")}
         </MenuItem>
 
         <MenuItem onClick={() => { navigate("/ability"); handleProfileClose(); }}>
           <ListItemIcon><Psychology /></ListItemIcon>
-          My ability
+          {t("nav.ability", "My ability")}
         </MenuItem>
       </Menu>
     </>

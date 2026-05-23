@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, type ReactNode, type ElementType } from "react";
 import {
   Box,
   Drawer,
@@ -26,7 +26,6 @@ import {
   Menu as MenuIcon,
   Flag,
   Users,
-  FileText,
   BadgeCheck,
 } from "lucide-react";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -35,7 +34,13 @@ import { useLocale } from "../../hooks/useLocale";
 import { Psychology } from "@mui/icons-material";
 import { useAuthModal } from "../../contexts/AuthModalContext";
 
-export const AppLayout = ({ children, isLoggedIn }: any) => {
+type NavigationItem = {
+  icon: ElementType;
+  label: string;
+  path: string;
+};
+
+export const AppLayout = ({ children, isLoggedIn }: { children: ReactNode; isLoggedIn: boolean }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
@@ -43,31 +48,31 @@ export const AppLayout = ({ children, isLoggedIn }: any) => {
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
-  const { locale, setLocale } = useLocale();
+  const { locale, setLocale, t } = useLocale();
 
   const currentUser = getUser();
   const isAdmin = currentUser?.role === "admin";
   const { openLogin } = useAuthModal();
 
-  const navigationItems = isLoggedIn
+  const navigationItems: NavigationItem[] = isLoggedIn
     ? isAdmin
       ? [
-          { icon: BarChart3, label: "Admin", path: "/admin" },
-          { icon: Users, label: "Users", path: "/admin/users" },
-          { icon: Edit3, label: "Quizzes", path: "/admin/quizzes" },
-          { icon: BookOpen, label: "Lessons", path: "/admin/lessons" },
-          { icon: BadgeCheck, label: "Certificates", path: "/admin/certificates" },
-          { icon: Home, label: "Home", path: "/" },
+          { icon: BarChart3, label: t("sidebar.admin", "Admin"), path: "/admin" },
+          { icon: Users, label: t("sidebar.users", "Users"), path: "/admin/users" },
+          { icon: Edit3, label: t("sidebar.quizzes", "Quizzes"), path: "/admin/quizzes" },
+          { icon: BookOpen, label: t("sidebar.lessons", "Lessons"), path: "/admin/lessons" },
+          { icon: BadgeCheck, label: t("sidebar.certificates", "Certificates"), path: "/admin/certificates" },
+          { icon: Home, label: t("nav.home", "Home"), path: "/" },
         ]
       : [
-          { icon: Home, label: "Home", path: "/home" },
-          { icon: BookOpen, label: "Chapters", path: "/chapter" },
-          { icon: BarChart3, label: "Progress", path: "/dashboard" },
-          { icon: Edit3, label: "Quizzes", path: "/quiz" },
-          { icon: Award, label: "Certificates", path: "/certificate" },
-          { icon: Calendar, label: "Calendar", path: "/focus" },
-          { icon: Flag, label: "Flashcards", path: "/flashcard" },
-          { icon: Psychology, label: "Ability", path: "/ability" },
+          { icon: Home, label: t("nav.home", "Home"), path: "/home" },
+          { icon: BookOpen, label: t("nav.chapter", "Chapter"), path: "/chapter" },
+          { icon: BarChart3, label: t("sidebar.progress", "Progress"), path: "/dashboard" },
+          { icon: Edit3, label: t("nav.quiz", "Quiz"), path: "/quiz" },
+          { icon: Award, label: t("sidebar.certificates", "Certificates"), path: "/certificate" },
+          { icon: Calendar, label: t("sidebar.calendar", "Calendar"), path: "/focus" },
+          { icon: Flag, label: t("nav.flashcard", "Flashcard"), path: "/flashcard" },
+          { icon: Psychology, label: t("nav.ability", "Ability"), path: "/ability" },
         ]
     : [];
 
@@ -122,7 +127,7 @@ export const AppLayout = ({ children, isLoggedIn }: any) => {
 
       {/* MENU */}
       <List sx={{ flex: 1 }}>
-        {navigationItems.map((item: any, i: number) => {
+        {navigationItems.map((item, i: number) => {
           const Icon = item.icon;
           const isActive = location.pathname === item.path;
 
@@ -220,7 +225,7 @@ export const AppLayout = ({ children, isLoggedIn }: any) => {
 
             {sidebarExpanded && (
               <ListItemText
-                primary="Settings"
+                primary={t("profile.settings", "Settings")}
                 sx={{ "& .MuiListItemText-primary": { fontSize: 13 } }}
               />
             )}
@@ -240,7 +245,7 @@ export const AppLayout = ({ children, isLoggedIn }: any) => {
             }}
           >
             <LogOut size={17} />
-            {sidebarExpanded && <Box ml={0.5}>Logout</Box>}
+            {sidebarExpanded && <Box ml={0.5}>{t("profile.logout", "Logout")}</Box>}
           </Button>
         </Box>
       )}

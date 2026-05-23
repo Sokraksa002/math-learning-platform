@@ -33,6 +33,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useLocale } from "../hooks/useLocale";
 
 interface StatCardProps {
   title: string;
@@ -90,6 +91,7 @@ const StatCard = ({ title, value, icon, accent, note }: StatCardProps) => (
 
 export default function StudentDashboard() {
   const navigate = useNavigate();
+  const { t } = useLocale();
 
   const currentStreak = 6;
   const maxStreak = 10;
@@ -129,20 +131,20 @@ export default function StudentDashboard() {
           >
             <Box>
               <Chip
-                label="Student Dashboard"
+                label={t("pages.Dashboard.student_dashboard", "Student Dashboard")}
                 sx={{ bgcolor: "rgba(255,255,255,0.14)", color: "white", fontWeight: 700, mb: 1.5 }}
               />
               <Typography variant="h4" fontWeight={900} sx={{ mb: 1 }}>
-                Welcome back, Student
+                {t("pages.Dashboard.welcome_back_student", "Welcome back, Student")}
               </Typography>
               <Typography sx={{ opacity: 0.88, maxWidth: 760 }}>
-                Keep moving with the same bold learning experience as the admin side, but tuned for your studies.
+                {t("pages.Dashboard.student_intro", "Keep moving with the same bold learning experience as the admin side, but tuned for your studies.")}
               </Typography>
             </Box>
 
             <Stack direction="row" spacing={1.5} alignItems="center" sx={{ flexWrap: "wrap" }}>
-              <Chip label="Online now" sx={{ bgcolor: "rgba(34,197,94,0.16)", color: "#dcfce7", fontWeight: 700 }} />
-              <Chip label="Thursday, May 14" sx={{ bgcolor: "rgba(255,255,255,0.12)", color: "white", fontWeight: 700 }} />
+              <Chip label={t("pages.Dashboard.online_now", "Online now")} sx={{ bgcolor: "rgba(34,197,94,0.16)", color: "#dcfce7", fontWeight: 700 }} />
+              <Chip label={t("pages.Dashboard.dashboard_date", "Thursday, May 14")} sx={{ bgcolor: "rgba(255,255,255,0.12)", color: "white", fontWeight: 700 }} />
             </Stack>
           </Box>
         </Paper>
@@ -161,13 +163,13 @@ export default function StudentDashboard() {
                 <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="space-between" alignItems={{ sm: "center" }}>
                   <Box>
                     <Typography variant="overline" sx={{ letterSpacing: 1.2, color: "#2563eb", fontWeight: 800 }}>
-                      Today's focus
+                      {t("pages.Dashboard.todays_focus", "Today's focus")}
                     </Typography>
                     <Typography variant="h5" fontWeight={900} sx={{ color: "#0f172a", mt: 0.5 }}>
-                      Ready to beat your record?
+                      {t("pages.Dashboard.ready_to_beat_record", "Ready to beat your record?")}
                     </Typography>
                     <Typography sx={{ color: "#475569", mt: 1, maxWidth: 620 }}>
-                      You've mastered 3 new concepts this week. Keep the momentum by opening a new chapter or reviewing a quiz.
+                      {t("pages.Dashboard.mastered_concepts", "You've mastered 3 new concepts this week. Keep the momentum by opening a new chapter or reviewing a quiz.")}
                     </Typography>
                   </Box>
 
@@ -185,7 +187,7 @@ export default function StudentDashboard() {
                       boxShadow: "0 16px 30px rgba(29, 78, 216, 0.28)",
                     }}
                   >
-                    Continue Learning
+                    {t("pages.Dashboard.continue_learning", "Continue Learning")}
                   </Button>
                 </Stack>
               </Paper>
@@ -193,28 +195,28 @@ export default function StudentDashboard() {
               <Grid container spacing={3}>
                 <Grid item xs={12} md={4}>
                   <StatCard
-                    title="Chapters Done"
+                    title={t("pages.Dashboard.chapters_done", "Chapters Done")}
                     value="12"
                     accent="linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
-                    note="Steady progress through the core chapter path."
+                    note={t("pages.Dashboard.chapters_done_note", "Steady progress through the core chapter path.")}
                     icon={<BookOpen className="h-24 w-24" />}
                   />
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <StatCard
-                    title="Quiz Accuracy"
+                    title={t("pages.Dashboard.quiz_accuracy", "Quiz Accuracy")}
                     value="89%"
                     accent="linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%)"
-                    note="Strong quiz performance across recent attempts."
+                    note={t("pages.Dashboard.quiz_accuracy_note", "Strong quiz performance across recent attempts.")}
                     icon={<Target className="h-24 w-24" />}
                   />
                 </Grid>
                 <Grid item xs={12} md={4}>
                   <StatCard
-                    title="Focus Hours"
+                    title={t("pages.Dashboard.focus_hours", "Focus Hours")}
                     value="24.5h"
                     accent="linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)"
-                    note="Dedicated practice time keeps the streak alive."
+                    note={t("pages.Dashboard.focus_hours_note", "Dedicated practice time keeps the streak alive.")}
                     icon={<Clock className="h-24 w-24" />}
                   />
                 </Grid>
@@ -224,13 +226,13 @@ export default function StudentDashboard() {
                 <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" spacing={2} sx={{ mb: 3 }}>
                   <Box>
                     <Typography variant="h6" fontWeight={900} color="#0f172a">
-                      Weekly Performance
+                      {t("pages.Dashboard.weekly_performance", "Weekly Performance")}
                     </Typography>
                     <Typography color="text.secondary">
-                      Match your progress against the learning goals for this week.
+                      {t("pages.Dashboard.weekly_performance_subtitle", "Match your progress against the learning goals for this week.")}
                     </Typography>
                   </Box>
-                  <Chip label="Last 7 days" sx={{ bgcolor: "#eff6ff", color: "#1d4ed8", fontWeight: 700 }} />
+                  <Chip label={t("pages.Dashboard.last_7_days", "Last 7 days")} sx={{ bgcolor: "#eff6ff", color: "#1d4ed8", fontWeight: 700 }} />
                 </Stack>
 
                 <Box sx={{ height: 280, width: "100%" }}>
@@ -349,16 +351,16 @@ export default function StudentDashboard() {
                     Daily Challenge
                   </Typography>
                 </Stack>
-                <Typography sx={{ mt: 1.5, color: "#475569" }}>
-                  Complete 5 quiz questions to unlock the Mastery badge and improve your weekly score.
-                </Typography>
+                  <Typography sx={{ mt: 1.5, color: "#475569" }}>
+                    {t("pages.Dashboard.daily_challenge_text", "Complete 5 quiz questions to unlock the Mastery badge and improve your weekly score.")}
+                  </Typography>
                 <Button
                   onClick={() => navigate("/quiz")}
                   variant="contained"
                   fullWidth
                   sx={{ mt: 2.5, borderRadius: 999, py: 1.25, bgcolor: "#0f172a" }}
                 >
-                  Go to Quiz
+                  {t("pages.Dashboard.go_to_quiz", "Go to Quiz")}
                 </Button>
               </Paper>
             </Stack>

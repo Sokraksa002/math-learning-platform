@@ -12,6 +12,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
+import { useLocale } from "../../hooks/useLocale";
 
 type QuizAnswer = {
   question: string;
@@ -260,6 +261,7 @@ const formatDate = (dateString: string) =>
 
 export default function QuizHistory() {
   const navigate = useNavigate();
+  const { t } = useLocale();
   const [openAttemptId, setOpenAttemptId] = useState<string | null>(
     quizAttempts[0]?.id ?? null
   );
@@ -301,14 +303,13 @@ export default function QuizHistory() {
             }}
           >
             <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 1.2 }}>
-              Quiz history
+              {t('pages.QuizHistory.quiz_history', 'Quiz history')}
             </Typography>
             <Typography variant="h4" fontWeight={800} mt={1} mb={1}>
-              Your quiz attempts
+              {t('pages.QuizHistory.your_quiz_attempts', 'Your quiz attempts')}
             </Typography>
             <Typography sx={{ maxWidth: 720, opacity: 0.9 }}>
-              Review your recent attempts, compare scores, and reopen any review that is still
-              within the 7-day window.
+              {t('pages.QuizHistory.subtitle', 'Review your recent attempts, compare scores, and reopen any review that is still within the 7-day window.')}
             </Typography>
           </Paper>
 
@@ -316,14 +317,14 @@ export default function QuizHistory() {
             <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="space-between" alignItems={{ sm: "center" }}>
               <Box>
                 <Typography fontWeight={800} color="#1d4ed8">
-                  Jump back into quizzes
+                  {t('pages.QuizHistory.jump_back_into_quizzes', 'Jump back into quizzes')}
                 </Typography>
                 <Typography color="text.secondary">
-                  Open the quiz page directly when you want to practice again.
+                  {t('pages.QuizHistory.quiz_page_hint', 'Open the quiz page directly when you want to practice again.')}
                 </Typography>
               </Box>
               <Button variant="contained" onClick={() => navigate("/quiz")}>
-                Go to Quiz
+                {t('pages.QuizHistory.go_to_quiz', 'Go to Quiz')}
               </Button>
             </Stack>
           </Paper>
@@ -338,7 +339,7 @@ export default function QuizHistory() {
           >
             <Paper sx={{ p: 2.5, borderRadius: 3, border: "1px solid #dbeafe", boxShadow: "0 10px 24px rgba(37, 99, 235, 0.06)" }}>
               <Typography color="text.secondary" fontSize="0.9rem">
-                Total attempts
+                {t('pages.QuizHistory.total_attempts', 'Total attempts')}
               </Typography>
               <Typography variant="h4" fontWeight={800} color="#1d4ed8">
                 {stats.totalAttempts}
@@ -347,7 +348,7 @@ export default function QuizHistory() {
 
             <Paper sx={{ p: 2.5, borderRadius: 3, border: "1px solid #dbeafe", boxShadow: "0 10px 24px rgba(37, 99, 235, 0.06)" }}>
               <Typography color="text.secondary" fontSize="0.9rem">
-                Average score
+                {t('pages.QuizHistory.average_score', 'Average score')}
               </Typography>
               <Typography variant="h4" fontWeight={800} color="#1d4ed8">
                 {stats.averageScore}%
@@ -356,7 +357,7 @@ export default function QuizHistory() {
 
             <Paper sx={{ p: 2.5, borderRadius: 3, border: "1px solid #dbeafe", boxShadow: "0 10px 24px rgba(37, 99, 235, 0.06)" }}>
               <Typography color="text.secondary" fontSize="0.9rem">
-                Reviewable now
+                {t('pages.QuizHistory.reviewable_now', 'Reviewable now')}
               </Typography>
               <Typography variant="h4" fontWeight={800} color="#1d4ed8">
                 {stats.reviewableAttempts}

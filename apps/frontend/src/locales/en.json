@@ -9,6 +9,15 @@
     "flashcardHistory": "Flashcard history",
     "ability": "My Ability"
   },
+  "sidebar": {
+    "admin": "Admin",
+    "users": "Users",
+    "quizzes": "Quizzes",
+    "lessons": "Lessons",
+    "certificates": "Certificates",
+    "progress": "Progress",
+    "calendar": "Calendar"
+  },
   "hero": {
     "ai_learning_hub": "AI Learning Hub",
     "khmer_title": "Learn Math More Easily",
@@ -229,16 +238,121 @@
       "title": "Title",
       "description": "Description"
     },
+    "AdminShell": {
+      "admin_console": "Admin console",
+      "overview": "Overview",
+      "users": "Users",
+      "quizzes": "Quizzes",
+      "lessons": "Lessons",
+      "certificates": "Certificates"
+    },
+    "AdminManageUsers": {
+      "title": "Manage Users",
+      "subtitle": "Create, update, and remove student or admin accounts from a single table."
+    },
+    "AdminManageQuizzes": {
+      "title": "Manage Quizzes",
+      "subtitle": "Edit the quiz bank by lesson ID and update the exercises used by the student quiz flow."
+    },
+    "AdminManageLessons": {
+      "title": "Manage Lessons",
+      "subtitle": "Create and organize lesson records independently from the chapter pages."
+    },
+    "AdminVerifyCertificates": {
+      "title": "Verify Certificates",
+      "subtitle": "Review completion certificates and mark them as verified, pending, or rejected."
+    },
+    "Ability": {
+      "my_ability": "My Ability",
+      "your_learning_strengths": "Your learning strengths",
+      "subtitle": "A quick view of where you are strongest, what needs more practice, and which topic is currently leading your progress.",
+      "top_skill": "Top skill",
+      "best_score": "Best score",
+      "focus_area": "Focus area",
+      "skill_breakdown": "Skill breakdown",
+      "recent_wins": "Recent wins",
+      "next_steps": "Next steps"
+    },
     "Certificate": {
+      "review_center": "Review center",
+      "chapter_review_history": "Chapter review history",
+      "subtitle": "Open a chapter to review the quiz answers. Chapters stay locked until the quiz score is at least 80% and all lessons are complete.",
+      "open": "Open",
+      "locked": "Locked",
+      "score": "score",
+      "open_message": "Open to review the answer details for this chapter.",
+      "locked_message": "Locked until all lessons are completed and the score reaches 80%.",
+      "need_answer_review": "Need the answer review?",
+      "quiz_history_note": "The quiz history page contains the full answer breakdown for each attempt.",
+      "open_quiz_history": "Open Quiz History",
       "date": "Date",
       "authorized_by": "Authorized by",
       "admin": "Admin",
       "back": "Back"
     },
     "Dashboard": {
+      "hello_student": "Hello, Student!",
+      "welcome_back": "Welcome back...",
+      "learning_streak_message": "You're on a 6-day learning streak! Keep it up! 🔥",
+      "continue_learning": "Continue Learning",
+      "your_learning_path": "Your Learning Path",
+      "student_dashboard": "Student Dashboard",
+      "welcome_back_student": "Welcome back, Student",
+      "student_intro": "Keep moving with the same bold learning experience as the admin side, but tuned for your studies.",
+      "online_now": "Online now",
+      "dashboard_date": "Thursday, May 14",
+      "todays_focus": "Today's focus",
+      "ready_to_beat_record": "Ready to beat your record?",
+      "mastered_concepts": "You've mastered 3 new concepts this week. Keep the momentum by opening a new chapter or reviewing a quiz.",
+      "chapters_done": "Chapters Done",
+      "chapters_done_note": "Steady progress through the core chapter path.",
+      "quiz_accuracy": "Quiz Accuracy",
+      "quiz_accuracy_note": "Strong quiz performance across recent attempts.",
+      "daily_streak": "Daily Streak",
+      "focus_hours": "Focus Hours",
+      "focus_hours_note": "Dedicated practice time keeps the streak alive.",
+      "weekly_performance": "Weekly Performance",
+      "weekly_performance_subtitle": "Match your progress against the learning goals for this week.",
+      "last_7_days": "Last 7 days",
+      "daily_challenge_text": "Complete 5 quiz questions to unlock the Mastery badge and improve your weekly score.",
+      "go_to_quiz": "Go to Quiz",
+      "completed_chapter_5": "Completed Chapter 5",
+      "two_hours_ago": "2 hours ago",
+      "score_in_algebra_quiz": "Score: 92% in Algebra Quiz",
+      "yesterday": "Yesterday",
+      "studied_for_45_minutes": "Studied for 45 minutes",
+      "two_days_ago": "2 days ago",
       "math": "Math",
       "science": "Science",
       "history": "History"
+    },
+    "Flashcard": {
+      "flashcards": "Flashcards",
+      "practice_theme": "Practice with the blue learning theme",
+      "subtitle": "Generate a card, flip it, and keep the interaction exactly the same while matching the new site color system."
+    },
+    "FlashcardHistory": {
+      "flashcard_history": "Flashcard history",
+      "your_revision_sessions": "Your revision sessions",
+      "subtitle": "Track the flashcards you reviewed, how much you mastered, and the notes you left for each study session.",
+      "sessions": "Sessions",
+      "average_mastery": "Average mastery",
+      "recent_review": "Recent review",
+      "jump_back_into_flashcards": "Jump back into flashcards",
+      "flashcard_page_hint": "Open the learning page directly instead of staying in the history view.",
+      "go_to_flashcards": "Go to Flashcards",
+      "flashcard": "Flashcard",
+      "answer": "Answer"
+    },
+    "Quiz": {
+      "quiz_hub": "QUIZ HUB",
+      "quiz_time": "Quiz Time",
+      "subtitle": "Complete quick rounds, keep your streak, and level up your score.",
+      "weekly_challenge": "Weekly challenge",
+      "reach_weekly_goal": "Reach {weeklyGoal}% average score",
+      "today": "Today",
+      "quizzes_completed": "quizzes completed",
+      "pick_a_chapter": "Pick a chapter"
     },
     "Focus": {
       "focused_time_distribution": "Focused Time Distribution"
@@ -283,5 +397,35 @@
     "disclaimer_title": "Disclaimer",
     "disclaimer_text": "Certificates and content on this website are created for educational and assessment purposes only and are not official documents of the Ministry of Education, Youth and Sports.",
     "copyright": "© {year} Online Learning Platform | All Rights Reserved"
+  },
+  
+  "dashboard": {
+    "hello": "Hello, Student!",
+    "welcome": "Welcome back...",
+    "streak": "You're on a 6-day learning streak! Keep it up! 🔥",
+    "continue": "Continue Learning",
+    "learningPath": "Your Learning Path",
+    "calendar": "Calendar",
+    "recentActivity": "Recent Activity"
+  },
+  "stats": {
+    "chapters": "Chapters Done",
+    "quiz": "Quiz Accuracy",
+    "streak": "Daily Streak"
+  },
+  "user": {
+    "name": "Student Name",
+    "grade": "Grade",
+    "points": "Total Points",
+    "edit": "Edit Profile"
+  },
+  "activity": {
+    "chapter": "Completed Chapter 5",
+    "score": "Score: 92% in Algebra Quiz",
+    "study": "Studied for 45 minutes",
+    "hoursAgo": "2 hours ago",
+    "yesterday": "Yesterday",
+    "daysAgo": "2 days ago"
   }
+
 }

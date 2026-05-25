@@ -3,9 +3,8 @@ import authPlugin from '../../../plugins/auth';
 import createAuthToken from '../../../tests/utils/createAuthToken';
 import { flashcardRoutes } from '../flashcard.routes';
 
-// Use require for the AI module so we can access its error classes
-const aiModule = require('../../../lib/ai/generateFlashcard');
-const prismaModule = require('../../../lib/prisma');
+import * as aiModule from '../../../lib/ai/generateFlashcard';
+import * as prismaModule from '../../../lib/prisma';
 
 describe('POST /flashcard/generate', () => {
   beforeEach(() => jest.clearAllMocks());
@@ -57,9 +56,16 @@ describe('POST /flashcard/generate', () => {
 
     const token = await createAuthToken(app, { userId: 'user-2', role: 'STUDENT' });
 
-    jest.spyOn(aiModule, 'generateFlashcardWithAi').mockRejectedValue(new aiModule.AiRateLimitError('rate limit'));
+    jest
+      .spyOn(aiModule, 'generateFlashcardWithAi')
+      .mockRejectedValue(new aiModule.AiRateLimitError('rate limit'));
 
-    const res = await app.inject({ method: 'POST', url: '/flashcard/generate', payload: { chapterId: '00000000-0000-0000-0000-000000000000', question: 'Question 1' }, headers: { authorization: `Bearer ${token}` } });
+    const res = await app.inject({
+      method: 'POST',
+      url: '/flashcard/generate',
+      payload: { chapterId: '00000000-0000-0000-0000-000000000000', question: 'Question 1' },
+      headers: { authorization: `Bearer ${token}` },
+    });
 
     expect(res.statusCode).toBe(429);
     const body = JSON.parse(res.payload);
@@ -78,9 +84,16 @@ describe('POST /flashcard/generate', () => {
 
     const token = await createAuthToken(app, { userId: 'user-3', role: 'STUDENT' });
 
-    jest.spyOn(aiModule, 'generateFlashcardWithAi').mockRejectedValue(new aiModule.AiParseError('invalid json', '{bad}'));
+    jest
+      .spyOn(aiModule, 'generateFlashcardWithAi')
+      .mockRejectedValue(new aiModule.AiParseError('invalid json', '{bad}'));
 
-    const res = await app.inject({ method: 'POST', url: '/flashcard/generate', payload: { chapterId: '00000000-0000-0000-0000-000000000000', question: 'Question 1' }, headers: { authorization: `Bearer ${token}` } });
+    const res = await app.inject({
+      method: 'POST',
+      url: '/flashcard/generate',
+      payload: { chapterId: '00000000-0000-0000-0000-000000000000', question: 'Question 1' },
+      headers: { authorization: `Bearer ${token}` },
+    });
 
     expect(res.statusCode).toBe(422);
     const body = JSON.parse(res.payload);
@@ -98,9 +111,16 @@ describe('POST /flashcard/generate', () => {
 
     const token = await createAuthToken(app, { userId: 'user-4', role: 'STUDENT' });
 
-    jest.spyOn(aiModule, 'generateFlashcardWithAi').mockRejectedValue(new aiModule.AiProviderError('provider error'));
+    jest
+      .spyOn(aiModule, 'generateFlashcardWithAi')
+      .mockRejectedValue(new aiModule.AiProviderError('provider error'));
 
-    const res = await app.inject({ method: 'POST', url: '/flashcard/generate', payload: { chapterId: '00000000-0000-0000-0000-000000000000', question: 'Question 1' }, headers: { authorization: `Bearer ${token}` } });
+    const res = await app.inject({
+      method: 'POST',
+      url: '/flashcard/generate',
+      payload: { chapterId: '00000000-0000-0000-0000-000000000000', question: 'Question 1' },
+      headers: { authorization: `Bearer ${token}` },
+    });
 
     expect(res.statusCode).toBe(502);
     const body = JSON.parse(res.payload);
@@ -115,7 +135,11 @@ describe('POST /flashcard/generate', () => {
     app.register(flashcardRoutes as any);
     await app.ready();
 
-    const res = await app.inject({ method: 'POST', url: '/flashcard/generate', payload: { chapterId: '00000000-0000-0000-0000-000000000000', question: 'Question 1' } });
+    const res = await app.inject({
+      method: 'POST',
+      url: '/flashcard/generate',
+      payload: { chapterId: '00000000-0000-0000-0000-000000000000', question: 'Question 1' },
+    });
     expect(res.statusCode).toBe(401);
 
     await app.close();

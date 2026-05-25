@@ -11,7 +11,7 @@ import type { FastifyInstance } from 'fastify';
  */
 export async function createAuthToken(
   app: FastifyInstance,
-  payload: { userId: string; role?: string } = { userId: 'test-user', role: 'STUDENT' }
+  payload: { userId: string; role?: string } = { userId: 'test-user', role: 'STUDENT' },
 ): Promise<string> {
   // Ensure a test JWT secret exists
   if (!process.env.JWT_SECRET) process.env.JWT_SECRET = 'test-secret';
@@ -19,8 +19,8 @@ export async function createAuthToken(
   // If the jwt decorator isn't present, register the auth plugin dynamically
   if (!(app as any).jwt) {
     // Import plugin dynamically so tests don't create circular imports at top-level
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const authPlugin = (await import('../../plugins/auth')).default;
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const authPlugin = (await import('../../plugins/auth')).default;
     await app.register(authPlugin as any);
     await app.ready();
   }

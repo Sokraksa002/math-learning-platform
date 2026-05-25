@@ -6,14 +6,14 @@
 // checking login persistence
 // debugging JWT
 
-import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 
 /**
  * Protected route to get current user info
  */
 export async function meRoutes(app: FastifyInstance) {
   app.get(
-    "/me",
+    '/me',
     {
       preHandler: app.authenticate, // 🔐 JWT REQUIRED
     },
@@ -25,7 +25,7 @@ export async function meRoutes(app: FastifyInstance) {
           role: request.user.role,
         },
       });
-    }
+    },
   );
 }
-``
+``;

@@ -27,7 +27,11 @@ describe('quiz routes', () => {
     app.register(quizRoutes as any);
     await app.ready();
 
-  const res = await app.inject({ method: 'POST', url: '/quiz/start', payload: { lessonId: '00000000-0000-0000-0000-000000000000' } });
+    const res = await app.inject({
+      method: 'POST',
+      url: '/quiz/start',
+      payload: { lessonId: '00000000-0000-0000-0000-000000000000' },
+    });
     expect(res.statusCode).toBe(401);
 
     await app.close();
@@ -40,11 +44,16 @@ describe('quiz routes', () => {
     app.register(quizRoutes as any);
     await app.ready();
 
-  // create a signed token with the shared test helper and pass it in Authorization header
-  const token = await createAuthToken(app, { userId: 'u1', role: 'STUDENT' });
+    // create a signed token with the shared test helper and pass it in Authorization header
+    const token = await createAuthToken(app, { userId: 'u1', role: 'STUDENT' });
 
     mockedPrisma.lesson.findUnique.mockResolvedValue(null);
-    const res = await app.inject({ method: 'POST', url: '/quiz/start', payload: { lessonId: '00000000-0000-0000-0000-000000000000' }, headers: { authorization: `Bearer ${token}` } });
+    const res = await app.inject({
+      method: 'POST',
+      url: '/quiz/start',
+      payload: { lessonId: '00000000-0000-0000-0000-000000000000' },
+      headers: { authorization: `Bearer ${token}` },
+    });
     expect(res.statusCode).toBe(404);
 
     await app.close();

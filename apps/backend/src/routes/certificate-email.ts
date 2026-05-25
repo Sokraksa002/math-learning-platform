@@ -1,18 +1,18 @@
-import { FastifyInstance, FastifyRequest } from "fastify";
-import { prisma } from "../lib/prisma";
-import { sendCertificateEmail } from "../lib/mailer";
-import { ensureExistsAndOwned } from "../lib/authHelpers";
+import { FastifyInstance, FastifyRequest } from 'fastify';
+import { prisma } from '../lib/prisma';
+import { sendCertificateEmail } from '../lib/mailer';
+import { ensureExistsAndOwned } from '../lib/authHelpers';
 
 export async function certificateEmailRoutes(app: FastifyInstance) {
   /**
    * Send certificate PDF by email
    */
   app.post(
-    "/certificates/:certificateId/email",
+    '/certificates/:certificateId/email',
     {
       preHandler: app.authenticate,
     },
-  async (request: FastifyRequest, reply) => {
+    async (request: FastifyRequest, reply) => {
       const { certificateId } = request.params as {
         certificateId: string;
       };
@@ -29,30 +29,26 @@ export async function certificateEmailRoutes(app: FastifyInstance) {
         },
       });
 
-  const userId = request.user.userId;
-  if (!ensureExistsAndOwned(certificate, userId, reply, "Certificate")) return;
+      const userId = request.user.userId;
+      if (!ensureExistsAndOwned(certificate, userId, reply, 'Certificate')) return;
 
       if (certificate.revokedAt) {
-        return { success: false, message: "Certificate is revoked" };
+        return { success: false, message: 'Certificate is revoked' };
       }
 
       if (!certificate.pdfUrl) {
         return {
           success: false,
-          message: "Certificate PDF not generated yet",
+          message: 'Certificate PDF not generated yet',
         };
       }
 
-      await sendCertificateEmail(
-        certificate.user.email,
-        certificate.user.name,
-        certificate.pdfUrl
-      );
+      await sendCertificateEmail(certificate.user.email, certificate.user.name, certificate.pdfUrl);
 
       return {
         success: true,
-        message: "Certificate sent by email",
+        message: 'Certificate sent by email',
       };
-    }
+    },
   );
 }

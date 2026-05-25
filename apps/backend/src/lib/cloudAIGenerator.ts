@@ -1,11 +1,9 @@
-import { LessonContent } from "./contentJson";
+import { LessonContent } from './contentJson';
 
 export function extractLessonText(content: LessonContent): string {
   return content.blocks
-    .filter(
-      (b) => b.type === "text" || b.type === "formula"
-    )
+    .filter((b) => b.type === 'text' || b.type === 'formula')
     .map((b) => b.value)
-    .join("\n");
+    .join('\n');
 }
-``
+``;

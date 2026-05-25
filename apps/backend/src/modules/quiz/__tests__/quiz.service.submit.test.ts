@@ -134,8 +134,14 @@ describe('quiz.service submitQuiz', () => {
     mockedPrisma.$transaction.mockImplementation(async (cb: any) => cb(mockTx));
 
     // session already completed
-    mockTx.quizSession.findUnique.mockResolvedValue({ id: 'done', items: [{}], completedAt: new Date() });
+    mockTx.quizSession.findUnique.mockResolvedValue({
+      id: 'done',
+      items: [{}],
+      completedAt: new Date(),
+    });
 
-    await expect(quizService.submitQuiz('done', [])).rejects.toThrow('Quiz session already completed');
+    await expect(quizService.submitQuiz('done', [])).rejects.toThrow(
+      'Quiz session already completed',
+    );
   });
 });

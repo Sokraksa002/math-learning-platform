@@ -1,8 +1,8 @@
-import axios from "axios";
-import { GoogleAuth } from "google-auth-library";
-import { LessonContent } from "../contentJson";
-import { buildGeminiPrompt } from "./prompts/geminiPrompt";
-import { aiFlashcardSchema } from "./aiFlashcard.schema";
+import axios from 'axios';
+import { GoogleAuth } from 'google-auth-library';
+import { LessonContent } from '../contentJson';
+import { buildGeminiPrompt } from './prompts/geminiPrompt';
+import { aiFlashcardSchema } from './aiFlashcard.schema';
 
 /**
  * Custom errors for clearer error handling upstream
@@ -34,20 +34,16 @@ export interface AIGeneratedFlashcard {
  */
 function extractLessonText(content: LessonContent): string {
   return content.blocks
-    .filter(
-      (block) =>
-        block.type === "text" ||
-        block.type === "formula"
-    )
+    .filter((block) => block.type === 'text' || block.type === 'formula')
     .map((block) => block.value)
-    .join("\n");
+    .join('\n');
 }
 
 /**
  * Generate flashcards using Google Vertex AI (Gemini)
  */
 export async function generateFlashcardsWithGemini(
-  content: LessonContent
+  content: LessonContent,
 ): Promise<AIGeneratedFlashcard[]> {
   // 1️⃣ Extract lesson text
   const lessonText = extractLessonText(content);
@@ -61,30 +57,30 @@ export async function generateFlashcardsWithGemini(
 
   // 3️⃣ Authenticate with Google Cloud
   const auth = new GoogleAuth({
-    scopes: ["https://www.googleapis.com/auth/cloud-platform"],
+    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
   });
 
   const client = await auth.getClient();
   const accessTokenResponse = await client.getAccessToken();
 
   if (!accessTokenResponse.token) {
-    throw new GeminiAuthError("Failed to obtain Google Cloud access token");
+    throw new GeminiAuthError('Failed to obtain Google Cloud access token');
   }
 
   // 4️⃣ Call Gemini (handle provider HTTP errors explicitly)
   // Retry logic for transient 5xx errors
   const maxRetries = 3;
   const baseDelayMs = 300; // backoff base
-  let attempt = 0;
   let response: any;
-  while (true) {
+
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
       response = await axios.post(
         `https://${process.env.GCP_REGION}-aiplatform.googleapis.com/v1/projects/${process.env.GCP_PROJECT_ID}/locations/${process.env.GCP_REGION}/publishers/google/models/gemini-pro:generateContent`,
         {
           contents: [
             {
-              role: "user",
+              role: 'user',
               parts: [{ text: prompt }],
             },
           ],
@@ -92,9 +88,9 @@ export async function generateFlashcardsWithGemini(
         {
           headers: {
             Authorization: `Bearer ${accessTokenResponse.token}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
-        }
+        },
       );
       break; // success
     } catch (err: any) {
@@ -109,13 +105,12 @@ export async function generateFlashcardsWithGemini(
 
       // Retry on 5xx
       if (status >= 500 && status < 600) {
-        attempt++;
-        if (attempt > maxRetries) {
+        if (attempt >= maxRetries) {
           throw new GeminiProviderError('Gemini provider error after retries');
         }
 
-        // exponential backoff with jitter
-        const backoff = Math.pow(2, attempt) * baseDelayMs;
+        // exponential backoff with jitter (use attempt+1 to match previous backoff behavior)
+        const backoff = Math.pow(2, attempt + 1) * baseDelayMs;
         const jitter = Math.floor(Math.random() * baseDelayMs);
         const delay = backoff + jitter;
         await new Promise((res) => setTimeout(res, delay));
@@ -128,11 +123,10 @@ export async function generateFlashcardsWithGemini(
   }
 
   // 5️⃣ Extract AI output
-  const rawText =
-    response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  const rawText = response.data?.candidates?.[0]?.content?.parts?.[0]?.text;
 
   if (!rawText) {
-    throw new GeminiEmptyResponseError("Gemini returned empty response");
+    throw new GeminiEmptyResponseError('Gemini returned empty response');
   }
 
   // 6️⃣ Parse + validate AI JSON
@@ -142,8 +136,8 @@ export async function generateFlashcardsWithGemini(
     parsedJson = JSON.parse(rawText);
   } catch (err) {
     // log raw text for debugging (avoid sensitive data leaking in prod logs)
-    console.error("Invalid JSON from Gemini:", rawText);
-    throw new GeminiParseError("Gemini response is not valid JSON", rawText);
+    console.error('Invalid JSON from Gemini:', rawText);
+    throw new GeminiParseError('Gemini response is not valid JSON', rawText);
   }
 
   // ✅ Zod validation gives full type safety
@@ -151,4 +145,4 @@ export async function generateFlashcardsWithGemini(
 
   return validatedFlashcards;
 }
-``
+``;

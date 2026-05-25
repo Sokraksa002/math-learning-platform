@@ -16,6 +16,8 @@
     "resolveJsonModule": true,
 
     "types": ["node", "jest"],
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.backend.tsbuildinfo",
     "ignoreDeprecations": "6.0"
   },
   "include": ["src/**/*"],

@@ -1,16 +1,15 @@
-import { FastifyInstance, FastifyRequest } from "fastify";
-import { prisma } from "../../lib/prisma";
+import { FastifyInstance, FastifyRequest } from 'fastify';
+import { prisma } from '../../lib/prisma';
 
 /**
  * Admin-only chapter management
  */
 export async function adminChapterRoutes(app: FastifyInstance) {
-
   /**
    * ✅ Create a new chapter (draft)
    */
   app.post(
-    "/admin/chapters",
+    '/admin/chapters',
     {
       preHandler: app.requireAdmin, // 👑 ADMIN ONLY
     },
@@ -31,14 +30,14 @@ export async function adminChapterRoutes(app: FastifyInstance) {
         success: true,
         data: chapter,
       };
-    }
+    },
   );
 
   /**
    * ✅ Publish / unpublish a chapter
    */
   app.patch(
-    "/admin/chapters/:id/publish",
+    '/admin/chapters/:id/publish',
     {
       preHandler: app.requireAdmin, // 👑 ADMIN ONLY
     },
@@ -55,6 +54,6 @@ export async function adminChapterRoutes(app: FastifyInstance) {
         success: true,
         data: chapter,
       };
-    }
+    },
   );
 }

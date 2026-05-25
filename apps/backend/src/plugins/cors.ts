@@ -1,5 +1,5 @@
-import cors from "@fastify/cors";
-import { FastifyInstance } from "fastify";
+import cors from '@fastify/cors';
+import { FastifyInstance } from 'fastify';
 
 /**
  * CORS plugin
@@ -9,6 +9,6 @@ export async function corsPlugin(app: FastifyInstance) {
   await app.register(cors, {
     origin: process.env.CLIENT_URL,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   });
 }

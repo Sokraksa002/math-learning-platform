@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 export const startQuizSchema = z.object({
   lessonId: z.string().uuid(),
@@ -12,7 +12,7 @@ export const submitQuizSchema = z.object({
       z.object({
         exerciseId: z.string().uuid(),
         selectedChoice: z.string(),
-      })
+      }),
     )
     .max(100),
 });
@@ -27,29 +27,29 @@ export type GetResultParams = z.infer<typeof getResultParamsSchema>;
 
 // JSON Schemas for Fastify (derived from the Zod schemas)
 export const startQuizJsonSchema = {
-  type: "object",
-  required: ["lessonId"],
+  type: 'object',
+  required: ['lessonId'],
   properties: {
-    lessonId: { type: "string", format: "uuid" },
-  count: { type: "integer", minimum: 5, maximum: 15, default: 10 },
+    lessonId: { type: 'string', format: 'uuid' },
+    count: { type: 'integer', minimum: 5, maximum: 15, default: 10 },
   },
   additionalProperties: false,
 } as const;
 
 export const submitQuizJsonSchema = {
-  type: "object",
-  required: ["sessionId", "answers"],
+  type: 'object',
+  required: ['sessionId', 'answers'],
   properties: {
-    sessionId: { type: "string", format: "uuid" },
+    sessionId: { type: 'string', format: 'uuid' },
     answers: {
-      type: "array",
+      type: 'array',
       maxItems: 100,
       items: {
-        type: "object",
-        required: ["exerciseId", "selectedChoice"],
+        type: 'object',
+        required: ['exerciseId', 'selectedChoice'],
         properties: {
-          exerciseId: { type: "string", format: "uuid" },
-          selectedChoice: { type: "string" },
+          exerciseId: { type: 'string', format: 'uuid' },
+          selectedChoice: { type: 'string' },
         },
         additionalProperties: false,
       },
@@ -59,10 +59,10 @@ export const submitQuizJsonSchema = {
 } as const;
 
 export const getResultParamsJsonSchema = {
-  type: "object",
-  required: ["id"],
+  type: 'object',
+  required: ['id'],
   properties: {
-    id: { type: "string", format: "uuid" },
+    id: { type: 'string', format: 'uuid' },
   },
   additionalProperties: false,
 } as const;

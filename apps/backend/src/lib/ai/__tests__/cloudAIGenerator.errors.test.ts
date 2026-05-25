@@ -27,7 +27,7 @@ describe('generateFlashcardsWithGemini - error mappings', () => {
     mockedAxios.post.mockRejectedValueOnce(err as any);
 
     await expect(
-      generateFlashcardsWithGemini({ blocks: [{ type: 'text', value: 'text' }] } as any)
+      generateFlashcardsWithGemini({ blocks: [{ type: 'text', value: 'text' }] } as any),
     ).rejects.toThrow(GeminiAuthError);
     expect(mockedAxios.post).toHaveBeenCalledTimes(1);
   });
@@ -37,7 +37,7 @@ describe('generateFlashcardsWithGemini - error mappings', () => {
     mockedAxios.post.mockRejectedValueOnce(err as any);
 
     await expect(
-      generateFlashcardsWithGemini({ blocks: [{ type: 'text', value: 'text' }] } as any)
+      generateFlashcardsWithGemini({ blocks: [{ type: 'text', value: 'text' }] } as any),
     ).rejects.toThrow(GeminiAuthError);
     expect(mockedAxios.post).toHaveBeenCalledTimes(1);
   });
@@ -47,17 +47,19 @@ describe('generateFlashcardsWithGemini - error mappings', () => {
     mockedAxios.post.mockRejectedValueOnce(err as any);
 
     await expect(
-      generateFlashcardsWithGemini({ blocks: [{ type: 'text', value: 'text' }] } as any)
+      generateFlashcardsWithGemini({ blocks: [{ type: 'text', value: 'text' }] } as any),
     ).rejects.toThrow(GeminiRateLimitError);
     expect(mockedAxios.post).toHaveBeenCalledTimes(1);
   });
 
   test('throws GeminiParseError on malformed JSON response', async () => {
-    const successResponse = { data: { candidates: [{ content: { parts: [{ text: 'not a json' }] } }] } };
+    const successResponse = {
+      data: { candidates: [{ content: { parts: [{ text: 'not a json' }] } }] },
+    };
     mockedAxios.post.mockResolvedValueOnce(successResponse as any);
 
     await expect(
-      generateFlashcardsWithGemini({ blocks: [{ type: 'text', value: 'text' }] } as any)
+      generateFlashcardsWithGemini({ blocks: [{ type: 'text', value: 'text' }] } as any),
     ).rejects.toThrow(GeminiParseError);
     expect(mockedAxios.post).toHaveBeenCalledTimes(1);
   });

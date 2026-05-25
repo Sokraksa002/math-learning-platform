@@ -1,5 +1,5 @@
 import { prisma } from '../../lib/prisma';
-import { AiFlashcard, generateFlashcardWithAi, AiRateLimitError, AiParseError, AiProviderError, AiAuthError } from '../../lib/ai/generateFlashcard';
+import { AiFlashcard, generateFlashcardWithAi } from '../../lib/ai/generateFlashcard';
 
 export async function generateAndSaveFlashcard(opts: {
   userId: string;

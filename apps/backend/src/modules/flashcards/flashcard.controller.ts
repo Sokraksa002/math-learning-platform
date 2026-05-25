@@ -7,12 +7,17 @@ type ReqBody = {
   question: string;
 };
 
-export async function handleGenerateFlashcard(request: FastifyRequest<{ Body: ReqBody }>, reply: FastifyReply) {
+export async function handleGenerateFlashcard(
+  request: FastifyRequest<{ Body: ReqBody }>,
+  reply: FastifyReply,
+) {
   const { chapterId, question } = request.body;
   const userId = (request.user as any)?.userId as string | undefined;
 
   if (!userId) {
-    return reply.code(401).send({ error: { code: 'UNAUTHORIZED', message: 'Authentication required' } });
+    return reply
+      .code(401)
+      .send({ error: { code: 'UNAUTHORIZED', message: 'Authentication required' } });
   }
 
   try {
@@ -30,6 +35,8 @@ export async function handleGenerateFlashcard(request: FastifyRequest<{ Body: Re
     }
 
     // fallback
-    return reply.code(500).send({ error: { code: 'INTERNAL_ERROR', message: 'Internal server error' } });
+    return reply
+      .code(500)
+      .send({ error: { code: 'INTERNAL_ERROR', message: 'Internal server error' } });
   }
 }

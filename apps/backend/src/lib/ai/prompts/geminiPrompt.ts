@@ -24,4 +24,4 @@ Lesson content:
 ${text}
 `;
 }
-``
+``;

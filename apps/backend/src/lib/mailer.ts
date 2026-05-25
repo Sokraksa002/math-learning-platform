@@ -1,6 +1,6 @@
-import nodemailer from "nodemailer";
-import fs from "fs";
-import path from "path";
+import nodemailer from 'nodemailer';
+import fs from 'fs';
+import path from 'path';
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -12,21 +12,17 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function sendCertificateEmail(
-  to: string,
-  studentName: string,
-  pdfUrl: string
-) {
+export async function sendCertificateEmail(to: string, studentName: string, pdfUrl: string) {
   const pdfPath = path.join(process.cwd(), pdfUrl);
 
   if (!fs.existsSync(pdfPath)) {
-    throw new Error("Certificate PDF not found");
+    throw new Error('Certificate PDF not found');
   }
 
   await transporter.sendMail({
     from: process.env.SMTP_FROM,
     to,
-    subject: "🎓 Your Certificate of Completion",
+    subject: '🎓 Your Certificate of Completion',
     html: `
       <p>Hello <strong>${studentName}</strong>,</p>
       <p>Congratulations on completing your course!</p>
@@ -35,7 +31,7 @@ export async function sendCertificateEmail(
     `,
     attachments: [
       {
-        filename: "certificate.pdf",
+        filename: 'certificate.pdf',
         path: pdfPath,
       },
     ],

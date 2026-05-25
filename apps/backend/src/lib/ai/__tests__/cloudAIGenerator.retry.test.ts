@@ -28,7 +28,9 @@ describe('generateFlashcardsWithGemini - retry/backoff', () => {
       { question: 'Question 2', answer: 'Answer 2' },
     ]);
 
-    const successResponse = { data: { candidates: [{ content: { parts: [{ text: validPayload }] } }] } };
+    const successResponse = {
+      data: { candidates: [{ content: { parts: [{ text: validPayload }] } }] },
+    };
 
     mockedAxios.post
       .mockRejectedValueOnce(error500)
@@ -41,7 +43,7 @@ describe('generateFlashcardsWithGemini - retry/backoff', () => {
 
     expect(res).toHaveLength(2);
     expect(mockedAxios.post).toHaveBeenCalledTimes(3);
-  expect(res[0].question).toBe('Question 1');
+    expect(res[0].question).toBe('Question 1');
   });
 
   test('exhausts retries and throws GeminiProviderError', async () => {

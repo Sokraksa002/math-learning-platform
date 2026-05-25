@@ -1,22 +1,19 @@
-import { FastifyInstance, FastifyRequest } from "fastify";
-import { prisma } from "../lib/prisma";
+import { FastifyInstance, FastifyRequest } from 'fastify';
+import { prisma } from '../lib/prisma';
 
 /**
  * Student flashcards due for review
  */
 export async function flashcardsDueRoutes(app: FastifyInstance) {
   app.get(
-    "/flashcards/due",
+    '/flashcards/due',
     {
       preHandler: app.authenticate, // ✅ student must be logged in
     },
     async (request: FastifyRequest) => {
       const userId = request.user.userId;
 
-      const {
-        chapterId,
-        limit = "20",
-      } = request.query as {
+      const { chapterId, limit = '20' } = request.query as {
         chapterId?: string;
         limit?: string;
       };
@@ -32,7 +29,7 @@ export async function flashcardsDueRoutes(app: FastifyInstance) {
           ...(chapterId ? { chapterId } : {}),
         },
         orderBy: {
-          nextReviewDate: "asc",
+          nextReviewDate: 'asc',
         },
         take: Number(limit),
         select: {
@@ -51,6 +48,6 @@ export async function flashcardsDueRoutes(app: FastifyInstance) {
         success: true,
         data: flashcards,
       };
-    }
+    },
   );
 }

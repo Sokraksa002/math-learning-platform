@@ -32,15 +32,19 @@ describe('quiz integration (real DB)', () => {
     });
     userId = user.id;
 
-  const chapter = await prisma.chapter.create({ data: { titleKm: 'Imported', orderIndex: 1 } });
-  createdChapterIds.push(chapter.id);
-  const lesson = await prisma.lesson.create({ data: { chapterId: chapter.id, titleKm: 'Lesson 1', orderIndex: 1 } });
-  lessonId = lesson.id;
-  createdLessonIds.push(lesson.id);
+    const chapter = await prisma.chapter.create({ data: { titleKm: 'Imported', orderIndex: 1 } });
+    createdChapterIds.push(chapter.id);
+    const lesson = await prisma.lesson.create({
+      data: { chapterId: chapter.id, titleKm: 'Lesson 1', orderIndex: 1 },
+    });
+    lessonId = lesson.id;
+    createdLessonIds.push(lesson.id);
 
-  const ex = await prisma.exercise.create({ data: { lessonId: lessonId, questionKm: 'Q1', solutionKm: 'S1', correctAnswer: 'A' } });
-  exerciseId = ex.id;
-  createdExerciseIds.push(exerciseId);
+    const ex = await prisma.exercise.create({
+      data: { lessonId: lessonId, questionKm: 'Q1', solutionKm: 'S1', correctAnswer: 'A' },
+    });
+    exerciseId = ex.id;
+    createdExerciseIds.push(exerciseId);
 
     app = Fastify();
     process.env.JWT_SECRET = process.env.JWT_SECRET ?? 'test-secret';
@@ -53,7 +57,9 @@ describe('quiz integration (real DB)', () => {
     try {
       // delete only records created by this test to avoid interfering with other tests
       if (createdExerciseIds.length) {
-        await prisma.quizSessionItem.deleteMany({ where: { exerciseId: { in: createdExerciseIds } } });
+        await prisma.quizSessionItem.deleteMany({
+          where: { exerciseId: { in: createdExerciseIds } },
+        });
         await prisma.exercise.deleteMany({ where: { id: { in: createdExerciseIds } } });
       }
       if (createdLessonIds.length) {
@@ -76,23 +82,37 @@ describe('quiz integration (real DB)', () => {
   });
 
   test('full quiz flow', async () => {
-  // use shared helper to create a signed JWT for the test app
-  // import locally to avoid top-level circulars in some test runners
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const { default: createAuthToken } = require('../tests/utils/createAuthToken');
-  const token = await createAuthToken(app, { userId, role: 'STUDENT' });
-  const startRes = await app.inject({ method: 'POST', url: '/quiz/start', payload: { lessonId }, headers: { authorization: `Bearer ${token}` } });
+    // use shared helper to create a signed JWT for the test app
+    // import locally to avoid top-level circulars in some test runners
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const { default: createAuthToken } = require('../tests/utils/createAuthToken');
+    const token = await createAuthToken(app, { userId, role: 'STUDENT' });
+    const startRes = await app.inject({
+      method: 'POST',
+      url: '/quiz/start',
+      payload: { lessonId },
+      headers: { authorization: `Bearer ${token}` },
+    });
     expect(startRes.statusCode).toBe(200);
     const session = JSON.parse(startRes.payload);
     expect(session).toHaveProperty('id');
 
     const answers = [{ exerciseId, selectedChoice: 'A' }];
-  const submitRes = await app.inject({ method: 'POST', url: '/quiz/submit', payload: { sessionId: session.id, answers }, headers: { authorization: `Bearer ${token}` } });
+    const submitRes = await app.inject({
+      method: 'POST',
+      url: '/quiz/submit',
+      payload: { sessionId: session.id, answers },
+      headers: { authorization: `Bearer ${token}` },
+    });
     expect(submitRes.statusCode).toBe(200);
     const submit = JSON.parse(submitRes.payload);
     expect(submit.score).toBe(100);
 
-  const resultRes = await app.inject({ method: 'GET', url: `/quiz/result/${session.id}`, headers: { authorization: `Bearer ${token}` } });
+    const resultRes = await app.inject({
+      method: 'GET',
+      url: `/quiz/result/${session.id}`,
+      headers: { authorization: `Bearer ${token}` },
+    });
     expect(resultRes.statusCode).toBe(200);
     const result = JSON.parse(resultRes.payload);
     expect(result).toHaveProperty('items');

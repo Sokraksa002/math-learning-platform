@@ -1,27 +1,27 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { prisma } from "../lib/prisma";
-import { ensureExistsAndOwned } from "../lib/authHelpers";
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { prisma } from '../lib/prisma';
+import { ensureExistsAndOwned } from '../lib/authHelpers';
 
 export async function flashcardReviewRoutes(app: FastifyInstance) {
   app.post(
-    "/flashcards/:flashcardId/review",
+    '/flashcards/:flashcardId/review',
     {
       preHandler: app.authenticate, // ✅ student must be logged in
     },
-  async (request: FastifyRequest, reply: FastifyReply) => {
+    async (request: FastifyRequest, reply: FastifyReply) => {
       const { flashcardId } = request.params as {
         flashcardId: string;
       };
 
       const { rating } = request.body as {
-        rating: "AGAIN" | "HARD" | "GOOD" | "EASY";
+        rating: 'AGAIN' | 'HARD' | 'GOOD' | 'EASY';
       };
 
-    const userId = request.user.userId;
+      const userId = request.user.userId;
 
-    // 1️⃣ Load flashcard
-    const flashcard = await prisma.flashcard.findUnique({ where: { id: flashcardId } });
-    if (!ensureExistsAndOwned(flashcard, userId, reply, "Flashcard")) return;
+      // 1️⃣ Load flashcard
+      const flashcard = await prisma.flashcard.findUnique({ where: { id: flashcardId } });
+      if (!ensureExistsAndOwned(flashcard, userId, reply, 'Flashcard')) return;
 
       // 2️⃣ Save review (learning logic)
       const review = await prisma.flashcardReview.create({
@@ -46,17 +46,17 @@ export async function flashcardReviewRoutes(app: FastifyInstance) {
       await prisma.activityEvent.create({
         data: {
           userId,
-          eventType: "FLASHCARD_REVIEW",
+          eventType: 'FLASHCARD_REVIEW',
           entity: flashcardId,
         },
       });
 
       return {
         success: true,
-        message: "Flashcard reviewed",
+        message: 'Flashcard reviewed',
         data: review,
       };
-    }
+    },
   );
 }
-``
+``;

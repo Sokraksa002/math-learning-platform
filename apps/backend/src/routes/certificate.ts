@@ -1,7 +1,6 @@
-import { FastifyInstance, FastifyRequest } from "fastify";
-import { prisma } from "../lib/prisma";
-import crypto from "crypto";
-import { ensureExists } from "../lib/authHelpers";
+import { FastifyInstance, FastifyRequest } from 'fastify';
+import { prisma } from '../lib/prisma';
+import crypto from 'crypto';
 
 /**
  * Certificate routes
@@ -11,13 +10,13 @@ export async function certificateRoutes(app: FastifyInstance) {
    * Issue certificate if student completed course
    */
   app.post(
-    "/certificates/issue",
+    '/certificates/issue',
     {
       preHandler: app.authenticate, // ✅ student must be logged in
     },
     async (request: FastifyRequest) => {
       const userId = request.user.userId;
-      const course = "Grade 12 Mathematics";
+      const course = 'Grade 12 Mathematics';
 
       // 1️⃣ Count total published lessons
       const totalLessons = await prisma.lesson.count({
@@ -43,14 +42,14 @@ export async function certificateRoutes(app: FastifyInstance) {
       if (totalLessons === 0) {
         return {
           success: false,
-          message: "No published lessons found",
+          message: 'No published lessons found',
         };
       }
 
       if (completedLessons < totalLessons) {
         return {
           success: false,
-          message: "Course not fully completed",
+          message: 'Course not fully completed',
         };
       }
 
@@ -68,7 +67,7 @@ export async function certificateRoutes(app: FastifyInstance) {
         return {
           success: true,
           data: existing,
-          message: "Certificate already issued",
+          message: 'Certificate already issued',
         };
       }
 
@@ -86,8 +85,8 @@ export async function certificateRoutes(app: FastifyInstance) {
       return {
         success: true,
         data: certificate,
-        message: "Certificate issued successfully",
+        message: 'Certificate issued successfully',
       };
-    }
+    },
   );
 }

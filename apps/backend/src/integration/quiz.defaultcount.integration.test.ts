@@ -11,12 +11,17 @@ describe('quiz start default count (real DB)', () => {
   const createdExerciseIds: string[] = [];
 
   beforeAll(async () => {
-    if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL must be set to run integration tests');
+    if (!process.env.DATABASE_URL)
+      throw new Error('DATABASE_URL must be set to run integration tests');
     execSync('npx prisma db push', { stdio: 'inherit' });
 
     // create minimal data and app
-  const user = await prisma.user.upsert({ where: { email: 'defaultcount@example.com' }, update: { name: 'DefaultCount' }, create: { email: 'defaultcount@example.com', name: 'DefaultCount', passwordHash: 'x' } });
-  createdUserId = user.id;
+    const user = await prisma.user.upsert({
+      where: { email: 'defaultcount@example.com' },
+      update: { name: 'DefaultCount' },
+      create: { email: 'defaultcount@example.com', name: 'DefaultCount', passwordHash: 'x' },
+    });
+    createdUserId = user.id;
 
     app = Fastify();
     process.env.JWT_SECRET = process.env.JWT_SECRET ?? 'test-secret';
@@ -37,12 +42,17 @@ describe('quiz start default count (real DB)', () => {
   afterAll(async () => {
     try {
       if (createdExerciseIds.length) {
-        await prisma.quizSessionItem.deleteMany({ where: { exerciseId: { in: createdExerciseIds } } });
+        await prisma.quizSessionItem.deleteMany({
+          where: { exerciseId: { in: createdExerciseIds } },
+        });
         await prisma.exercise.deleteMany({ where: { id: { in: createdExerciseIds } } });
       }
       if (createdLessonIds.length) {
         // remove quiz sessions tied to these lessons to avoid FK constraint when deleting users
-        const sessions = await prisma.quizSession.findMany({ where: { lessonId: { in: createdLessonIds } }, select: { id: true } });
+        const sessions = await prisma.quizSession.findMany({
+          where: { lessonId: { in: createdLessonIds } },
+          select: { id: true },
+        });
         if (sessions.length) {
           const sessionIds = sessions.map((s) => s.id);
           await prisma.quizSessionItem.deleteMany({ where: { sessionId: { in: sessionIds } } });
@@ -56,7 +66,10 @@ describe('quiz start default count (real DB)', () => {
 
       // delete any quiz sessions for the created test user to avoid FK constraint
       if (createdUserId) {
-        const userSessions = await prisma.quizSession.findMany({ where: { userId: createdUserId }, select: { id: true } });
+        const userSessions = await prisma.quizSession.findMany({
+          where: { userId: createdUserId },
+          select: { id: true },
+        });
         if (userSessions.length) {
           const sessionIds = userSessions.map((s) => s.id);
           await prisma.quizSessionItem.deleteMany({ where: { sessionId: { in: sessionIds } } });
@@ -72,27 +85,38 @@ describe('quiz start default count (real DB)', () => {
   });
 
   test('starting a quiz without count defaults to 10 items', async () => {
-  const chapter = await prisma.chapter.create({ data: { titleKm: 'Default Count Chap', orderIndex: 1000 } });
-  createdChapterIds.push(chapter.id);
-  const lesson = await prisma.lesson.create({ data: { chapterId: chapter.id, titleKm: 'Default Count Lesson', orderIndex: 1000 } });
-  createdLessonIds.push(lesson.id);
+    const chapter = await prisma.chapter.create({
+      data: { titleKm: 'Default Count Chap', orderIndex: 1000 },
+    });
+    createdChapterIds.push(chapter.id);
+    const lesson = await prisma.lesson.create({
+      data: { chapterId: chapter.id, titleKm: 'Default Count Lesson', orderIndex: 1000 },
+    });
+    createdLessonIds.push(lesson.id);
 
     // create 15 exercises so that selection of 10 is possible
     for (let i = 0; i < 15; i++) {
-      const ex = await prisma.exercise.create({ data: { lessonId: lesson.id, questionKm: `Q${i}`, solutionKm: `S${i}`, correctAnswer: 'A' } });
+      const ex = await prisma.exercise.create({
+        data: { lessonId: lesson.id, questionKm: `Q${i}`, solutionKm: `S${i}`, correctAnswer: 'A' },
+      });
       createdExerciseIds.push(ex.id);
     }
 
-    const startRes = await app.inject({ method: 'POST', url: '/quiz/start', payload: { lessonId: lesson.id }, headers: { authorization: `Bearer ${token}` } });
+    const startRes = await app.inject({
+      method: 'POST',
+      url: '/quiz/start',
+      payload: { lessonId: lesson.id },
+      headers: { authorization: `Bearer ${token}` },
+    });
     expect(startRes.statusCode).toBe(200);
     const session = JSON.parse(startRes.payload);
     // session.items should be an array of length 10
     expect(session).toHaveProperty('items');
     expect(Array.isArray(session.items)).toBe(true);
     expect(session.items.length).toBe(10);
-  // ensure exerciseIds are unique (no duplicates)
-  const exerciseIds = session.items.map((it: any) => it.exerciseId);
-  const uniqueIds = Array.from(new Set(exerciseIds));
-  expect(uniqueIds.length).toBe(exerciseIds.length);
+    // ensure exerciseIds are unique (no duplicates)
+    const exerciseIds = session.items.map((it: any) => it.exerciseId);
+    const uniqueIds = Array.from(new Set(exerciseIds));
+    expect(uniqueIds.length).toBe(exerciseIds.length);
   }, 30_000);
 });

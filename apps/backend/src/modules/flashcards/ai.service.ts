@@ -29,13 +29,15 @@ export async function generateFlashcardsForLesson(lessonId: string, save = false
   }
 
   for (const card of aiCards) {
-    const fb = await prisma.flashcard.create({ data: {
-      userId: ownerId ?? undefined,
-      chapterId: lesson.chapterId,
-      questionKm: card.question,
-      answerJson: { text: card.answer },
-      isUserGenerated: false,
-    } });
+    const fb = await prisma.flashcard.create({
+      data: {
+        userId: ownerId ?? undefined,
+        chapterId: lesson.chapterId,
+        questionKm: card.question,
+        answerJson: { text: card.answer },
+        isUserGenerated: false,
+      },
+    });
     created.push(fb);
   }
 

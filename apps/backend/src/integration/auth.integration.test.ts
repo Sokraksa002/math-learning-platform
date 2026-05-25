@@ -7,7 +7,8 @@ describe('auth integration (real DB)', () => {
   const createdEmails: string[] = [];
 
   beforeAll(async () => {
-    if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL must be set to run integration tests');
+    if (!process.env.DATABASE_URL)
+      throw new Error('DATABASE_URL must be set to run integration tests');
     execSync('npx prisma db push', { stdio: 'inherit' });
 
     app = Fastify();
@@ -28,7 +29,10 @@ describe('auth integration (real DB)', () => {
       for (const email of createdEmails) {
         const user = await prisma.user.findUnique({ where: { email } });
         if (user) {
-          const sessions = await prisma.quizSession.findMany({ where: { userId: user.id }, select: { id: true } });
+          const sessions = await prisma.quizSession.findMany({
+            where: { userId: user.id },
+            select: { id: true },
+          });
           if (sessions.length) {
             const sessionIds = sessions.map((s) => s.id);
             await prisma.quizSessionItem.deleteMany({ where: { sessionId: { in: sessionIds } } });
@@ -66,14 +70,22 @@ describe('auth integration (real DB)', () => {
     createdEmails.push(email);
 
     // successful login
-    const loginRes = await app.inject({ method: 'POST', url: '/login', payload: { email, password } });
+    const loginRes = await app.inject({
+      method: 'POST',
+      url: '/login',
+      payload: { email, password },
+    });
     expect(loginRes.statusCode).toBe(200);
-  const body = JSON.parse(loginRes.payload);
-  const token = body?.data?.token ?? body.token ?? body.accessToken ?? body.jwt;
-  expect(typeof token).toBe('string');
+    const body = JSON.parse(loginRes.payload);
+    const token = body?.data?.token ?? body.token ?? body.accessToken ?? body.jwt;
+    expect(typeof token).toBe('string');
 
     // wrong password should fail
-    const badRes = await app.inject({ method: 'POST', url: '/login', payload: { email, password: 'wrong' } });
+    const badRes = await app.inject({
+      method: 'POST',
+      url: '/login',
+      payload: { email, password: 'wrong' },
+    });
     expect([401, 400]).toContain(badRes.statusCode);
   }, 30_000);
 
@@ -91,12 +103,20 @@ describe('auth integration (real DB)', () => {
 
   // Invalid payload tests
   test('invalid registration payloads return 400 - missing fields', async () => {
-    const res = await app.inject({ method: 'POST', url: '/register', payload: { email: 'missingfields@example.com' } });
+    const res = await app.inject({
+      method: 'POST',
+      url: '/register',
+      payload: { email: 'missingfields@example.com' },
+    });
     expect(res.statusCode).toBe(400);
   }, 10_000);
 
   test('invalid registration payloads return 400 - bad email / short password', async () => {
-    const res = await app.inject({ method: 'POST', url: '/register', payload: { email: 'not-an-email', name: 'Bad', password: '1' } });
+    const res = await app.inject({
+      method: 'POST',
+      url: '/register',
+      payload: { email: 'not-an-email', name: 'Bad', password: '1' },
+    });
     expect(res.statusCode).toBe(400);
   }, 10_000);
 });

@@ -1,5 +1,5 @@
-import { prisma } from "../../lib/prisma";
-import type { Prisma } from "@prisma/client";
+import { prisma } from '../../lib/prisma';
+import type { Prisma } from '@prisma/client';
 
 /**
  * Answer item provided by frontend
@@ -19,12 +19,12 @@ export async function startQuiz(userId: string, lessonId: string, count?: number
   const exercises = await prisma.exercise.findMany({ where: { lessonId } });
 
   if (!exercises || exercises.length === 0) {
-    throw new Error("No exercises found for the given lesson");
+    throw new Error('No exercises found for the given lesson');
   }
 
   // Shuffle and select
   const DEFAULT_MAX = 10;
-  const max = typeof count === "number" && count > 0 ? count : DEFAULT_MAX;
+  const max = typeof count === 'number' && count > 0 ? count : DEFAULT_MAX;
 
   const shuffled = exercises.slice();
   for (let i = shuffled.length - 1; i > 0; i--) {
@@ -130,7 +130,7 @@ export async function getQuizResult(sessionId: string) {
   });
 
   if (!session) {
-    throw new Error("Quiz session not found");
+    throw new Error('Quiz session not found');
   }
 
   return session;

@@ -3,16 +3,26 @@ import * as controller from './admin.controller';
 
 export async function adminRoutes(fastify: FastifyInstance) {
   // List lessons with exercise counts
-  fastify.get('/admin/lessons', { preHandler: [fastify.authenticate, controller.requireAdmin] }, controller.listLessons as any);
+  fastify.get(
+    '/admin/lessons',
+    { preHandler: [fastify.authenticate, controller.requireAdmin] },
+    controller.listLessons as any,
+  );
 
   // Lesson details with exercises
   fastify.get(
     '/admin/lesson/:id',
     {
       preHandler: [fastify.authenticate, controller.requireAdmin],
-      schema: { params: { type: 'object', required: ['id'], properties: { id: { type: 'string', format: 'uuid' } } } },
+      schema: {
+        params: {
+          type: 'object',
+          required: ['id'],
+          properties: { id: { type: 'string', format: 'uuid' } },
+        },
+      },
     },
-    controller.getLessonDetails as any
+    controller.getLessonDetails as any,
   );
 
   // Create exercise
@@ -34,7 +44,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    controller.addExercise as any
+    controller.addExercise as any,
   );
 
   // Move exercise to another lesson
@@ -54,7 +64,7 @@ export async function adminRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    controller.moveExerciseHandler as any
+    controller.moveExerciseHandler as any,
   );
 
   // Delete exercise
@@ -62,8 +72,14 @@ export async function adminRoutes(fastify: FastifyInstance) {
     '/admin/exercise/:id',
     {
       preHandler: [fastify.authenticate, controller.requireAdmin],
-      schema: { params: { type: 'object', required: ['id'], properties: { id: { type: 'string', format: 'uuid' } } } },
+      schema: {
+        params: {
+          type: 'object',
+          required: ['id'],
+          properties: { id: { type: 'string', format: 'uuid' } },
+        },
+      },
     },
-    controller.deleteExerciseHandler as any
+    controller.deleteExerciseHandler as any,
   );
 }

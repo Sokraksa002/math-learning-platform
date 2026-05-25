@@ -32,7 +32,13 @@ export async function getLessonWithExercises(lessonId: string) {
     where: { id: lessonId },
     include: {
       exercises: {
-        select: { id: true, questionKm: true, solutionKm: true, correctAnswer: true, createdAt: true },
+        select: {
+          id: true,
+          questionKm: true,
+          solutionKm: true,
+          correctAnswer: true,
+          createdAt: true,
+        },
         orderBy: { createdAt: 'asc' },
       },
     },
@@ -49,12 +55,14 @@ export async function createExercise(data: {
   const lesson = await prisma.lesson.findUnique({ where: { id: data.lessonId } });
   if (!lesson) throw new Error('Lesson not found');
 
-  return prisma.exercise.create({ data: {
-    lessonId: data.lessonId,
-    questionKm: data.questionKm,
-    solutionKm: data.solutionKm,
-    correctAnswer: data.correctAnswer,
-  } });
+  return prisma.exercise.create({
+    data: {
+      lessonId: data.lessonId,
+      questionKm: data.questionKm,
+      solutionKm: data.solutionKm,
+      correctAnswer: data.correctAnswer,
+    },
+  });
 }
 
 export async function moveExercise(exerciseId: string, newLessonId: string) {

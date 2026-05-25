@@ -1,5 +1,5 @@
-import { prisma } from "../../lib/prisma";
-import type { Prisma, Exercise } from "@prisma/client";
+import { prisma } from '../../lib/prisma';
+import type { Prisma, Exercise } from '@prisma/client';
 
 export class QuizSessionCompletedError extends Error {
   constructor(message?: string) {
@@ -24,12 +24,12 @@ export interface AnswerItem {
 export async function startQuiz(userId: string, lessonId: string, count?: number) {
   // Default: limit to 10 questions when not specified.
   const DEFAULT_MAX = 10;
-  const max = typeof count === "number" && count > 0 ? count : DEFAULT_MAX;
+  const max = typeof count === 'number' && count > 0 ? count : DEFAULT_MAX;
 
   const exercises = await prisma.exercise.findMany({ where: { lessonId } });
 
   if (!exercises || exercises.length === 0) {
-    throw new Error("No exercises found for the given lesson");
+    throw new Error('No exercises found for the given lesson');
   }
 
   // Shuffle exercises using Fisher-Yates and take up to `max` items
@@ -65,14 +65,22 @@ export async function startQuiz(userId: string, lessonId: string, count?: number
  */
 export async function submitQuiz(sessionId: string, answers: AnswerItem[]) {
   let correctCount = 0;
-  const wrongAnswers: Array<{ question?: string; correctAnswer?: string; selected?: string; solutionKm?: string | null }> = [];
+  const wrongAnswers: Array<{
+    question?: string;
+    correctAnswer?: string;
+    selected?: string;
+    solutionKm?: string | null;
+  }> = [];
   let finalTotal = 0;
   let finalScore = 0;
 
   await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-  // Load session to know the total number of items (unanswered count as incorrect)
-  const session = (await tx.quizSession.findUnique({ where: { id: sessionId }, include: { items: true } })) as Prisma.QuizSessionGetPayload<{ include: { items: true } }> | null;
-  if (!session) throw new Error('Quiz session not found');
+    // Load session to know the total number of items (unanswered count as incorrect)
+    const session = (await tx.quizSession.findUnique({
+      where: { id: sessionId },
+      include: { items: true },
+    })) as Prisma.QuizSessionGetPayload<{ include: { items: true } }> | null;
+    if (!session) throw new Error('Quiz session not found');
 
     // Prevent re-submission if already completed
     if (session.completedAt) {
@@ -105,7 +113,7 @@ export async function submitQuiz(sessionId: string, answers: AnswerItem[]) {
 
     // Compute score relative to total session items (unanswered are incorrect)
     const total = sessionTotal;
-  const score = total === 0 ? 0 : Math.round((correctCount / total) * 100);
+    const score = total === 0 ? 0 : Math.round((correctCount / total) * 100);
     const completedAt = new Date();
     await tx.quizSession.update({ where: { id: sessionId }, data: { score, completedAt } });
 
@@ -130,6 +138,6 @@ export async function getQuizResult(sessionId: string) {
     include: { items: { include: { exercise: true } } },
   });
 
-  if (!session) throw new Error("Quiz session not found");
+  if (!session) throw new Error('Quiz session not found');
   return session;
 }

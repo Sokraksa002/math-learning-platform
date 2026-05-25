@@ -1,7 +1,7 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import * as bcrypt from "bcryptjs";
-import { prisma } from "../lib/prisma";
-import { registerSchema, loginSchema, registerJsonSchema, loginJsonSchema } from "../validators/auth";
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import * as bcrypt from 'bcryptjs';
+import { prisma } from '../lib/prisma';
+import { registerJsonSchema, loginJsonSchema } from '../validators/auth';
 
 /**
  * Authentication routes
@@ -13,11 +13,15 @@ export async function authRoutes(app: FastifyInstance) {
    * Create a new user (NO JWT here)
    */
   app.post(
-    "/register",
+    '/register',
     { schema: { body: registerJsonSchema } },
     async (request: FastifyRequest, reply: FastifyReply) => {
       // Fastify has already validated `request.body` against registerJsonSchema
-      const { email, name, password } = request.body as { email: string; name: string; password: string };
+      const { email, name, password } = request.body as {
+        email: string;
+        name: string;
+        password: string;
+      };
 
       try {
         const existingUser = await prisma.user.findUnique({
@@ -27,7 +31,7 @@ export async function authRoutes(app: FastifyInstance) {
         if (existingUser) {
           return reply.code(409).send({
             success: false,
-            message: "Email already exists",
+            message: 'Email already exists',
           });
         }
 
@@ -51,16 +55,16 @@ export async function authRoutes(app: FastifyInstance) {
               createdAt: user.createdAt,
             },
           },
-          message: "Registration successful",
+          message: 'Registration successful',
         });
       } catch (error) {
-        console.error("[auth/register]", error);
+        console.error('[auth/register]', error);
         return reply.code(500).send({
           success: false,
-          message: "Internal server error",
+          message: 'Internal server error',
         });
       }
-    }
+    },
   );
 
   /**
@@ -68,7 +72,7 @@ export async function authRoutes(app: FastifyInstance) {
    * Authenticate user and ISSUE JWT
    */
   app.post(
-    "/login",
+    '/login',
     { schema: { body: loginJsonSchema } },
     async (request: FastifyRequest, reply: FastifyReply) => {
       // Fastify has already validated `request.body` against loginJsonSchema
@@ -82,7 +86,7 @@ export async function authRoutes(app: FastifyInstance) {
         if (!user) {
           return reply.code(401).send({
             success: false,
-            message: "Invalid email or password",
+            message: 'Invalid email or password',
           });
         }
 
@@ -90,7 +94,7 @@ export async function authRoutes(app: FastifyInstance) {
         if (!isMatch) {
           return reply.code(401).send({
             success: false,
-            message: "Invalid email or password",
+            message: 'Invalid email or password',
           });
         }
 
@@ -110,15 +114,15 @@ export async function authRoutes(app: FastifyInstance) {
               role: user.role,
             },
           },
-          message: "Login successful",
+          message: 'Login successful',
         });
       } catch (error) {
-        console.error("[auth/login]", error);
+        console.error('[auth/login]', error);
         return reply.code(500).send({
           success: false,
-          message: "Internal server error",
+          message: 'Internal server error',
         });
       }
-    }
+    },
   );
 }

@@ -1,6 +1,6 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { prisma } from "../../lib/prisma";
-import { ensureExists } from "../../lib/authHelpers";
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { prisma } from '../../lib/prisma';
+import { ensureExists } from '../../lib/authHelpers';
 
 /**
  * Admin-only certificate management
@@ -10,7 +10,7 @@ export async function adminCertificateRoutes(app: FastifyInstance) {
    * Revoke a certificate
    */
   app.post(
-    "/admin/certificates/:certificateId/revoke",
+    '/admin/certificates/:certificateId/revoke',
     {
       preHandler: app.requireAdmin, // 👑 ADMIN ONLY
     },
@@ -22,12 +22,12 @@ export async function adminCertificateRoutes(app: FastifyInstance) {
       const certificate = await prisma.certificate.findUnique({
         where: { id: certificateId },
       });
-      if (!ensureExists(certificate, reply, "Certificate")) return;
+      if (!ensureExists(certificate, reply, 'Certificate')) return;
 
       if (certificate.revokedAt) {
         return {
           success: false,
-          message: "Certificate already revoked",
+          message: 'Certificate already revoked',
         };
       }
 
@@ -41,8 +41,8 @@ export async function adminCertificateRoutes(app: FastifyInstance) {
       return {
         success: true,
         data: revoked,
-        message: "Certificate revoked successfully",
+        message: 'Certificate revoked successfully',
       };
-    }
+    },
   );
 }

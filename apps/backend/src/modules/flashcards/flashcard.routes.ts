@@ -18,6 +18,6 @@ export async function flashcardRoutes(fastify: FastifyInstance) {
         },
       },
     },
-    handleGenerateFlashcard as any
+    handleGenerateFlashcard as any,
   );
 }

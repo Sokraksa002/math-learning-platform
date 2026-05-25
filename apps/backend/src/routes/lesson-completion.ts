@@ -1,6 +1,6 @@
-import { FastifyInstance, FastifyRequest, FastifyReply } from "fastify";
-import { prisma } from "../lib/prisma";
-import { ensureExists } from "../lib/authHelpers";
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { prisma } from '../lib/prisma';
+import { ensureExists } from '../lib/authHelpers';
 
 /**
  * Student lesson completion routes
@@ -10,11 +10,11 @@ export async function lessonCompletionRoutes(app: FastifyInstance) {
    * Mark a lesson as completed
    */
   app.post(
-    "/lessons/:lessonId/complete",
+    '/lessons/:lessonId/complete',
     {
       preHandler: app.authenticate, // ✅ user must be logged in
     },
-  async (request: FastifyRequest, reply: FastifyReply) => {
+    async (request: FastifyRequest, reply: FastifyReply) => {
       const { lessonId } = request.params as { lessonId: string };
       const userId = request.user.userId;
 
@@ -28,7 +28,7 @@ export async function lessonCompletionRoutes(app: FastifyInstance) {
         },
       });
 
-  if (!ensureExists(lesson, reply, "Lesson")) return;
+      if (!ensureExists(lesson, reply, 'Lesson')) return;
 
       // 2️⃣ Create lesson completion (idempotent)
       const completion = await prisma.lessonCompletion.upsert({
@@ -49,7 +49,7 @@ export async function lessonCompletionRoutes(app: FastifyInstance) {
         success: true,
         data: completion,
       };
-    }
+    },
   );
 }
-``
+``;

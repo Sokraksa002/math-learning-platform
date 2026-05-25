@@ -1,5 +1,5 @@
-import { prisma } from "./prisma";
-import { AIGeneratedFlashcard } from "./ai/cloudAIGenerator";
+import { prisma } from './prisma';
+import { AIGeneratedFlashcard } from './ai/cloudAIGenerator';
 
 /**
  * Save AI-generated flashcards to database

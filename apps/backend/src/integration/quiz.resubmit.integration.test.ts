@@ -10,11 +10,16 @@ describe('quiz re-submit integration (real DB)', () => {
   const createdExerciseIds: string[] = [];
 
   beforeAll(async () => {
-    if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL must be set to run integration tests');
+    if (!process.env.DATABASE_URL)
+      throw new Error('DATABASE_URL must be set to run integration tests');
     execSync('npx prisma db push', { stdio: 'inherit' });
 
-  // create minimal data and app
-  const user = await prisma.user.upsert({ where: { email: 'resubmit@example.com' }, update: { name: 'Resubmit' }, create: { email: 'resubmit@example.com', name: 'Resubmit', passwordHash: 'x' } });
+    // create minimal data and app
+    const user = await prisma.user.upsert({
+      where: { email: 'resubmit@example.com' },
+      update: { name: 'Resubmit' },
+      create: { email: 'resubmit@example.com', name: 'Resubmit', passwordHash: 'x' },
+    });
 
     app = Fastify();
     process.env.JWT_SECRET = process.env.JWT_SECRET ?? 'test-secret';
@@ -36,7 +41,9 @@ describe('quiz re-submit integration (real DB)', () => {
   afterAll(async () => {
     try {
       if (createdExerciseIds.length) {
-        await prisma.quizSessionItem.deleteMany({ where: { exerciseId: { in: createdExerciseIds } } });
+        await prisma.quizSessionItem.deleteMany({
+          where: { exerciseId: { in: createdExerciseIds } },
+        });
         await prisma.exercise.deleteMany({ where: { id: { in: createdExerciseIds } } });
       }
       if (createdLessonIds.length) {
@@ -54,26 +61,47 @@ describe('quiz re-submit integration (real DB)', () => {
   });
 
   test('re-submitting a completed quiz returns 409', async () => {
-    const chapter = await prisma.chapter.create({ data: { titleKm: 'Resubmit chap', orderIndex: 999 } });
+    const chapter = await prisma.chapter.create({
+      data: { titleKm: 'Resubmit chap', orderIndex: 999 },
+    });
     createdChapterIds.push(chapter.id);
-    const lesson = await prisma.lesson.create({ data: { chapterId: chapter.id, titleKm: 'Resubmit lesson', orderIndex: 999 } });
+    const lesson = await prisma.lesson.create({
+      data: { chapterId: chapter.id, titleKm: 'Resubmit lesson', orderIndex: 999 },
+    });
     createdLessonIds.push(lesson.id);
-    const exercise = await prisma.exercise.create({ data: { lessonId: lesson.id, questionKm: 'Q', solutionKm: 'S', correctAnswer: 'A' } });
+    const exercise = await prisma.exercise.create({
+      data: { lessonId: lesson.id, questionKm: 'Q', solutionKm: 'S', correctAnswer: 'A' },
+    });
     createdExerciseIds.push(exercise.id);
 
-    const startRes = await app.inject({ method: 'POST', url: '/quiz/start', payload: { lessonId: lesson.id }, headers: { authorization: `Bearer ${token}` } });
+    const startRes = await app.inject({
+      method: 'POST',
+      url: '/quiz/start',
+      payload: { lessonId: lesson.id },
+      headers: { authorization: `Bearer ${token}` },
+    });
     expect(startRes.statusCode).toBe(200);
     const session = JSON.parse(startRes.payload);
 
     const answers = [{ exerciseId: exercise.id, selectedChoice: 'A' }];
-    const submitRes = await app.inject({ method: 'POST', url: '/quiz/submit', payload: { sessionId: session.id, answers }, headers: { authorization: `Bearer ${token}` } });
+    const submitRes = await app.inject({
+      method: 'POST',
+      url: '/quiz/submit',
+      payload: { sessionId: session.id, answers },
+      headers: { authorization: `Bearer ${token}` },
+    });
     expect(submitRes.statusCode).toBe(200);
 
     // second submit should be rejected with 409
-    const res2 = await app.inject({ method: 'POST', url: '/quiz/submit', payload: { sessionId: session.id, answers }, headers: { authorization: `Bearer ${token}` } });
+    const res2 = await app.inject({
+      method: 'POST',
+      url: '/quiz/submit',
+      payload: { sessionId: session.id, answers },
+      headers: { authorization: `Bearer ${token}` },
+    });
     expect(res2.statusCode).toBe(409);
-  const body = JSON.parse(res2.payload);
-  expect(body).toHaveProperty('code', 'QUIZ_COMPLETED');
-  expect(body).toHaveProperty('message', 'Quiz session already completed');
+    const body = JSON.parse(res2.payload);
+    expect(body).toHaveProperty('code', 'QUIZ_COMPLETED');
+    expect(body).toHaveProperty('message', 'Quiz session already completed');
   }, 30_000);
 });

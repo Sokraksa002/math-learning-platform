@@ -4,6 +4,8 @@ module.exports = {
   parserOptions: {
     project: './tsconfig.json',
     sourceType: 'module',
+    // Prevent parser from warning about unsupported TypeScript versions (e.g. TS 6)
+    warnOnUnsupportedTypeScriptVersion: false,
   },
   plugins: ['@typescript-eslint', 'prettier'],
   extends: [

@@ -25,7 +25,12 @@ describe('auth.service', () => {
   test('register creates a new user', async () => {
     mockedPrisma.user.findUnique.mockResolvedValue(null);
     mockedBcrypt.hash.mockResolvedValue('hashed');
-    mockedPrisma.user.create.mockResolvedValue({ id: '1', email: 'a@a.com', name: 'A', createdAt: new Date() });
+    mockedPrisma.user.create.mockResolvedValue({
+      id: '1',
+      email: 'a@a.com',
+      name: 'A',
+      createdAt: new Date(),
+    });
 
     const user = await authService.register({ email: 'a@a.com', name: 'A', password: 'pass' });
 

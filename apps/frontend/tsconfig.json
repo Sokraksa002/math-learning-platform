@@ -1,4 +1,8 @@
 {
+  "compilerOptions": {
+    "composite": true,
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.frontend.tsbuildinfo"
+  },
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },

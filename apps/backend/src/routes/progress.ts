@@ -1,5 +1,5 @@
-import { FastifyInstance, FastifyRequest } from "fastify";
-import { prisma } from "../lib/prisma";
+import { FastifyInstance, FastifyRequest } from 'fastify';
+import { prisma } from '../lib/prisma';
 
 /**
  * Student progress dashboard
@@ -9,7 +9,7 @@ export async function progressRoutes(app: FastifyInstance) {
    * Get progress summary for the logged-in student
    */
   app.get(
-    "/progress",
+    '/progress',
     {
       preHandler: app.authenticate, // ✅ student must be logged in
     },
@@ -39,9 +39,7 @@ export async function progressRoutes(app: FastifyInstance) {
 
       // 3️⃣ Calculate progress percentage
       const progressPercent =
-        totalLessons === 0
-          ? 0
-          : Math.round((completedLessons / totalLessons) * 100);
+        totalLessons === 0 ? 0 : Math.round((completedLessons / totalLessons) * 100);
 
       return {
         success: true,
@@ -51,6 +49,6 @@ export async function progressRoutes(app: FastifyInstance) {
           progressPercent,
         },
       };
-    }
+    },
   );
 }

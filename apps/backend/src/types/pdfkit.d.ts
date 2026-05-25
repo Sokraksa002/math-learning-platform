@@ -1,4 +1,4 @@
-declare module "pdfkit" {
+declare module 'pdfkit' {
   class PDFDocument {
     constructor(options?: any);
     pipe(stream: any): void;
@@ -10,4 +10,4 @@ declare module "pdfkit" {
 
   export = PDFDocument;
 }
-``
+``;

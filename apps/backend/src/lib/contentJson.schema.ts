@@ -1,27 +1,27 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 /* =======================
    Individual Block Schemas
 ======================= */
 
 export const textBlockSchema = z.object({
-  type: z.literal("text"),
+  type: z.literal('text'),
   value: z.string().min(1),
 });
 
 export const flashcardBlockSchema = z.object({
-  type: z.literal("flashcard"),
+  type: z.literal('flashcard'),
   question: z.string().min(1),
   answer: z.string().min(1),
 });
 
 export const formulaBlockSchema = z.object({
-  type: z.literal("formula"),
+  type: z.literal('formula'),
   value: z.string().min(1),
 });
 
 export const quizBlockSchema = z.object({
-  type: z.literal("quiz"),
+  type: z.literal('quiz'),
   question: z.string().min(1),
   choices: z.array(z.string().min(1)).min(2),
   correctIndex: z.number().int().nonnegative(),
@@ -32,7 +32,7 @@ export const quizBlockSchema = z.object({
    Discriminated Union
 ======================= */
 
-export const contentBlockSchema = z.discriminatedUnion("type", [
+export const contentBlockSchema = z.discriminatedUnion('type', [
   textBlockSchema,
   flashcardBlockSchema,
   formulaBlockSchema,
@@ -47,45 +47,45 @@ export const lessonContentSchema = z.object({
   blocks: z.array(contentBlockSchema).min(1),
 });
 export const lessonContentJsonSchema = {
-  type: "object",
-  required: ["blocks"],
+  type: 'object',
+  required: ['blocks'],
   properties: {
     blocks: {
-      type: "array",
+      type: 'array',
       minItems: 1,
       items: {
         oneOf: [
           {
-            type: "object",
-            required: ["type", "value"],
-            properties: { type: { const: "text" }, value: { type: "string", minLength: 1 } },
+            type: 'object',
+            required: ['type', 'value'],
+            properties: { type: { const: 'text' }, value: { type: 'string', minLength: 1 } },
             additionalProperties: false,
           },
           {
-            type: "object",
-            required: ["type", "question", "answer"],
+            type: 'object',
+            required: ['type', 'question', 'answer'],
             properties: {
-              type: { const: "flashcard" },
-              question: { type: "string", minLength: 1 },
-              answer: { type: "string", minLength: 1 },
+              type: { const: 'flashcard' },
+              question: { type: 'string', minLength: 1 },
+              answer: { type: 'string', minLength: 1 },
             },
             additionalProperties: false,
           },
           {
-            type: "object",
-            required: ["type", "value"],
-            properties: { type: { const: "formula" }, value: { type: "string", minLength: 1 } },
+            type: 'object',
+            required: ['type', 'value'],
+            properties: { type: { const: 'formula' }, value: { type: 'string', minLength: 1 } },
             additionalProperties: false,
           },
           {
-            type: "object",
-            required: ["type", "question", "choices", "correctIndex"],
+            type: 'object',
+            required: ['type', 'question', 'choices', 'correctIndex'],
             properties: {
-              type: { const: "quiz" },
-              question: { type: "string", minLength: 1 },
-              choices: { type: "array", minItems: 2, items: { type: "string", minLength: 1 } },
-              correctIndex: { type: "integer", minimum: 0 },
-              explanation: { type: "string" },
+              type: { const: 'quiz' },
+              question: { type: 'string', minLength: 1 },
+              choices: { type: 'array', minItems: 2, items: { type: 'string', minLength: 1 } },
+              correctIndex: { type: 'integer', minimum: 0 },
+              explanation: { type: 'string' },
             },
             additionalProperties: false,
           },
@@ -95,4 +95,4 @@ export const lessonContentJsonSchema = {
   },
   additionalProperties: false,
 } as const;
-``
+``;

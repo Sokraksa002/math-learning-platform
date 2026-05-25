@@ -42,10 +42,8 @@ export async function generateFlashcardWithAi(promptQuestion: string): Promise<A
   const url = `https://${process.env.GCP_REGION}-aiplatform.googleapis.com/v1/projects/${process.env.GCP_PROJECT_ID}/locations/${process.env.GCP_REGION}/publishers/google/models/gemini-pro:generateContent`;
 
   const maxRetries = 2;
-  let attempt = 0;
   const baseDelayMs = 300;
-
-  while (true) {
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
     try {
       const res = await axios.post(
         url,
@@ -60,7 +58,7 @@ export async function generateFlashcardWithAi(promptQuestion: string): Promise<A
         {
           headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
           timeout: 15_000,
-        }
+        },
       );
 
       const rawText = res.data?.candidates?.[0]?.content?.parts?.[0]?.text as string | undefined;
@@ -82,12 +80,15 @@ export async function generateFlashcardWithAi(promptQuestion: string): Promise<A
       if (status === 401 || status === 403) throw new AiAuthError('AI auth error');
 
       // Retry for 5xx
-      if ((status && status >= 500 && status < 600) || err.code === 'ECONNABORTED' || err.code === 'ENOTFOUND') {
+      if (
+        (status && status >= 500 && status < 600) ||
+        err.code === 'ECONNABORTED' ||
+        err.code === 'ENOTFOUND'
+      ) {
         if (attempt >= maxRetries) {
           throw new AiProviderError('AI provider unavailable after retries');
         }
         const delay = Math.pow(2, attempt) * baseDelayMs;
-        attempt++;
         await new Promise((res) => setTimeout(res, delay));
         continue;
       }
@@ -97,6 +98,9 @@ export async function generateFlashcardWithAi(promptQuestion: string): Promise<A
       throw new AiProviderError(err?.message ?? 'Unknown AI error');
     }
   }
+
+  // If we somehow exit the retry loop without returning or throwing, treat as provider error
+  throw new AiProviderError('AI provider unavailable after retries');
 }
 
 function buildPrompt(question: string): string {

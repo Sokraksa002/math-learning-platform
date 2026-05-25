@@ -1,0 +1,287 @@
+{
+  "nav": {
+    "home": "Home",
+    "chapter": "Chapter",
+    "quiz": "Quiz",
+    "flashcard": "Flashcard",
+    "profile": "Profile",
+    "quizHistory": "My quiz attempts",
+    "flashcardHistory": "Flashcard history",
+    "ability": "My Ability"
+  },
+  "hero": {
+    "ai_learning_hub": "AI Learning Hub",
+    "khmer_title": "Learn Math More Easily",
+    "subtitle": "Find exercise solutions and abundant learning resources with Kanit."
+  },
+  "chapter": {
+    "khmer": "Chapter"
+  },
+  "quiz": {
+    "khmer": "Quiz Practice"
+  },
+  "flashcard": {
+    "khmer": "Flashcard",
+    "generate": "Generate",
+    "clear": "Clear",
+    "clickToFlip": "click to flip",
+    "flashcardQA": "Flashcard Q & A",
+    "reviewSessions": "Your revision sessions"
+  },
+  "focus": {
+    "khmer": "Focus Timer",
+    "title": "Focus Timer"
+  },
+  "certificate": {
+    "khmer": "Certificate",
+    "title": "Certificate"
+  },
+  "scan": {
+    "khmer": "Quick Scan",
+    "title": "Quick Scan"
+  },
+  "menu": {
+    "myProfile": "My profile",
+    "lesson": "Lesson",
+    "about": "About us"
+  },
+  "profile": {
+    "account": "Account",
+    "settings": "Settings",
+    "logout": "Log out",
+    "manageProfile": "Manage Profile",
+    "security": "Password & Security",
+    "notifications": "Notifications"
+  },
+  "components": {
+    "Calendor": {
+      "FocusTimer": {
+        "start_focus": "Start Focus"
+      },
+      "Calender": {
+        "mood_question": "What about your mood for today?",
+        "mood_bad": "Bad",
+        "mood_sad": "Sad",
+        "mood_happy": "Happy",
+        "mood_okay": "Okay",
+        "mood_great": "Great",
+        "motivational_1": "Just keep going! I know you can do it",
+        "motivational_2": "You're doing great! Keep it up!",
+        "motivational_3": "Every step counts. Stay motivated!",
+        "motivational_4": "Believe in yourself!",
+        "motivational_5": "You've got this! 💪"
+      }
+    },
+    "Flashcard": {
+      "FlashcardBoard": {
+        "flashcard": "Flashcard",
+        "lesson": "lesson",
+        "topic": "Topic",
+        "flashcard_q__a": "Flashcard Q & A",
+        "enter_exercise": "Enter exercise",
+        "Cancel": "Cancel",
+        "generate": "Generate"
+      }
+    },
+    "focus": {
+      "FocusHeader": {
+        "total_focused_time": "Total Focused Time",
+        "mins": "mins"
+      }
+    },
+    "Home": {
+      "Buttle": {
+        "title": "Daily Check‑In",
+        "how_are_you": "How are you today?",
+        "description": "Select your mood. We'll help you plan your study smarter.",
+        "subtitle": "Pick your cute mood buddy today ✨",
+        "your_mood_week": "Your Mood This Week",
+        "older_week": "Older week",
+        "newer_week": "Newer week",
+        "today_you_feel": "Today you feel",
+        "weekly_average": "Weekly average:",
+        "emotional_insight": "Emotional Insight",
+        "study_tip": "Study tip:",
+        "moods": {
+          "awful": "Awful",
+          "bad": "Bad",
+          "okay": "Okay",
+          "good": "Good",
+          "great": "Great"
+        },
+        "messages": {
+          "awful": "Take it slow today. A short break can help reset your energy.",
+          "bad": "Start small. Even 5 minutes of study is progress.",
+          "okay": "You're steady. A balanced study session will work well today.",
+          "good": "Nice energy! Try one challenging exercise today.",
+          "great": "Excellent mood. Perfect time for deep practice or a quiz."
+        },
+        "insights": {
+          "low_energy": "Low energy day",
+          "slow_start": "Slow start",
+          "balanced_mood": "Balanced mood",
+          "high_focus": "High focus",
+          "peak_performance": "Peak performance"
+        },
+        "study_tips": {
+          "low_energy_tip": "Do light review only. Avoid heavy new topics.",
+          "slow_start_tip": "Use short focus sessions (10–15 minutes).",
+          "balanced_mood_tip": "Good for regular lessons and revision.",
+          "high_focus_tip": "Great time for problem solving and quizzes.",
+          "peak_performance_tip": "Ideal for mock exams or difficult topics."
+        },
+        "weeks": {
+          "this_week": "This week",
+          "last_week": "Last week",
+          "two_weeks_ago": "2 weeks ago"
+        }
+      },
+      "Calender": {
+        "mood_question": "What about your mood for today?"
+      },
+      "EmotionCalendar": {
+        "cancel": "Cancel",
+        "reflection_note": "Reflection Note"
+      },
+      "HeaderBeforeLogin": {
+        "about_us": "About us"
+      },
+      "HeroSection": {
+        "learning_illustration": "Learning Illustration"
+      },
+      "OurFunctionsSection": {
+        "our_functions": "Our Features",
+        "features_intro": "Excellent learning tools for success",
+        "chapter_desc": "Learn structured lessons aligned with education standards",
+        "quiz_desc": "Practice questions and enhance your math knowledge",
+        "flashcard_desc": "Find formulas, lessons, and study materials",
+        "focus_desc": "Focus on learning in appropriate time periods",
+        "certificate_desc": "Get certificates showing successful completion",
+        "scan_desc": "Take and submit photos for detailed solutions",
+        "interactive_learning": "Interactive Learning",
+        "track_progress": "Track Progress",
+        "earn_certificates": "Earn Certificates",
+        "community_support": "Community Support"
+      },
+      "MoodSection": {
+        "emotional_support": "Emotional Support",
+        "track_emotions": "Track your emotions while learning"
+      },
+      "QuizTimeSection": {
+        "quiz_section": "Quiz Time",
+        "take_quizzes": "Test Your Knowledge"
+      },
+      "ProgressChart": {
+        "learning_progress": "Learning Progress",
+        "your_progress": "Your Progress"
+      },
+      "ChapterSection": {
+        "chapters": "Chapters",
+        "start_learning": "Start Learning"
+      },
+      "FlashcardSection": {
+        "flashcards": "Flashcards",
+        "review_material": "Review material with flashcards",
+        "best_approach": "Let us show you the best approach to ace the test!",
+        "card_generate": "Card Generate"
+      }
+    },
+    "Profile": {
+      "ManageProfile": {
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone"
+      },
+      "Notifications": {
+        "quiz_reminders": "Quiz reminders",
+        "new_lessons_available": "New lessons available",
+        "certificate_notifications": "Certificate notifications"
+      },
+      "PasswordSecurity": {
+        "current_password": "Current Password",
+        "new_password": "New Password",
+        "confirm_new_password": "Confirm New Password"
+      },
+      "Security": {
+        "current_password": "Current Password",
+        "new_password": "New Password",
+        "confirm_new_password": "Confirm New Password"
+      }
+    },
+    "Chapter": {
+      "lets_study": "Let's study with us!"
+    }
+  },
+  "pages": {
+    "AdminDashboard": {
+      "user": "User",
+      "email": "Email",
+      "role": "Role",
+      "join_date": "Join Date",
+      "status": "Status",
+      "chapter_chapter_algebra_basics": "Chapter {chapter}: Algebra Basics",
+      "server_health": "Server Health",
+      "database_load": "Database Load",
+      "api_response_time": "API Response Time",
+      "cancel": "Cancel",
+      "excellent": "Excellent",
+      "name": "Name",
+      "title": "Title",
+      "description": "Description"
+    },
+    "Certificate": {
+      "date": "Date",
+      "authorized_by": "Authorized by",
+      "admin": "Admin",
+      "back": "Back"
+    },
+    "Dashboard": {
+      "math": "Math",
+      "science": "Science",
+      "history": "History"
+    },
+    "Focus": {
+      "focused_time_distribution": "Focused Time Distribution"
+    },
+    "ForgotPassword": {
+      "background": "background",
+      "background2": "background2",
+      "book": "book",
+      "paper": "paper",
+      "backpack": "backpack",
+      "enter_your_email": "Enter your email"
+    },
+    "Login": {
+      "email": "Email",
+      "password": "Password",
+      "remember_me": "Remember me"
+    },
+    "Profile": {
+      "view": "View"
+    },
+    "Register": {
+      "full_name": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "confirm_password": "Confirm Password",
+      "background": "background",
+      "background2": "background2",
+      "book": "book",
+      "paper": "paper",
+      "backpack": "backpack",
+      "enter_your_full_name": "Enter your full name",
+      "enter_your_email": "Enter your email",
+      "create_a_password": "Create a password",
+      "confirm_your_password": "Confirm your password",
+      "i_agree_to_the_terms_and_conditions": "I agree to the terms and conditions"
+    }
+  },
+  "footer": {
+    "title": "Online Learning Platform",
+    "subtitle": "Mathematics Grade 12",
+    "description": "For learning, assessment and student knowledge development",
+    "disclaimer_title": "Disclaimer",
+    "disclaimer_text": "Certificates and content on this website are created for educational and assessment purposes only and are not official documents of the Ministry of Education, Youth and Sports.",
+    "copyright": "© {year} Online Learning Platform | All Rights Reserved"
+  }
+}

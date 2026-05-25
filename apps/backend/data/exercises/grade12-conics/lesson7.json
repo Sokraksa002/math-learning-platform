@@ -1,0 +1,156 @@
+{
+  "lessonId": "math-grade12-lesson7-conics-extended",
+  "lessonTitle": "កោនិក (Conics)",
+  "exercises": [
+    {
+      "id": "834c73a0-a810-4308-baaa-313526124a7b",
+      "question": "រកសមីការស្តង់ដានៃប៉ារ៉ាបូលដែលមានកំពូល V(-1, 1) និងកំណុំ F(-1, 0)។",
+      "choices": [
+        "(x+1)^2 = -4(y-1)",
+        "(x-1)^2 = -4(y+1)",
+        "(y-1)^2 = -4(x+1)",
+        "(x+1)^2 = 4(y-1)"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Parabola",
+      "exerciseTypeImage": "parabola_vertical_down",
+      "explanation": "កំពូល និងកំណុំមានអាប់ស៊ីស x=-1 ដូចគ្នា នាំឱ្យអ័ក្សឆ្លុះជាបន្ទាត់ឈរ។ ចម្ងាយ p = 0 - 1 = -1។ សមីការគឺ (x-h)^2 = 4p(y-k) => (x+1)^2 = -4(y-1)។",
+      "externalId": "ex-001"
+    },
+    {
+      "id": "80d21b86-58b4-4d3e-b885-d06df912663c",
+      "question": "រកសមីការស្តង់ដានៃអេលីបដែលមានផ្ចិត C(0,0) អ័ក្សធំនៅលើអ័ក្ស y មានប្រវែង 10 និងអ័ក្សតូចមានប្រវែង 8។",
+      "choices": [
+        "y^2/25 + x^2/16 = 1",
+        "x^2/25 + y^2/16 = 1",
+        "y^2/100 + x^2/64 = 1",
+        "y^2/5 + x^2/4 = 1"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Ellipse",
+      "exerciseTypeImage": "ellipse_vertical",
+      "explanation": "អ័ក្សធំ 2a = 10 => a = 5 (a^2=25) នៅលើអ័ក្ស y។ អ័ក្សតូច 2b = 8 => b = 4 (b^2=16)។",
+      "externalId": "ex-002"
+    },
+    {
+      "id": "b393f283-017d-434b-bd95-e0f68bb7cae3",
+      "question": "រកសមីការស្តង់ដានៃអ៊ីពែបូលដែលមានកំពូល (+-3, 0) និងអាស៊ីមតូត y = ±2x។",
+      "choices": [
+        "x^2/9 - y^2/36 = 1",
+        "x^2/9 - y^2/4 = 1",
+        "y^2/36 - x^2/9 = 1",
+        "x^2/3 - y^2/6 = 1"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Hyperbola",
+      "exerciseTypeImage": "hyperbola_horizontal",
+      "explanation": "កំពូល (+-3, 0) នាំឱ្យ a = 3។ អាស៊ីមតូត b/a = 2 => b/3 = 2 => b = 6 (b^2=36)។",
+      "externalId": "ex-003"
+    },
+    {
+      "id": "85a256fd-2d5c-42dd-b6f6-03eecbc448bb",
+      "question": "រកកូអរដោនេកំណុំនៃប៉ារ៉ាបូលដែលមានសមីការ (y+3)^2 = 4(x-2)។",
+      "choices": [
+        "(3, -3)",
+        "(1, -3)",
+        "(2, -2)",
+        "(2, -4)"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Parabola",
+      "exerciseTypeImage": "parabola_horizontal_right",
+      "explanation": "កំពូល V(2, -3) និង 4p = 4 => p = 1។ ដោយសារអ័ក្សឆ្លុះដេក កំណុំគឺ (h+p, k) = (2+1, -3) = (3, -3)។",
+      "externalId": "ex-004"
+    },
+    {
+      "id": "ebdbf2e0-3863-4592-bf1d-e75333fb4b08",
+      "question": "គណនាអ៊ិចសង់ទ្រីស៊ីតេនៃអ៊ីពែបូលដែលមានសមីការ 9x^2 - 16y^2 = 144។",
+      "choices": [
+        "e = 5/4",
+        "e = 5/3",
+        "e = 3/4",
+        "e = 4/5"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Hyperbola",
+      "exerciseTypeImage": "hyperbola_horizontal",
+      "explanation": "បម្លែងជាទម្រង់ស្តង់ដា: x^2/16 - y^2/9 = 1។ នាំឱ្យ a=4, b=3, c=sqrt(16+9)=5។ e = c/a = 5/4។",
+      "externalId": "ex-005"
+    },
+    {
+      "id": "f817c632-632a-4d22-84de-acb8744f656b",
+      "question": "រកសមីការស្តង់ដានៃប៉ារ៉ាបូលដែលមានកំណុំ F(-3, 4) និងបន្ទាត់ប្រាប់ទិស y = 2។",
+      "choices": [
+        "(x+3)^2 = 4(y-3)",
+        "(x-3)^2 = 4(y+3)",
+        "(y-4)^2 = 4(x+3)",
+        "(x+3)^2 = -4(y-3)"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Parabola",
+      "exerciseTypeImage": "parabola_vertical_up",
+      "explanation": "កំពូល V ស្ថិតនៅកណ្តាលរវាងកំណុំ និងបន្ទាត់ប្រាប់ទិស។ ដូចនេះ V(-3, (4+2)/2) = (-3, 3)។ ចម្ងាយ p = 4 − 3 = 1។ ដោយអ័ក្សឆ្លុះឈរ (បើកឡើងលើ) សមីការស្តង់ដាគឺ (x - h)^2 = 4p(y - k) ⇒ (x+3)^2 = 4(y-3)។",
+      "externalId": "ex-006"
+    },
+    {
+      "id": "a8278b8e-96c6-49c9-81b3-b044be67bf1d",
+      "question": "រកប្រវែងអ័ក្សធំនៃអេលីបដែលមានសមីការ 4x^2 + 9y^2 = 36។",
+      "choices": [
+        "6",
+        "4",
+        "9",
+        "12"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Ellipse",
+      "exerciseTypeImage": "ellipse_horizontal",
+      "explanation": "បម្លែងជា x^2/9 + y^2/4 = 1។ នាំឱ្យ a^2 = 9 => a = 3។ ប្រវែងអ័ក្សធំ 2a = 6។",
+      "externalId": "ex-007"
+    },
+    {
+      "id": "04390a73-a125-484c-a780-1d9c39fb4359",
+      "question": "តើសមីការ (x-1)^2 - (y+2)^2 = 1 តំណាងឱ្យអ៊ីពែបូលប្រភេទអ្វី?",
+      "choices": [
+        "អ៊ីពែបូលសាច់ស្មើ (Equilateral Hyperbola)",
+        "អ៊ីពែបូលឈរ",
+        "អ៊ីពែបូលកាត់អ័ក្ស y",
+        "មិនមែនជាអ៊ីពែបូល"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Hyperbola",
+      "exerciseTypeImage": "hyperbola_equilateral",
+      "explanation": "ដោយសារមេគុណក្រោម x និង y ស្មើគ្នា (a=b=1) វានិងជាអ៊ីពែបូលសាច់ស្មើ។",
+      "externalId": "ex-008"
+    },
+    {
+      "id": "bdbe82e9-4fab-4a6a-826e-79b82d76edd6",
+      "question": "រកសមីការបន្ទាត់ប្រាប់ទិសនៃប៉ារ៉ាបូល (x+1)^2 = -8(y-2)។",
+      "choices": [
+        "y = 4",
+        "y = 0",
+        "x = 1",
+        "y = 2"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Parabola",
+      "exerciseTypeImage": "parabola_vertical_down",
+      "explanation": "កំពូល V(-1, 2) និង 4p = -8 => p = -2។ បន្ទាត់ប្រាប់ទិស y = k - p = 2 - (-2) = 4។",
+      "externalId": "ex-009"
+    },
+    {
+      "id": "2e34f6ba-287b-4813-bc76-7ebc15f0fd33",
+      "question": "រកកូអរដោនេផ្ចិតនៃអ៊ីពែបូល x^2 - y^2 + 4x + 2y - 1 = 0 (ក្រោយពេលបំប្លែង)។",
+      "choices": [
+        "(-2, 1)",
+        "(2, -1)",
+        "(0, 0)",
+        "(-2, -1)"
+      ],
+      "correctIndex": 0,
+      "exerciseType": "Hyperbola",
+      "exerciseTypeImage": "hyperbola_general",
+      "explanation": "រៀបជាកន្សោមការ៉េ: (x+2)^2 - 4 - (y-1)^2 + 1 - 1 = 0 => (x+2)^2 - (y-1)^2 = 4។ ផ្ចិតគឺ (-2, 1)។",
+      "externalId": "ex-010"
+    }
+  ]
+}

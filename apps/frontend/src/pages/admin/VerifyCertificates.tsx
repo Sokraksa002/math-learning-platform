@@ -23,6 +23,7 @@ import {
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import AdminShell from './AdminShell';
+import { useLocale } from '../../hooks/useLocale';
 
 type CertificateStatus = 'pending' | 'verified' | 'rejected';
 
@@ -80,6 +81,7 @@ export default function VerifyCertificates() {
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState<CertificateRecord>(blankCertificate());
+  const { t } = useLocale();
 
   useEffect(() => {
     saveCertificates(certificates);
@@ -131,7 +133,7 @@ export default function VerifyCertificates() {
   const markRejected = (id: number) => setCertificates((prev) => prev.map((item) => (item.id === id ? { ...item, status: 'rejected' } : item)));
 
   return (
-    <AdminShell title="Verify Certificates" subtitle="Review completion certificates and mark them as verified, pending, or rejected.">
+    <AdminShell title={t('pages.AdminVerifyCertificates.title', 'Verify Certificates')} subtitle={t('pages.AdminVerifyCertificates.subtitle', 'Review completion certificates and mark them as verified, pending, or rejected.')}>
       <Stack spacing={3}>
         <Paper
           sx={{

@@ -55,27 +55,27 @@ export default function Profile() {
 
             {/* ACCOUNT */}
             <Typography fontSize={13} color="text.secondary" mb={1}>
-              Account
+              {t('pages.Profile.account', 'Account')}
             </Typography>
             <List disablePadding>
               <ListItemButton onClick={() => navigate('/chapter')}>
                 <ListItemIcon><School /></ListItemIcon>
-                <ListItemText primary="Lesson" />
+                <ListItemText primary={t('menu.lesson', 'Lesson')} />
               </ListItemButton>
 
               <ListItemButton onClick={() => navigate('/quiz-history')}>
                 <ListItemIcon><Quiz /></ListItemIcon>
-                <ListItemText primary="My quiz attempts" />
+                <ListItemText primary={t('nav.quizHistory', 'My quiz attempts')} />
               </ListItemButton>
 
               <ListItemButton onClick={() => navigate('/flashcard-history')}>
                 <ListItemIcon><Style /></ListItemIcon>
-                <ListItemText primary="Flashcard history" />
+                <ListItemText primary={t('nav.flashcardHistory', 'Flashcard history')} />
               </ListItemButton>
 
               <ListItemButton onClick={() => navigate('/ability')}>
                 <ListItemIcon><Psychology /></ListItemIcon>
-                <ListItemText primary="My Ability" />
+                <ListItemText primary={t('nav.ability', 'My Ability')} />
               </ListItemButton>
             </List>
 
@@ -83,22 +83,22 @@ export default function Profile() {
 
             {/* SETTINGS */}
             <Typography fontSize={13} color="text.secondary" mb={1}>
-              Settings
+              {t('profile.settings', 'Settings')}
             </Typography>
             <List disablePadding>
               <ListItemButton onClick={() => navigate('/profile/manage')}>
                 <ListItemIcon><Person /></ListItemIcon>
-                <ListItemText primary="Manage Profile" />
+                <ListItemText primary={t('profile.manageProfile', 'Manage Profile')} />
               </ListItemButton>
 
               <ListItemButton onClick={() => navigate('/profile/security')}>
                 <ListItemIcon><Lock /></ListItemIcon>
-                <ListItemText primary="Password & Security" />
+                <ListItemText primary={t('profile.security', 'Password & Security')} />
               </ListItemButton>
 
               <ListItemButton onClick={() => navigate('/profile/notifications')}>
                 <ListItemIcon><Notifications /></ListItemIcon>
-                <ListItemText primary="Notifications" />
+                <ListItemText primary={t('profile.notifications', 'Notifications')} />
               </ListItemButton>
             </List>
 
@@ -106,12 +106,12 @@ export default function Profile() {
 
             {/* CERTIFICATES */}
             <Typography fontSize={13} color="text.secondary" mb={1}>
-              Certificates
+              {t('pages.Certificate.khmer', 'Certificates')}
             </Typography>
             <List disablePadding>
               <ListItemButton onClick={() => navigate('/certificate/1')}>
                 <ListItemIcon><WorkspacePremium /></ListItemIcon>
-                <ListItemText primary="Chapter 1 Certificate" />
+                <ListItemText primary={t('pages.Profile.chapter_1_certificate', 'Chapter 1 Certificate')} />
                 <Chip label={t('pages.Profile.view', 'View')} size="small" color="primary" />
               </ListItemButton>
             </List>
@@ -131,7 +131,7 @@ export default function Profile() {
                   <Logout />
                 </ListItemIcon>
                 <ListItemText
-                  primary="Log out"
+                  primary={t('profile.logout', 'Log out')}
                   primaryTypographyProps={{ color: 'error' }}
                 />
               </ListItemButton>

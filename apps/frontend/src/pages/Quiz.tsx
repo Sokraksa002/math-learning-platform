@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useLocale } from '../hooks/useLocale';
 
 const quizChapters = [
   { id: 1, name: 'Chapter 1', lesson: 'Lesson: Limit', color: '#3D86E8' },
@@ -18,6 +19,7 @@ const quizChapters = [
 
 export default function Quiz() {
   const navigate = useNavigate();
+  const { t } = useLocale();
   const weeklyGoal = 70;
   const completedToday = 2;
 
@@ -42,7 +44,7 @@ export default function Quiz() {
           }}
         >
           <Typography sx={{ color: '#7d8ca3', fontSize: 12, letterSpacing: 1, fontWeight: 700 }}>
-            QUIZ HUB
+            {t('pages.Quiz.quiz_hub', 'QUIZ HUB')}
           </Typography>
 
           <Typography
@@ -54,20 +56,20 @@ export default function Quiz() {
               color: '#1F2937',
             }}
           >
-            Quiz Time
+            {t('pages.Quiz.quiz_time', 'Quiz Time')}
           </Typography>
 
           <Typography sx={{ color: '#5f6c80', mb: 2 }}>
-            Complete quick rounds, keep your streak, and level up your score.
+            {t('pages.Quiz.subtitle', 'Complete quick rounds, keep your streak, and level up your score.')}
           </Typography>
 
           <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1.2fr 0.8fr' }, gap: 2 }}>
             <Box sx={{ p: 2, borderRadius: 2, backgroundColor: '#F5FAFF', border: '1px solid #D8E8FF' }}>
               <Typography sx={{ fontSize: 12, color: '#6e8099', fontWeight: 700, mb: 0.5 }}>
-                Weekly challenge
+                {t('pages.Quiz.weekly_challenge', 'Weekly challenge')}
               </Typography>
               <Typography sx={{ fontWeight: 800, color: '#1F2937', mb: 1 }}>
-                Reach {weeklyGoal}% average score
+                {t('pages.Quiz.reach_weekly_goal', 'Reach {weeklyGoal}% average score').replace('{weeklyGoal}', String(weeklyGoal))}
               </Typography>
               <LinearProgress
                 variant="determinate"
@@ -83,13 +85,13 @@ export default function Quiz() {
 
             <Box sx={{ p: 2, borderRadius: 2, backgroundColor: '#F8FBFF', border: '1px solid #D8E8FF' }}>
               <Typography sx={{ fontSize: 12, color: '#6e8099', fontWeight: 700 }}>
-                Today
+                {t('pages.Quiz.today', 'Today')}
               </Typography>
               <Typography sx={{ fontSize: 28, lineHeight: 1.1, fontWeight: 900, color: '#2F6FC0' }}>
                 {completedToday}
               </Typography>
               <Typography sx={{ color: '#5f6c80', fontSize: 13 }}>
-                quizzes completed
+                {t('pages.Quiz.quizzes_completed', 'quizzes completed')}
               </Typography>
             </Box>
           </Box>
@@ -105,7 +107,7 @@ export default function Quiz() {
             fontSize: 24,
           }}
         >
-          Pick a chapter
+          {t('pages.Quiz.pick_a_chapter', 'Pick a chapter')}
         </Typography>
 
         {/* ✅ HAMBURGER / LIST STYLE */}

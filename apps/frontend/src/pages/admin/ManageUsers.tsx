@@ -24,6 +24,7 @@ import {
 import { useEffect, useMemo, useState } from 'react';
 import AdminShell from './AdminShell';
 import { loadAdminUsers, saveAdminUsers, type AdminUser, type AdminUserStatus } from '../../data/adminContent';
+import { useLocale } from '../../hooks/useLocale';
 
 const emptyUser: AdminUser = {
   id: 0,
@@ -41,6 +42,7 @@ export default function ManageUsers() {
   const [open, setOpen] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [form, setForm] = useState<AdminUser>(emptyUser);
+  const { t } = useLocale();
 
   useEffect(() => {
     saveAdminUsers(users);
@@ -91,8 +93,8 @@ export default function ManageUsers() {
 
   return (
     <AdminShell
-      title="Manage Users"
-      subtitle="Create, update, and remove student or admin accounts from a single table."
+      title={t('pages.AdminManageUsers.title', 'Manage Users')}
+      subtitle={t('pages.AdminManageUsers.subtitle', 'Create, update, and remove student or admin accounts from a single table.')}
     >
       <Stack spacing={3}>
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>

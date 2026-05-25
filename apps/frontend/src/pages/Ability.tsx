@@ -1,11 +1,11 @@
 import { Box, Card, CardContent, Chip, Paper, Stack, Typography } from '@mui/material';
 import { useLocale } from '../hooks/useLocale';
+import { colorPalette } from '../theme/colorPalette';
 
 interface SkillArea {
   name: string;
   score: number;
   note: string;
-  color: string;
 }
 
 const skillAreas: SkillArea[] = [
@@ -13,27 +13,39 @@ const skillAreas: SkillArea[] = [
     name: 'Algebra',
     score: 86,
     note: 'Strong with equations and operations.',
-    color: '#2563eb',
   },
   {
     name: 'Fractions',
     score: 74,
     note: 'Good base, still improving speed.',
-    color: '#0f766e',
   },
   {
     name: 'Geometry',
     score: 91,
     note: 'Very confident with shapes and measures.',
-    color: '#7c3aed',
   },
   {
     name: 'Mental math',
     score: 68,
     note: 'Needs more short timed practice.',
-    color: '#ea580c',
   },
 ];
+
+const getSkillColor = (score: number) => {
+  if (score < 40) {
+    return '#ef4444';
+  }
+
+  if (score < 50) {
+    return '#f97316';
+  }
+
+  if (score < 70) {
+    return '#facc15';
+  }
+
+  return colorPalette.accent.blue;
+};
 
 const recentWins = [
   'Solved 9 out of 10 geometry questions correctly.',
@@ -50,7 +62,7 @@ const recommendations = [
 const topSkill = skillAreas.reduce((best, current) => (current.score > best.score ? current : best));
 
 export default function Ability() {
-  useLocale();
+  const { t } = useLocale();
 
   return (
     <>
@@ -72,14 +84,13 @@ export default function Ability() {
             }}
           >
             <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 1.2 }}>
-              My Ability
+              {t('pages.Ability.my_ability', 'My Ability')}
             </Typography>
             <Typography variant="h4" fontWeight={800} mt={1} mb={1}>
-              Your learning strengths
+              {t('pages.Ability.your_learning_strengths', 'Your learning strengths')}
             </Typography>
             <Typography sx={{ maxWidth: 720, opacity: 0.9 }}>
-              A quick view of where you are strongest, what needs more practice, and which topic is
-              currently leading your progress.
+              {t('pages.Ability.subtitle', 'A quick view of where you are strongest, what needs more practice, and which topic is currently leading your progress.')}
             </Typography>
           </Paper>
 
@@ -93,7 +104,7 @@ export default function Ability() {
           >
             <Paper sx={{ p: 2.5, borderRadius: 3, border: '1px solid #dbeafe', boxShadow: '0 8px 24px rgba(37, 99, 235, 0.08)' }}>
               <Typography color="text.secondary" fontSize="0.9rem">
-                Top skill
+                {t('pages.Ability.top_skill', 'Top skill')}
               </Typography>
               <Typography variant="h4" fontWeight={800} color="#1d4ed8">
                 {topSkill.name}
@@ -102,7 +113,7 @@ export default function Ability() {
 
             <Paper sx={{ p: 2.5, borderRadius: 3, border: '1px solid #dbeafe', boxShadow: '0 8px 24px rgba(37, 99, 235, 0.08)' }}>
               <Typography color="text.secondary" fontSize="0.9rem">
-                Best score
+                {t('pages.Ability.best_score', 'Best score')}
               </Typography>
               <Typography variant="h4" fontWeight={800} color="#2563eb">
                 {topSkill.score}%
@@ -111,7 +122,7 @@ export default function Ability() {
 
             <Paper sx={{ p: 2.5, borderRadius: 3, border: '1px solid #dbeafe', boxShadow: '0 8px 24px rgba(37, 99, 235, 0.08)' }}>
               <Typography color="text.secondary" fontSize="0.9rem">
-                Focus area
+                {t('pages.Ability.focus_area', 'Focus area')}
               </Typography>
               <Typography variant="h4" fontWeight={800} color="#1d4ed8">
                 Mental math
@@ -129,7 +140,7 @@ export default function Ability() {
             <Card sx={{ borderRadius: 3, boxShadow: '0 12px 28px rgba(37, 99, 235, 0.08)', border: '1px solid #dbeafe' }}>
               <CardContent sx={{ p: { xs: 2.5, md: 3 } }}>
                 <Typography variant="h6" fontWeight={800} mb={2}>
-                  Skill breakdown
+                  {t('pages.Ability.skill_breakdown', 'Skill breakdown')}
                 </Typography>
                 <Stack spacing={2}>
                   {skillAreas.map((skill) => (
@@ -150,7 +161,7 @@ export default function Ability() {
                           sx={{
                             width: `${skill.score}%`,
                             height: '100%',
-                            background: `linear-gradient(90deg, ${skill.color}, ${skill.color}cc)`,
+                            background: `linear-gradient(90deg, ${getSkillColor(skill.score)}, ${getSkillColor(skill.score)}cc)`,
                           }}
                         />
                       </Box>
@@ -167,7 +178,7 @@ export default function Ability() {
               <Card sx={{ borderRadius: 3, boxShadow: '0 12px 28px rgba(37, 99, 235, 0.08)', border: '1px solid #dbeafe' }}>
                 <CardContent>
                   <Typography variant="h6" fontWeight={800} mb={1.5}>
-                    Recent wins
+                    {t('pages.Ability.recent_wins', 'Recent wins')}
                   </Typography>
                   <Stack spacing={1}>
                     {recentWins.map((item) => (
@@ -180,7 +191,7 @@ export default function Ability() {
               <Card sx={{ borderRadius: 3, boxShadow: '0 12px 28px rgba(37, 99, 235, 0.08)', border: '1px solid #dbeafe' }}>
                 <CardContent>
                   <Typography variant="h6" fontWeight={800} mb={1.5}>
-                    Next steps
+                    {t('pages.Ability.next_steps', 'Next steps')}
                   </Typography>
                   <Stack spacing={1.25}>
                     {recommendations.map((item) => (

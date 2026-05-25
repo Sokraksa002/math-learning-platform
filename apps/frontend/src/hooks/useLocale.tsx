@@ -1,9 +1,26 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState, useSyncExternalStore } from 'react';
 
 type LocaleData = Record<string, any>;
 
+const LOCALE_STORAGE_KEY = 'locale';
+const DEFAULT_LOCALE = 'en';
+
+let currentLocale = localStorage.getItem(LOCALE_STORAGE_KEY) || DEFAULT_LOCALE;
+const listeners = new Set<() => void>();
+
+const subscribe = (listener: () => void) => {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+};
+
+const getLocaleSnapshot = () => currentLocale;
+
+const notifyLocaleChange = () => {
+  listeners.forEach((listener) => listener());
+};
+
 export function useLocale() {
-  const [locale, setLocale] = useState<string>(localStorage.getItem('locale') || 'en');
+  const locale = useSyncExternalStore(subscribe, getLocaleSnapshot, getLocaleSnapshot);
   const [messages, setMessages] = useState<LocaleData>({});
 
   useEffect(() => {
@@ -30,8 +47,9 @@ export function useLocale() {
   };
 
   const set = (l: string) => {
-    localStorage.setItem('locale', l);
-    setLocale(l);
+    currentLocale = l;
+    localStorage.setItem(LOCALE_STORAGE_KEY, l);
+    notifyLocaleChange();
   };
 
   return { locale, setLocale: set, t };

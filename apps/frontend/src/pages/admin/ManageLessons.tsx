@@ -24,6 +24,7 @@ import {
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import AdminShell from './AdminShell';
+import { useLocale } from '../../hooks/useLocale';
 
 type LessonStatus = 'draft' | 'published';
 
@@ -109,6 +110,7 @@ export default function ManageLessons() {
   const [form, setForm] = useState<AdminLesson>(blankLesson());
   const [selectedLessonId, setSelectedLessonId] = useState('');
   const [newChapterName, setNewChapterName] = useState('');
+  const { t } = useLocale();
 
   useEffect(() => {
     saveLessons(lessons);
@@ -199,7 +201,7 @@ export default function ManageLessons() {
   const deleteLesson = (id: number) => setLessons((prev) => prev.filter((item) => item.id !== id));
 
   return (
-    <AdminShell title="Manage Lessons" subtitle="Create and organize lesson records independently from the chapter pages.">
+    <AdminShell title={t('pages.AdminManageLessons.title', 'Manage Lessons')} subtitle={t('pages.AdminManageLessons.subtitle', 'Create and organize lesson records independently from the chapter pages.')}>
       <Stack spacing={3}>
         <Paper
           sx={{

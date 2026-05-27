@@ -29,6 +29,8 @@ import { flashcardsDueRoutes } from './routes/flashcards-due';
 import { flashcardRoutes } from './modules/flashcards/flashcard.routes';
 import { adminRoutes as adminModuleRoutes } from './modules/admin/admin.routes';
 
+import { quizRoutes } from './routes/quiz';
+
 dotenv.config();
 
 const app = Fastify({ logger: true });
@@ -57,6 +59,9 @@ app.register(progressRoutes, { prefix: '/api' });
 app.register(certificateRoutes, { prefix: '/api' });
 app.register(certificateVerificationRoutes, { prefix: '/api' });
 app.register(certificateEmailRoutes, { prefix: '/api' });
+
+//quiz
+app.register(quizRoutes, { prefix: '/api' });
 
 // ✅ Admin
 app.register(adminChapterRoutes, { prefix: '/api' });

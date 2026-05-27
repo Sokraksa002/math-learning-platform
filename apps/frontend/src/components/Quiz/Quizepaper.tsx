@@ -1,319 +1,180 @@
-import { Box, Button, Container, Typography } from '@mui/material';
-import { useParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { loadQuizBank } from '../../data/adminContent';
+import { Box, Button, Container, Typography } from "@mui/material";
+import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 
-const COMPLETED_LESSON_STORAGE_KEY = 'math-learning-completed-lessons';
+import { startQuiz, submitQuiz } from "../../utils/api";
+import type { QuizSession, QuizAnswer, QuizResult } from "../../utils/api";
 
-const areAllLessonsCompleted = (): boolean => {
-  if (typeof window === 'undefined') {
-    return false;
-  }
-
-  try {
-    const rawValue = window.localStorage.getItem(COMPLETED_LESSON_STORAGE_KEY);
-    const completedLessonIds = rawValue ? JSON.parse(rawValue) : [];
-
-    return [101, 102, 201, 202].every((lessonId) => Array.isArray(completedLessonIds) && completedLessonIds.includes(lessonId));
-  } catch {
-    return false;
-  }
-};
-
-/* =========================
-   TYPES
-========================= */
-interface QuizOption {
-  id: string;
-  label: string;
-  text: string;
-}
-
-interface QuizQuestion {
-  id: number;
-  prompt: string;
-  equation?: string;
-  options: QuizOption[];
-  answerId: string;
-}
-
-/* =========================
-   MOCK QUESTIONS (10)
-   👉 Replace later with API
-========================= */
-const FALLBACK_QUESTIONS: QuizQuestion[] = [
-  {
-    id: 1,
-    prompt: 'What is the limit as x → 0?',
-    equation: 'sin(x) / x',
-    options: [
-      { id: 'a', label: 'A.', text: '0' },
-      { id: 'b', label: 'B.', text: '1' },
-      { id: 'c', label: 'C.', text: '∞' },
-      { id: 'd', label: 'D.', text: '-1' },
-    ],
-    answerId: 'b',
-  },
-  {
-    id: 2,
-    prompt: 'Derivative of x² is?',
-    options: [
-      { id: 'a', label: 'A.', text: 'x' },
-      { id: 'b', label: 'B.', text: '2x' },
-      { id: 'c', label: 'C.', text: 'x²' },
-      { id: 'd', label: 'D.', text: '2' },
-    ],
-    answerId: 'b',
-  },
-  {
-    id: 3,
-    prompt: 'Solve: 2x + 4 = 10',
-    options: [
-      { id: 'a', label: 'A.', text: '2' },
-      { id: 'b', label: 'B.', text: '3' },
-      { id: 'c', label: 'C.', text: '4' },
-      { id: 'd', label: 'D.', text: '6' },
-    ],
-    answerId: 'c',
-  },
-  {
-    id: 4,
-    prompt: 'Integral of 1 dx?',
-    options: [
-      { id: 'a', label: 'A.', text: '1' },
-      { id: 'b', label: 'B.', text: 'x' },
-      { id: 'c', label: 'C.', text: 'x²' },
-      { id: 'd', label: 'D.', text: 'ln x' },
-    ],
-    answerId: 'b',
-  },
-  {
-    id: 5,
-    prompt: 'What is π approximately?',
-    options: [
-      { id: 'a', label: 'A.', text: '2.14' },
-      { id: 'b', label: 'B.', text: '3.14' },
-      { id: 'c', label: 'C.', text: '1.14' },
-      { id: 'd', label: 'D.', text: '4.14' },
-    ],
-    answerId: 'b',
-  },
-  {
-    id: 6,
-    prompt: 'Derivative of sin(x)?',
-    options: [
-      { id: 'a', label: 'A.', text: 'cos(x)' },
-      { id: 'b', label: 'B.', text: '-cos(x)' },
-      { id: 'c', label: 'C.', text: 'tan(x)' },
-      { id: 'd', label: 'D.', text: 'x' },
-    ],
-    answerId: 'a',
-  },
-  {
-    id: 7,
-    prompt: 'Solve: x² = 9',
-    options: [
-      { id: 'a', label: 'A.', text: '3 only' },
-      { id: 'b', label: 'B.', text: '-3 only' },
-      { id: 'c', label: 'C.', text: '±3' },
-      { id: 'd', label: 'D.', text: '0' },
-    ],
-    answerId: 'c',
-  },
-  {
-    id: 8,
-    prompt: 'What is 2³?',
-    options: [
-      { id: 'a', label: 'A.', text: '6' },
-      { id: 'b', label: 'B.', text: '8' },
-      { id: 'c', label: 'C.', text: '9' },
-      { id: 'd', label: 'D.', text: '4' },
-    ],
-    answerId: 'b',
-  },
-  {
-    id: 9,
-    prompt: 'Slope of y = 3x?',
-    options: [
-      { id: 'a', label: 'A.', text: '1' },
-      { id: 'b', label: 'B.', text: '2' },
-      { id: 'c', label: 'C.', text: '3' },
-      { id: 'd', label: 'D.', text: '0' },
-    ],
-    answerId: 'c',
-  },
-  {
-    id: 10,
-    prompt: 'What is √16?',
-    options: [
-      { id: 'a', label: 'A.', text: '2' },
-      { id: 'b', label: 'B.', text: '3' },
-      { id: 'c', label: 'C.', text: '4' },
-      { id: 'd', label: 'D.', text: '5' },
-    ],
-    answerId: 'c',
-  },
-];
-
-const ADMIN_QUESTIONS: QuizQuestion[] = loadQuizBank().flatMap((quiz, quizIndex) =>
-  quiz.exercises.map((exercise, exerciseIndex) => ({
-    id: quizIndex * 100 + exerciseIndex + 1,
-    prompt: exercise.question,
-    options: exercise.choices.slice(0, 4).map((choice, choiceIndex) => ({
-      id: `choice-${choiceIndex}`,
-      label: `${String.fromCharCode(65 + choiceIndex)}.`,
-      text: choice,
-    })),
-    answerId: `choice-${Math.max(0, Math.min(3, exercise.correctIndex))}`,
-  }))
-);
-
-const QUESTIONS = ADMIN_QUESTIONS.length > 0 ? ADMIN_QUESTIONS : FALLBACK_QUESTIONS;
-
-/* =========================
-   COMPONENT
-========================= */
 export default function QuizPaper() {
-  const { chapterId } = useParams();
+  const { lessonId } = useParams<{ lessonId: string }>();
   const navigate = useNavigate();
 
+  const [session, setSession] = useState<QuizSession | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
-  const [score, setScore] = useState(0);
+  const [answers, setAnswers] = useState<QuizAnswer[]>([]);
+  const [selected, setSelected] = useState<string | null>(null);
+  const [showAnswer, setShowAnswer] = useState(false);
   const [finished, setFinished] = useState(false);
+  const [result, setResult] = useState<QuizResult | null>(null);
 
-  const question = QUESTIONS[currentIndex];
-  const total = QUESTIONS.length;
-  const percentage = (score / total) * 100;
-  const allLessonsCompleted = areAllLessonsCompleted();
-  const canUnlockCertificate = percentage >= 80 && allLessonsCompleted;
+  // ✅ Load quiz
+  useEffect(() => {
+    if (!lessonId) return;
 
-  const handleSelect = (id: string) => {
-    if (selectedAnswer) return;
+    const load = async () => {
+      try {
+        const data = await startQuiz(lessonId);
+        setSession(data);
+      } catch (err) {
+        console.error("Error loading quiz:", err);
+      }
+    };
 
-    setSelectedAnswer(id);
+    load();
+  }, [lessonId]);
 
-    if (id === question.answerId) {
-      setScore((s) => s + 1);
-    }
+  if (!session) {
+    return (
+      <Container sx={{ py: 10 }}>
+        <Typography>Loading quiz...</Typography>
+      </Container>
+    );
+  }
+
+  const question = session.items[currentIndex];
+  const total = session.items.length;
+
+  // ✅ Handle answer
+  const handleSelect = (choice: string) => {
+    if (selected) return;
+
+    setSelected(choice);
+    setShowAnswer(true);
+
+    setAnswers((prev) => [
+      ...prev,
+      {
+        exerciseId: question.exerciseId,
+        selectedChoice: choice,
+      },
+    ]);
 
     setTimeout(() => {
       if (currentIndex === total - 1) {
-        setFinished(true);
+        handleSubmit();
       } else {
         setCurrentIndex((i) => i + 1);
-        setSelectedAnswer(null);
+        setSelected(null);
+        setShowAnswer(false);
       }
-    }, 600);
+    }, 2000);
+  };
+
+  // ✅ Submit quiz
+  const handleSubmit = async () => {
+    if (!session) return;
+
+    try {
+      const res = await submitQuiz(session.id, answers);
+      setResult(res);
+      setFinished(true);
+    } catch (err) {
+      console.error("Submit failed:", err);
+    }
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', backgroundColor: '#F4F6FB', py: 8 }}>
+    <Box sx={{ minHeight: "100vh", backgroundColor: "#F4F6FB", py: 8 }}>
       <Container maxWidth="md">
         <Box
           sx={{
-            backgroundColor: '#fff',
+            backgroundColor: "#fff",
             borderRadius: 4,
             p: 5,
-            boxShadow: '0 12px 25px rgba(0,0,0,0.05)',
+            boxShadow: "0 12px 25px rgba(0,0,0,0.05)",
           }}
         >
           {!finished ? (
             <>
               {/* HEADER */}
-              <Typography sx={{ fontSize: 20, fontWeight: 700 }}>
-                Quiz – Chapter {chapterId}
-              </Typography>
-
-              <Typography sx={{ fontSize: 13, color: '#888', mb: 3 }}>
+              <Typography fontWeight={700}>
                 Question {currentIndex + 1} / {total}
               </Typography>
 
-              {/* QUESTION */}
-              <Typography sx={{ fontWeight: 600, mb: 2 }}>
-                {question.prompt}
+              {/* ✅ QUESTION */}
+              <Typography sx={{ mt: 2 }}>
+                {question.exercise.questionKm}
               </Typography>
 
-              {/* OPTIONS */}
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-                {question.options.map((opt) => {
-                  const isSelected = selectedAnswer === opt.id;
-                  const isCorrect = opt.id === question.answerId;
-                  const show = selectedAnswer !== null;
+              {/* ✅ OPTIONS */}
+              <Box mt={3} display="flex" flexDirection="column" gap={2}>
+                {["A", "B", "C", "D"].map((opt) => {
+                  const correct = question.exercise.correctAnswer;
+                  const isCorrect = opt === correct;
+                  const isSelected = selected === opt;
 
-                  let borderColor = '#E5E7EB';
-                  let bgColor = '#FFFFFF';
+                  let bg = "#fff";
+                  let border = "#ccc";
 
-                  if (show && isCorrect) {
-                    borderColor = '#4CAF50';
-                    bgColor = '#ECFDF5';
-                  }
-
-                  if (show && isSelected && !isCorrect) {
-                    borderColor = '#F97316';
-                    bgColor = '#FFF7ED';
+                  if (showAnswer) {
+                    if (isCorrect) {
+                      bg = "#E8F5E9";
+                      border = "green";
+                    } else if (isSelected) {
+                      bg = "#FFF3E0";
+                      border = "orange";
+                    }
                   }
 
                   return (
                     <Box
-                      key={opt.id}
-                      onClick={() => handleSelect(opt.id)}
+                      key={opt}
+                      onClick={() => handleSelect(opt)}
                       sx={{
-                        border: `2px solid ${borderColor}`,
-                        borderRadius: 3,
-                        px: 3,
-                        py: 2,
-                        backgroundColor: bgColor,
-                        cursor: show ? 'default' : 'pointer',
-                        transition: 'all 0.3s ease',
-
-                        /* ✅ HOVER EFFECT */
-                        '&:hover': {
-                          backgroundColor: show ? bgColor : 'transparent',
-                          borderColor: '#6366F1',
-                          transform: show ? 'none' : 'scale(1.02)',
-                        },
+                        border: `2px solid ${border}`,
+                        borderRadius: 2,
+                        p: 2,
+                        cursor: selected ? "default" : "pointer",
+                        backgroundColor: bg,
                       }}
                     >
-                      <strong>{opt.label}</strong> {opt.text}
+                      {opt}
                     </Box>
                   );
                 })}
               </Box>
+
+              {/* ✅ EXPLANATION */}
+              {showAnswer && (
+                <Box mt={3} p={2} bgcolor="#F9FAFB" borderRadius={2}>
+                  <Typography fontWeight={600}>Explanation:</Typography>
+                  <Typography>
+                    {question.exercise.solutionKm || "No explanation available"}
+                  </Typography>
+                </Box>
+              )}
             </>
           ) : (
-            /* ✅ RESULT */
             <Box textAlign="center">
-              <Typography sx={{ fontSize: 24, fontWeight: 700, mb: 2 }}>
-                🎉 Quiz Finished
+              <Typography variant="h5">🎉 Finished</Typography>
+
+              <Typography mt={2}>
+                Score: {result?.score} / {result?.total}
               </Typography>
 
-              <Typography sx={{ mb: 2 }}>
-                Score: {score} / {total} ({percentage.toFixed(1)}%)
-              </Typography>
+              {/* ✅ WRONG ANSWERS */}
+              {result?.wrongAnswers.map((w, i) => (
+                <Box key={i} mt={2} p={2} bgcolor="#FFF3E0">
+                  <Typography>{w.question}</Typography>
+                  <Typography>Your: {w.selected}</Typography>
+                  <Typography>Correct: {w.correctAnswer}</Typography>
+                  <Typography>{w.solutionKm}</Typography>
+                </Box>
+              ))}
 
-              {canUnlockCertificate ? (
-                <Button
-                  onClick={() => navigate('/quiz-history')}
-                  sx={{
-                    backgroundColor: '#6366F1',
-                    color: '#fff',
-                    borderRadius: 2,
-                    px: 4,
-                    '&:hover': { backgroundColor: '#4F46E5' },
-                  }}
-                >
-                  Open Review
-                </Button>
-              ) : percentage >= 80 ? (
-                <Typography sx={{ color: '#F97316', mt: 2 }}>
-                  Finish all lessons in the site to unlock the certificate.
-                </Typography>
-              ) : (
-                <Typography sx={{ color: '#F97316', mt: 2 }}>
-                  Score at least 80% to unlock certificate 💪
-                </Typography>
-              )}
+              <Button sx={{ mt: 3 }} onClick={() => navigate("/dashboard")}>
+                Back
+              </Button>
             </Box>
           )}
         </Box>

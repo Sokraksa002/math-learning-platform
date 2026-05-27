@@ -9,102 +9,109 @@ import {
   FormControlLabel,
   Alert,
   CircularProgress,
+  InputAdornment,
+  IconButton,
+  LinearProgress,
 } from "@mui/material";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
-import { useAuthModal } from "../contexts/AuthModalContext";
-import { useLocale } from "../hooks/useLocale";
-
-import bookImg from "../assets/Login/Book.png";
-import paperImg from "../assets/Login/Paper.png";
-import backpackImg from "../assets/Login/backpack.png";
-import bg1 from "../assets/Login/bg1.png";
-import bg2 from "../assets/Login/bg2.png";
-import { colorPalette } from "../theme/colorPalette";
-
-type StoredUser = {
-  id: string;
-  fullName: string;
-  email: string;
-  password: string;
-  role: "student";
-  createdAt: string;
-};
-
-const textFieldStyles = {
-  mb: 1.5,
-  "& .MuiInputBase-input": {
-    color: "white",
-    fontSize: "0.9rem",
-  },
-  "& .MuiInputBase-input::placeholder": {
-    color: "rgba(239,247,255,0.78)",
-    opacity: 1,
-  },
-  "& .MuiOutlinedInput-root": {
-    background: "rgba(255,255,255,0.1)",
-    borderRadius: "12px",
-    height: 36,
-    "& fieldset": {
-      borderColor: "rgba(255,255,255,0.38)",
-    },
-    "&:hover fieldset": {
-      borderColor: "rgba(255,255,255,0.75)",
-    },
-    "&.Mui-focused fieldset": {
-      borderColor: "white",
-    },
-  },
-};
+import {
+  Person,
+  Email as EmailIcon,
+  Lock,
+  Visibility,
+  VisibilityOff,
+} from "@mui/icons-material";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom"; // ✅ NEW
+import { publicPost, saveToken } from "../utils/api"; // ✅ NEW
 
 export default function Register() {
-  const navigate = useNavigate();
-  const { t } = useLocale();
-  const { openLogin } = useAuthModal();
+  const navigate = useNavigate(); // ✅ NEW
+
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] =
+    useState("");
+
   const [agreeTerms, setAgreeTerms] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const validateEmail = (value: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] =
+    useState(false);
 
-  const handleRegister = async (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
+  // ✅ Password strength
+  const getStrength = () => {
+    if (password.length < 6)
+      return { label: "Weak", value: 30, color: "red" };
+
+    if (/[A-Z]/.test(password) && /[0-9]/.test(password))
+      return {
+        label: "Strong",
+        value: 100,
+        color: "#10B981",
+      };
+
+    return {
+      label: "Medium",
+      value: 60,
+      color: "#F59E0B",
+    };
+  };
+
+  const strength = getStrength();
+
+  // ✅ UPDATED REGISTER HANDLER
+  const handleRegister = async (
+    e: FormEvent<HTMLFormElement>
+  ) => {
+    e.preventDefault();
+
     setError("");
     setSuccess("");
 
-    if (!fullName.trim()) return setError("Full name is required");
-    if (!email.trim()) return setError("Email is required");
-    if (!validateEmail(email)) return setError("Please enter a valid email");
-    if (password.length < 6) return setError("Password must be at least 6 characters");
-    if (password !== confirmPassword) return setError("Passwords do not match");
-    if (!agreeTerms) return setError("Please agree to the terms and conditions");
+    if (!fullName || !email || !password)
+      return setError("Please fill all fields");
 
-    const existingUsers = JSON.parse(localStorage.getItem("registeredUsers") || "[]") as StoredUser[];
-    const alreadyExists = existingUsers.some((user) => user.email.toLowerCase() === email.toLowerCase());
-    if (alreadyExists) return setError("Email already registered. Please login instead.");
+    if (password !== confirmPassword)
+      return setError("Passwords do not match");
 
-    setLoading(true);
+    if (!agreeTerms)
+      return setError("Please accept terms");
+
     try {
-      const newUser: StoredUser = {
-        id: Date.now().toString(),
-        fullName,
+      setLoading(true);
+
+      // ✅ CALL API
+      const res = await publicPost<{
+        success: boolean;
+        data: {
+          token: string;
+          user: { id: string; email: string };
+        };
+      }>("/api/auth/register", {
+        name: fullName,
         email,
         password,
-        role: "student",
-        createdAt: new Date().toISOString(),
-      };
+      });
 
-      existingUsers.push(newUser);
-      localStorage.setItem("registeredUsers", JSON.stringify(existingUsers));
+      // ✅ AUTO LOGIN
+      saveToken(res.data.token);
 
-      setSuccess("Registration successful! Opening login...");
-      window.setTimeout(() => openLogin(), 1200);
-    } catch {
-      setError("Registration failed. Please try again.");
+      setSuccess("Account created successfully!");
+
+      // ✅ REDIRECT TO HOME
+      setTimeout(() => {
+        navigate("/");
+      }, 600);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Registration failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -113,161 +120,185 @@ export default function Register() {
   return (
     <Box
       sx={{
-        position: "fixed",
-        inset: 0,
-        height: "100dvh",
-        width: "100vw",
+        minHeight: "100vh",
         display: "flex",
-        overflow: "hidden",
-        background: `radial-gradient(circle at 12% 16%, ${colorPalette.background.light} 0%, ${colorPalette.background.lighter} 45%, ${colorPalette.background.default} 100%)`,
+        justifyContent: "center",
+        alignItems: "center",
+        background:
+          "linear-gradient(135deg,#6366F1,#4F46E5,#4338CA)",
       }}
     >
-      <Box
-        sx={{
-          flex: 1,
-          height: "100dvh",
-          position: "relative",
-          display: { xs: "none", md: "block" },
-          overflow: "hidden",
-          filter: "saturate(1.06)",
-        }}
-      >
-        <img src={bg1} alt={t('pages.Register.background', 'background')} style={{ position: "absolute", width: "100%", height: "100%", objectFit: "cover", objectPosition: "left center" }} />
-        <img src={bg2} alt={t('pages.Register.background2', 'background2')} style={{ position: "absolute", width: "50%", height: "100%", objectFit: "cover", objectPosition: "left center", opacity: 0.78 }} />
-        <img src={bookImg} alt={t('pages.Register.book', 'book')} style={{ position: "absolute", width: "350px", top: "5%", left: "20%" }} />
-        <img src={paperImg} alt={t('pages.Register.paper', 'paper')} style={{ position: "absolute", width: "300px", top: "34%", left: "45%" }} />
-        <img src={backpackImg} alt={t('pages.Register.backpack', 'backpack')} style={{ position: "absolute", width: "260px", bottom: "0%", left: "0%" }} />
-      </Box>
-
-      <Box
-        sx={{
-          flex: 1,
-          height: "100dvh",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          px: { xs: 2, sm: 3 },
-          overflow: "hidden",
-          position: "relative",
-          "&::before": {
-            content: '""',
-            position: "absolute",
-            width: { xs: 240, sm: 340 },
-            height: { xs: 240, sm: 340 },
-            borderRadius: "50%",
-            background: `radial-gradient(circle, ${colorPalette.primary.lighter} 0%, rgba(0,0,0,0) 72%)`,
-            top: { xs: 10, sm: 24 },
-            right: { xs: -60, sm: -70 },
-            pointerEvents: "none",
-          },
-        }}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
       >
         <Paper
           component="form"
           onSubmit={handleRegister}
           sx={{
-            width: { xs: "min(94vw, 420px)", sm: "420px" },
-            maxHeight: "calc(100dvh - 32px)",
-            overflow: "auto",
-            p: { xs: 2.5, sm: 3.5 },
-            borderRadius: "26px",
-            background: `linear-gradient(160deg, ${colorPalette.primary.light} 0%, ${colorPalette.primary.main} 48%, ${colorPalette.primary.dark} 100%)`,
-            color: "white",
-            border: "1px solid rgba(255,255,255,0.26)",
-            backdropFilter: "blur(8px)",
-            boxShadow: "0 22px 55px rgba(19, 62, 130, 0.28)",
+            width: 380,
+            p: 4,
+            borderRadius: 4,
+            backdropFilter: "blur(12px)",
+            background: "rgba(255,255,255,0.08)",
+            color: "#fff",
+            boxShadow: "0 20px 50px rgba(0,0,0,0.25)",
           }}
-          elevation={6}
         >
-          <Typography variant="h4" fontWeight={700} mb={0.75} letterSpacing={1.05} fontSize={{ xs: "1.8rem", sm: "2.1rem" }} sx={{ textShadow: "0 2px 14px rgba(0,0,0,0.17)" }}>
-            CREATE ACCOUNT
-          </Typography>
-          <Typography variant="body1" mb={2.6} sx={{ opacity: 0.95, fontSize: "0.95rem", color: "#ecf5ff" }}>
-            Create your account and start learning smarter.
+          <Typography fontSize={26} fontWeight={800} mb={1}>
+            Create Account 🚀
           </Typography>
 
-          <Typography mb={0.55} sx={{ fontSize: "0.88rem", fontWeight: 600, color: "#f3f9ff" }}>{t('pages.Register.full_name', 'Full name')}</Typography>
+          <Typography fontSize={14} mb={2} sx={{ opacity: 0.85 }}>
+            Start your journey today
+          </Typography>
+
+          {/* NAME */}
           <TextField
-            size="small"
-            placeholder={t('pages.Register.enter_your_full_name', 'Enter your full name')}
+            placeholder="Full Name"
             fullWidth
             value={fullName}
             onChange={(e) => setFullName(e.target.value)}
-            sx={textFieldStyles}
+            sx={{ mb: 2 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Person sx={{ color: "#fff" }} />
+                </InputAdornment>
+              ),
+            }}
           />
 
-          <Typography mb={0.55} sx={{ fontSize: "0.88rem", fontWeight: 600, color: "#f3f9ff" }}>{t('pages.Register.email', 'Email')}</Typography>
+          {/* EMAIL */}
           <TextField
-            size="small"
-            placeholder={t('pages.Register.enter_your_email', 'Enter your email')}
-            type="email"
+            placeholder="Email"
             fullWidth
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            sx={textFieldStyles}
+            sx={{ mb: 2 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <EmailIcon sx={{ color: "#fff" }} />
+                </InputAdornment>
+              ),
+            }}
           />
 
-          <Typography mb={0.55} sx={{ fontSize: "0.88rem", fontWeight: 600, color: "#f3f9ff" }}>{t('pages.Register.password', 'Password')}</Typography>
+          {/* PASSWORD */}
           <TextField
-            size="small"
-            placeholder={t('pages.Register.create_a_password', 'Create a password')}
-            type="password"
+            placeholder="Password"
+            type={showPassword ? "text" : "password"}
             fullWidth
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            sx={textFieldStyles}
+            sx={{ mb: 1 }}
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Lock sx={{ color: "#fff" }} />
+                </InputAdornment>
+              ),
+              endAdornment: (
+                <IconButton
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? (
+                    <VisibilityOff />
+                  ) : (
+                    <Visibility />
+                  )}
+                </IconButton>
+              ),
+            }}
           />
 
-          <Typography mb={0.55} sx={{ fontSize: "0.88rem", fontWeight: 600, color: "#f3f9ff" }}>{t('pages.Register.confirm_password', 'Confirm Password')}</Typography>
+          {/* STRENGTH */}
+          {password && (
+            <>
+              <LinearProgress
+                variant="determinate"
+                value={strength.value}
+                sx={{
+                  height: 6,
+                  borderRadius: 5,
+                  mb: 1,
+                  background: "#ffffff33",
+                  "& .MuiLinearProgress-bar": {
+                    backgroundColor: strength.color,
+                  },
+                }}
+              />
+              <Typography fontSize={12} mb={1}>
+                Strength: {strength.label}
+              </Typography>
+            </>
+          )}
+
+          {/* CONFIRM */}
           <TextField
-            size="small"
-            placeholder={t('pages.Register.confirm_your_password', 'Confirm your password')}
-            type="password"
+            placeholder="Confirm Password"
+            type={showConfirmPassword ? "text" : "password"}
             fullWidth
             value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            sx={textFieldStyles}
+            onChange={(e) =>
+              setConfirmPassword(e.target.value)
+            }
+            sx={{ mb: 2 }}
+            InputProps={{
+              endAdornment: (
+                <IconButton
+                  onClick={() =>
+                    setShowConfirmPassword(
+                      !showConfirmPassword
+                    )
+                  }
+                >
+                  {showConfirmPassword ? (
+                    <VisibilityOff />
+                  ) : (
+                    <Visibility />
+                  )}
+                </IconButton>
+              ),
+            }}
           />
 
           <FormControlLabel
-            control={<Checkbox size="small" checked={agreeTerms} onChange={(e) => setAgreeTerms(e.target.checked)} sx={{ color: "rgba(240,248,255,0.8)", p: 0.5, "&.Mui-checked": { color: colorPalette.primary.dark } }} />}
-            label={t('pages.Register.i_agree_to_the_terms_and_conditions', 'I agree to the terms and conditions')}
-            sx={{ color: "#f1f8ff", mb: 1, m: 0, "& .MuiFormControlLabel-label": { fontSize: "0.86rem" } }}
+            control={
+              <Checkbox
+                checked={agreeTerms}
+                onChange={(e) =>
+                  setAgreeTerms(e.target.checked)
+                }
+              />
+            }
+            label="I agree to terms"
           />
 
-          {error && <Alert severity="error" sx={{ mb: 1.5, fontSize: "0.85rem", color: "#fff", backgroundColor: "rgba(211, 47, 47, 0.8)" }}>{error}</Alert>}
-          {success && <Alert severity="success" sx={{ mb: 1.5, fontSize: "0.85rem", color: "#fff", backgroundColor: "rgba(56, 142, 60, 0.8)" }}>{success}</Alert>}
+          {error && <Alert severity="error">{error}</Alert>}
+          {success && (
+            <Alert severity="success">{success}</Alert>
+          )}
 
           <Button
             type="submit"
-            variant="contained"
             fullWidth
             disabled={loading}
             sx={{
-              background: `linear-gradient(180deg, ${colorPalette.primary.dark} 0%, ${colorPalette.primary.main} 100%)`,
-              py: 1,
-              mb: 1.5,
-              borderRadius: "12px",
-              fontWeight: 600,
-              letterSpacing: 0.3,
-              fontSize: "1rem",
-              textTransform: "none",
-              boxShadow: "0 10px 22px rgba(12, 53, 138, 0.35)",
-              "&:hover": { boxShadow: "0 14px 26px rgba(12, 53, 138, 0.4)" },
-              "&:disabled": { opacity: 0.7 },
+              mt: 2,
+              py: 1.2,
+              borderRadius: 2,
+              fontWeight: 700,
+              background:
+                "linear-gradient(135deg,#6366F1,#4F46E5)",
             }}
           >
-            {loading ? <CircularProgress size={24} sx={{ color: "white" }} /> : "Register"}
+            {loading ? <CircularProgress size={20} /> : "Register"}
           </Button>
-
-          <Typography textAlign="center" mt={1.6} sx={{ opacity: 0.96, fontSize: "0.8rem", color: "#f2f8ff" }}>
-            Already have an account?{" "}
-            <Typography component={RouterLink} to="/login" sx={{ color: colorPalette.accent.yellow, fontWeight: 700, textDecoration: "none", display: "inline", "&:hover": { textDecoration: "underline" } }}>
-              Sign in
-            </Typography>
-          </Typography>
         </Paper>
-      </Box>
+      </motion.div>
     </Box>
   );
 }

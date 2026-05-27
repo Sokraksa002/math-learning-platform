@@ -17,8 +17,7 @@
 
     "types": ["node", "jest"],
     "composite": true,
-    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.backend.tsbuildinfo",
-    "ignoreDeprecations": "6.0"
+    "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.backend.tsbuildinfo"
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]

@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import { useLocale } from '../../hooks/useLocale';
 import { Box, Button, MenuItem, Paper, Select, Stack, TextField, Typography } from '@mui/material';
 import type { SelectChangeEvent } from '@mui/material/Select';
+import { useNavigate } from 'react-router-dom';
+import { isLoggedIn } from '../../utils/auth';
 
 interface FlashcardData {
   front: string;
@@ -32,6 +34,7 @@ const lessonOptions = ['Limit', 'Derivative', 'Integral'];
 
 export default function FlashcardBoard() {
   const { t } = useLocale();
+  const navigate = useNavigate();
   const [lesson, setLesson] = useState('Limit');
   const [topic, setTopic] = useState('f(x) = (x - 1)lnx');
   const [card, setCard] = useState<FlashcardData | null>(null);
@@ -46,6 +49,11 @@ export default function FlashcardBoard() {
   }, [card]);
 
   const handleGenerate = () => {
+    // require login for generation
+    if (!isLoggedIn()) {
+      navigate(`/login?next=${encodeURIComponent('/flashcard')}`);
+      return;
+    }
     const nextCard = flashcardLibrary[lesson] ?? flashcardLibrary.Limit;
     const derivedCard =
       topic.trim().length > 0

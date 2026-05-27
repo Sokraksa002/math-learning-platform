@@ -1,20 +1,26 @@
+const path = require("path");
+
 module.exports = {
   root: true,
-  parser: '@typescript-eslint/parser',
+  parser: "@typescript-eslint/parser",
   parserOptions: {
-    project: './tsconfig.json',
-    sourceType: 'module',
-    // Prevent parser from warning about unsupported TypeScript versions (e.g. TS 6)
-    warnOnUnsupportedTypeScriptVersion: false,
+    project: [path.join(__dirname, "tsconfig.json"), path.join(__dirname, "prisma/tsconfig.json")],
+    tsconfigRootDir: __dirname,
+    sourceType: "module",
   },
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: ["@typescript-eslint", "prettier"],
   extends: [
-    'eslint:recommended',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:prettier/recommended",
+  ],
+  ignorePatterns: [
+    "prisma.config.ts",
+    "jest.config.ts",
+    ".eslintrc.cjs"
   ],
   rules: {
-    'prettier/prettier': 'error',
-    '@typescript-eslint/no-explicit-any': 'off',
+    "prettier/prettier": "error",
+    "@typescript-eslint/no-explicit-any": "off",
   },
 };

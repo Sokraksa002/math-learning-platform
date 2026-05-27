@@ -1,9 +1,12 @@
 import { Box, Container, Typography, Card, CardContent, CardActionArea } from '@mui/material';
-import { MenuBook, Edit, Image, School, AutoStories, Camera } from '@mui/icons-material';
+import { MenuBook, Edit, Image, School, AutoStories } from '@mui/icons-material';
 import { useLocale } from '../../hooks/useLocale';
+import { useNavigate } from 'react-router-dom';
 
 export default function OurFunctionsSection() {
   const { t } = useLocale();
+
+  const navigate = useNavigate();
 
   const features = [
     {
@@ -16,6 +19,7 @@ export default function OurFunctionsSection() {
       icon: MenuBook,
       bgColor: '#DBEAFE',
       iconColor: '#0284C7',
+      path: '/chapter',
     },
     {
       title: t('nav.quiz', 'Quiz Practice'),
@@ -27,6 +31,7 @@ export default function OurFunctionsSection() {
       icon: Edit,
       bgColor: '#E0E7FF',
       iconColor: '#6366F1',
+      path: '/quiz',
     },
     {
       title: t('flashcard.flashcardQA', 'Flashcard'),
@@ -38,6 +43,7 @@ export default function OurFunctionsSection() {
       icon: AutoStories,
       bgColor: '#FEF3C7',
       iconColor: '#D97706',
+      path: '/flashcard',
     },
     {
       title: t('focus.title', 'Focus Timer'),
@@ -49,6 +55,7 @@ export default function OurFunctionsSection() {
       icon: School,
       bgColor: '#F3E8FF',
       iconColor: '#9333EA',
+      path: '/focus',
     },
     {
       title: t('certificate.title', 'Certificate'),
@@ -60,17 +67,7 @@ export default function OurFunctionsSection() {
       icon: Image,
       bgColor: '#FECACA',
       iconColor: '#DC2626',
-    },
-    {
-      title: t('scan.title', 'Quick Scan'),
-      titleKhmer: t('scan.khmer', 'ស្កេនលឿន'),
-      description: t(
-        'components.Home.OurFunctionsSection.scan_desc',
-        'ថតនិងបញ្ជូនទៅ ដោះស្រាយលម្អិតលម្អន់'
-      ),
-      icon: Camera,
-      bgColor: '#CCFBF1',
-      iconColor: '#0891B2',
+      path: '/certificate',
     },
   ];
 
@@ -126,7 +123,7 @@ export default function OurFunctionsSection() {
                 },
               }}
             >
-              <CardActionArea>
+              <CardActionArea onClick={() => feature.path && navigate(feature.path)}>
                 <Box
                   sx={{
                     backgroundColor: feature.bgColor,

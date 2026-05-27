@@ -1,31 +1,41 @@
-// Who am I according to the server?”
-
-// This is useful for:
-
-// front‑end profile page
-// checking login persistence
-// debugging JWT
-
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { prisma } from '../lib/prisma';
 
-/**
- * Protected route to get current user info
- */
 export async function meRoutes(app: FastifyInstance) {
   app.get(
     '/me',
-    {
-      preHandler: app.authenticate, // 🔐 JWT REQUIRED
-    },
+    { preHandler: app.authenticate },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      return reply.send({
-        success: true,
-        data: {
-          userId: request.user.userId,
-          role: request.user.role,
-        },
-      });
+      try {
+        const user = await prisma.user.findUnique({
+          where: { id: request.user.userId },
+          select: {
+            id: true,
+            email: true,
+            name: true,
+            role: true,
+            createdAt: true,
+          },
+        });
+
+        if (!user) {
+          return reply.code(404).send({
+            success: false,
+            message: 'User not found',
+          });
+        }
+
+        return reply.send({
+          success: true,
+          data: user,
+        });
+      } catch (error) {
+        console.error('[me]', error);
+        return reply.code(500).send({
+          success: false,
+          message: 'Internal server error',
+        });
+      }
     },
   );
 }
-``;

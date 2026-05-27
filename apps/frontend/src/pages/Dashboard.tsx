@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import {
   ArrowRight,
@@ -24,15 +25,6 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import { useLocale } from "../hooks/useLocale";
 
 interface StatCardProps {
@@ -43,15 +35,15 @@ interface StatCardProps {
   note: string;
 }
 
-const progressData = [
-  { day: "Mon", score: 65 },
-  { day: "Tue", score: 80 },
-  { day: "Wed", score: 75 },
-  { day: "Thu", score: 90 },
-  { day: "Fri", score: 85 },
-  { day: "Sat", score: 70 },
-  { day: "Sun", score: 95 },
-];
+
+// We'll fetch real progress from the API
+import { getProgress } from "../utils/api";
+
+type ProgressSummary = {
+  totalLessons?: number;
+  completedLessons?: number;
+  progressPercent?: number;
+};
 
 const quickActions = [
   { label: "Quiz", icon: <Target className="h-4 w-4" />, color: "#eff6ff", path: "/quiz" },
@@ -93,9 +85,30 @@ export default function StudentDashboard() {
   const navigate = useNavigate();
   const { t } = useLocale();
 
-  const currentStreak = 6;
-  const maxStreak = 10;
-  const progressPercent = Math.round((currentStreak / maxStreak) * 100);
+  const [progress, setProgress] = useState<ProgressSummary | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    let mounted = true;
+    setLoading(true);
+    getProgress()
+      .then((data) => {
+        if (!mounted) return;
+        // backend returns { totalLessons, completedLessons, progressPercent }
+        setProgress((data as unknown) as ProgressSummary);
+      })
+      .catch((err) => {
+        if (!mounted) return;
+        // eslint-disable-next-line no-console
+        console.error("getProgress failed", err);
+        setProgress({ totalLessons: 0, completedLessons: 0, progressPercent: 0 });
+      })
+      .finally(() => mounted && setLoading(false));
+
+    return () => {
+      mounted = false;
+    };
+  }, [t]);
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#f3f7ff" }}>
@@ -149,223 +162,155 @@ export default function StudentDashboard() {
           </Box>
         </Paper>
 
-        <Grid container spacing={3} alignItems="stretch">
-          <Grid item xs={12} lg={8}>
-            <Stack spacing={3}>
-              <Paper
-                sx={{
-                  p: { xs: 3, md: 4 },
-                  borderRadius: 4,
-                  border: "1px solid #dbe4ff",
-                  background: "linear-gradient(135deg, #eff6ff 0%, #ffffff 100%)",
-                }}
-              >
-                <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="space-between" alignItems={{ sm: "center" }}>
-                  <Box>
-                    <Typography variant="overline" sx={{ letterSpacing: 1.2, color: "#2563eb", fontWeight: 800 }}>
-                      {t("pages.Dashboard.todays_focus", "Today's focus")}
-                    </Typography>
-                    <Typography variant="h5" fontWeight={900} sx={{ color: "#0f172a", mt: 0.5 }}>
-                      {t("pages.Dashboard.ready_to_beat_record", "Ready to beat your record?")}
-                    </Typography>
-                    <Typography sx={{ color: "#475569", mt: 1, maxWidth: 620 }}>
-                      {t("pages.Dashboard.mastered_concepts", "You've mastered 3 new concepts this week. Keep the momentum by opening a new chapter or reviewing a quiz.")}
-                    </Typography>
-                  </Box>
+        {/* Conditional dashboard content based on real progress data */}
+        {loading ? (
+          <Box sx={{ py: 8 }}>
+            <Typography>{t("loading", "Loading...")}</Typography>
+          </Box>
+        ) : (
+          (() => {
+            const completed = progress?.completedLessons ?? 0;
+            const total = progress?.totalLessons ?? 0;
+            const percent = progress?.progressPercent ?? 0;
+            const hasActivity = Boolean(progress && (completed > 0 || percent > 0));
 
-                  <Button
-                    onClick={() => navigate("/chapter")}
-                    variant="contained"
-                    size="large"
-                    endIcon={<ArrowRight size={18} />}
-                    sx={{
-                      alignSelf: { xs: "flex-start", sm: "center" },
-                      borderRadius: 999,
-                      px: 3,
-                      py: 1.4,
-                      bgcolor: "#1d4ed8",
-                      boxShadow: "0 16px 30px rgba(29, 78, 216, 0.28)",
-                    }}
-                  >
-                    {t("pages.Dashboard.continue_learning", "Continue Learning")}
-                  </Button>
-                </Stack>
-              </Paper>
+            if (!hasActivity) {
+              return (
+                <Box sx={{ display: "flex", justifyContent: "center", py: 8 }}>
+                  <Paper sx={{ p: 6, maxWidth: 760, textAlign: "center", borderRadius: 4 }}>
+                    <Typography variant="h4" fontWeight={900} sx={{ mb: 1 }}>
+                      {t("pages.Dashboard.welcome_new", "Welcome to Kanit 🎉")}
+                    </Typography>
+                    <Typography sx={{ color: "#475569", mb: 3 }}>
+                      {t(
+                        "pages.Dashboard.empty_message",
+                        "You haven’t started learning yet. Start a chapter to begin tracking your progress."
+                      )}
+                    </Typography>
+                    <Button variant="contained" size="large" onClick={() => navigate("/chapter")} sx={{ borderRadius: 999 }}>
+                      {t("pages.Dashboard.start_learning", "Start Learning")}
+                    </Button>
+                  </Paper>
+                </Box>
+              );
+            }
 
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
-                  <StatCard
-                    title={t("pages.Dashboard.chapters_done", "Chapters Done")}
-                    value="12"
-                    accent="linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
-                    note={t("pages.Dashboard.chapters_done_note", "Steady progress through the core chapter path.")}
-                    icon={<BookOpen className="h-24 w-24" />}
-                  />
+            return (
+              <Grid container spacing={3} alignItems="stretch">
+                <Grid item xs={12} lg={8}>
+                  <Stack spacing={3}>
+                    <Paper sx={{ p: { xs: 3, md: 4 }, borderRadius: 4, border: "1px solid #dbe4ff", background: "linear-gradient(135deg, #eff6ff 0%, #ffffff 100%)" }}>
+                      <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="space-between" alignItems={{ sm: "center" }}>
+                        <Box>
+                          <Typography variant="overline" sx={{ letterSpacing: 1.2, color: "#2563eb", fontWeight: 800 }}>
+                            {t("pages.Dashboard.student_progress", "Your progress")}
+                          </Typography>
+                          <Typography variant="h5" fontWeight={900} sx={{ color: "#0f172a", mt: 0.5 }}>
+                            {t("pages.Dashboard.keep_going", "Keep going — you’re making progress")}
+                          </Typography>
+                          <Typography sx={{ color: "#475569", mt: 1, maxWidth: 620 }}>
+                            {t("pages.Dashboard.progress_summary", "Here’s a quick summary of your learning progress.")}
+                          </Typography>
+                        </Box>
+
+                        <Button onClick={() => navigate("/chapter")} variant="contained" size="large" endIcon={<ArrowRight size={18} />} sx={{ alignSelf: { xs: "flex-start", sm: "center" }, borderRadius: 999, px: 3, py: 1.4, bgcolor: "#1d4ed8", boxShadow: "0 16px 30px rgba(29, 78, 216, 0.28)" }}>
+                          {t("pages.Dashboard.continue_learning", "Continue Learning")}
+                        </Button>
+                      </Stack>
+                    </Paper>
+
+                    <Grid container spacing={3}>
+                      <Grid item xs={12} md={6}>
+                        <StatCard
+                          title={t("pages.Dashboard.completed_lessons", "Completed Lessons")}
+                          value={total ? `${completed} / ${total}` : completed}
+                          accent="linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)"
+                          note={t("pages.Dashboard.completed_lessons_note", "Lessons you've completed so far.")}
+                          icon={<BookOpen className="h-24 w-24" />}
+                        />
+                      </Grid>
+
+                      <Grid item xs={12} md={6}>
+                        <StatCard
+                          title={t("pages.Dashboard.overall_progress", "Overall Progress")}
+                          value={`${percent}%`}
+                          accent="linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%)"
+                          note={t("pages.Dashboard.progress_note", "Percent of published lessons completed.")}
+                          icon={<Target className="h-24 w-24" />}
+                        />
+                      </Grid>
+                    </Grid>
+
+                    <Paper sx={{ p: 3, borderRadius: 4, border: "1px solid #e2e8f0" }}>
+                      <Typography variant="h6" fontWeight={900} color="#0f172a" sx={{ mb: 1 }}>
+                        {t("pages.Dashboard.summary", "Summary")}
+                      </Typography>
+                      <Typography sx={{ color: "#475569", mb: 2 }}>
+                        {`You have completed ${completed} lessons.`}
+                      </Typography>
+                    </Paper>
+                  </Stack>
                 </Grid>
-                <Grid item xs={12} md={4}>
-                  <StatCard
-                    title={t("pages.Dashboard.quiz_accuracy", "Quiz Accuracy")}
-                    value="89%"
-                    accent="linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%)"
-                    note={t("pages.Dashboard.quiz_accuracy_note", "Strong quiz performance across recent attempts.")}
-                    icon={<Target className="h-24 w-24" />}
-                  />
-                </Grid>
-                <Grid item xs={12} md={4}>
-                  <StatCard
-                    title={t("pages.Dashboard.focus_hours", "Focus Hours")}
-                    value="24.5h"
-                    accent="linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)"
-                    note={t("pages.Dashboard.focus_hours_note", "Dedicated practice time keeps the streak alive.")}
-                    icon={<Clock className="h-24 w-24" />}
-                  />
+
+                <Grid item xs={12} lg={4}>
+                  <Stack spacing={3}>
+                    <Paper sx={{ p: 3, borderRadius: 4, border: "1px solid #e2e8f0" }}>
+                      <Stack direction="row" spacing={1.5} alignItems="center">
+                        <Box sx={{ borderRadius: 3, bgcolor: "#fff7ed", p: 1.5, color: "#ea580c" }}>
+                          <Zap className="h-6 w-6" />
+                        </Box>
+                        <Box>
+                          <Typography fontWeight={900} color="#0f172a">
+                            {t("pages.Dashboard.progress", "Progress")}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {t("pages.Dashboard.progress_sub", "Completed percentage of the curriculum.")}
+                          </Typography>
+                        </Box>
+                      </Stack>
+
+                      <Box sx={{ mt: 3 }}>
+                        <Typography variant="h3" fontWeight={900} color="#0f172a" sx={{ lineHeight: 1 }}>
+                          {percent}%
+                        </Typography>
+                        <Typography sx={{ color: "#64748b", mt: 1 }}>{t("pages.Dashboard.of_curriculum", "of curriculum")}</Typography>
+                      </Box>
+
+                      <Box sx={{ mt: 3 }}>
+                        <LinearProgress variant="determinate" value={percent} sx={{ height: 10, borderRadius: 999, bgcolor: "#e2e8f0" }} />
+                      </Box>
+                    </Paper>
+
+                    <Paper sx={{ p: 3, borderRadius: 4, border: "1px solid #e2e8f0" }}>
+                      <Typography variant="h6" fontWeight={900} color="#0f172a" sx={{ mb: 2 }}>
+                        Quick Actions
+                      </Typography>
+                      <Grid container spacing={1.5}>
+                        {quickActions.map((action) => (
+                          <Grid item xs={6} key={action.label}>
+                            <Button fullWidth onClick={() => navigate(action.path)} sx={{ height: 88, borderRadius: 3, background: action.color, color: "#0f172a", border: "1px solid rgba(148, 163, 184, 0.22)", display: "flex", flexDirection: "column", gap: 1, textTransform: "none", fontWeight: 800 }}>
+                              {action.icon}
+                              {action.label}
+                            </Button>
+                          </Grid>
+                        ))}
+                      </Grid>
+                    </Paper>
+
+                    <Paper sx={{ p: 3, borderRadius: 4, border: "1px dashed #cbd5e1", bgcolor: "#f8fafc" }}>
+                      <Stack direction="row" spacing={1.5} alignItems="center">
+                        <BarChart3 className="h-5 w-5 text-blue-600" />
+                        <Typography fontWeight={900} color="#0f172a">Daily Challenge</Typography>
+                      </Stack>
+                      <Typography sx={{ mt: 1.5, color: "#475569" }}>{t("pages.Dashboard.daily_challenge_text", "Complete 5 quiz questions to unlock the Mastery badge and improve your weekly score.")}</Typography>
+                      <Button onClick={() => navigate("/quiz")} variant="contained" fullWidth sx={{ mt: 2.5, borderRadius: 999, py: 1.25, bgcolor: "#0f172a" }}>{t("pages.Dashboard.go_to_quiz", "Go to Quiz")}</Button>
+                    </Paper>
+                  </Stack>
                 </Grid>
               </Grid>
-
-              <Paper sx={{ p: { xs: 3, md: 4 }, borderRadius: 4, border: "1px solid #e2e8f0" }}>
-                <Stack direction={{ xs: "column", sm: "row" }} justifyContent="space-between" spacing={2} sx={{ mb: 3 }}>
-                  <Box>
-                    <Typography variant="h6" fontWeight={900} color="#0f172a">
-                      {t("pages.Dashboard.weekly_performance", "Weekly Performance")}
-                    </Typography>
-                    <Typography color="text.secondary">
-                      {t("pages.Dashboard.weekly_performance_subtitle", "Match your progress against the learning goals for this week.")}
-                    </Typography>
-                  </Box>
-                  <Chip label={t("pages.Dashboard.last_7_days", "Last 7 days")} sx={{ bgcolor: "#eff6ff", color: "#1d4ed8", fontWeight: 700 }} />
-                </Stack>
-
-                <Box sx={{ height: 280, width: "100%" }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <LineChart data={progressData}>
-                      <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                      <XAxis dataKey="day" axisLine={false} tickLine={false} tick={{ fill: "#64748b", fontSize: 12 }} dy={10} />
-                      <YAxis hide />
-                      <Tooltip
-                        contentStyle={{ borderRadius: 16, border: "none", boxShadow: "0 20px 30px rgba(15, 23, 42, 0.12)" }}
-                      />
-                      <Line
-                        type="monotone"
-                        dataKey="score"
-                        stroke="#2563eb"
-                        strokeWidth={4}
-                        dot={{ r: 6, fill: "#2563eb", strokeWidth: 2, stroke: "#fff" }}
-                        activeDot={{ r: 8 }}
-                      />
-                    </LineChart>
-                  </ResponsiveContainer>
-                </Box>
-              </Paper>
-            </Stack>
-          </Grid>
-
-          <Grid item xs={12} lg={4}>
-            <Stack spacing={3}>
-              <Paper sx={{ p: 3, borderRadius: 4, border: "1px solid #e2e8f0" }}>
-                <Stack direction="row" spacing={1.5} alignItems="center">
-                  <Box sx={{ borderRadius: 3, bgcolor: "#fff7ed", p: 1.5, color: "#ea580c" }}>
-                    <Zap className="h-6 w-6" />
-                  </Box>
-                  <Box>
-                    <Typography fontWeight={900} color="#0f172a">
-                      Study Streak
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Keep the streak going every day.
-                    </Typography>
-                  </Box>
-                </Stack>
-
-                <Box sx={{ mt: 3, textAlign: "center" }}>
-                  <Typography variant="h2" fontWeight={900} color="#0f172a" sx={{ lineHeight: 1 }}>
-                    {currentStreak}
-                  </Typography>
-                  <Typography sx={{ color: "#64748b", mt: 1 }}>days in a row</Typography>
-                </Box>
-
-                <Box sx={{ mt: 3 }}>
-                  <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-                    <Typography variant="body2" fontWeight={700} color="#475569">
-                      Progress to goal
-                    </Typography>
-                    <Typography variant="body2" fontWeight={700} color="#475569">
-                      {currentStreak}/{maxStreak}
-                    </Typography>
-                  </Stack>
-                  <LinearProgress
-                    variant="determinate"
-                    value={progressPercent}
-                    sx={{ height: 10, borderRadius: 999, bgcolor: "#e2e8f0" }}
-                  />
-                </Box>
-              </Paper>
-
-              <Paper sx={{ p: 3, borderRadius: 4, border: "1px solid #e2e8f0" }}>
-                <Typography variant="h6" fontWeight={900} color="#0f172a" sx={{ mb: 2 }}>
-                  Quick Actions
-                </Typography>
-                <Grid container spacing={1.5}>
-                  {quickActions.map((action) => (
-                    <Grid item xs={6} key={action.label}>
-                      <Button
-                        fullWidth
-                        onClick={() => navigate(action.path)}
-                        sx={{
-                          height: 88,
-                          borderRadius: 3,
-                          background: action.color,
-                          color: "#0f172a",
-                          border: "1px solid rgba(148, 163, 184, 0.22)",
-                          display: "flex",
-                          flexDirection: "column",
-                          gap: 1,
-                          textTransform: "none",
-                          fontWeight: 800,
-                          transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                          "&:hover": {
-                            transform: "translateY(-2px)",
-                            boxShadow: "0 16px 28px rgba(15, 23, 42, 0.08)",
-                            background: action.color,
-                          },
-                        }}
-                      >
-                        {action.icon}
-                        {action.label}
-                      </Button>
-                    </Grid>
-                  ))}
-                </Grid>
-              </Paper>
-
-              <Paper
-                sx={{
-                  p: 3,
-                  borderRadius: 4,
-                  border: "1px dashed #cbd5e1",
-                  bgcolor: "#f8fafc",
-                }}
-              >
-                <Stack direction="row" spacing={1.5} alignItems="center">
-                  <BarChart3 className="h-5 w-5 text-blue-600" />
-                  <Typography fontWeight={900} color="#0f172a">
-                    Daily Challenge
-                  </Typography>
-                </Stack>
-                  <Typography sx={{ mt: 1.5, color: "#475569" }}>
-                    {t("pages.Dashboard.daily_challenge_text", "Complete 5 quiz questions to unlock the Mastery badge and improve your weekly score.")}
-                  </Typography>
-                <Button
-                  onClick={() => navigate("/quiz")}
-                  variant="contained"
-                  fullWidth
-                  sx={{ mt: 2.5, borderRadius: 999, py: 1.25, bgcolor: "#0f172a" }}
-                >
-                  {t("pages.Dashboard.go_to_quiz", "Go to Quiz")}
-                </Button>
-              </Paper>
-            </Stack>
-          </Grid>
-        </Grid>
+            );
+          })()
+        )}
       </Container>
     </Box>
   );

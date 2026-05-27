@@ -1,11 +1,13 @@
-import { useEffect, useState, useSyncExternalStore } from 'react';
+import { useEffect, useState, useSyncExternalStore } from "react";
 
-type LocaleData = Record<string, any>;
+type LocaleData = Record<string, unknown>;
 
-const LOCALE_STORAGE_KEY = 'locale';
-const DEFAULT_LOCALE = 'en';
+const LOCALE_STORAGE_KEY = "locale";
+const DEFAULT_LOCALE = "en";
 
-let currentLocale = localStorage.getItem(LOCALE_STORAGE_KEY) || DEFAULT_LOCALE;
+let currentLocale =
+  localStorage.getItem(LOCALE_STORAGE_KEY) || DEFAULT_LOCALE;
+
 const listeners = new Set<() => void>();
 
 const subscribe = (listener: () => void) => {
@@ -20,7 +22,12 @@ const notifyLocaleChange = () => {
 };
 
 export function useLocale() {
-  const locale = useSyncExternalStore(subscribe, getLocaleSnapshot, getLocaleSnapshot);
+  const locale = useSyncExternalStore(
+    subscribe,
+    getLocaleSnapshot,
+    getLocaleSnapshot
+  );
+
   const [messages, setMessages] = useState<LocaleData>({});
 
   useEffect(() => {
@@ -29,28 +36,34 @@ export function useLocale() {
         const mod = await import(`../locales/${locale}.json`);
         setMessages(mod.default ?? mod);
       } catch (e) {
-        console.error('Failed to load locale', locale, e);
+        console.error("Failed to load locale", locale, e);
       }
     };
 
     load();
   }, [locale]);
 
+  // ✅ SUPPORT NESTED KEYS (IMPORTANT)
   const t = (path: string, fallback?: string) => {
-    const parts = path.split('.');
-    let cur: any = messages;
+    const parts = path.split(".");
+    let cur: unknown = messages;
+
     for (const p of parts) {
-      if (!cur) return fallback ?? path;
-      cur = cur[p];
+      if (typeof cur !== "object" || cur === null) {
+        return fallback ?? path;
+      }
+      const obj = cur as Record<string, unknown>;
+      cur = obj[p];
     }
-    return typeof cur === 'string' ? cur : fallback ?? path;
+
+    return typeof cur === "string" ? cur : fallback ?? path;
   };
 
-  const set = (l: string) => {
+  const setLocale = (l: string) => {
     currentLocale = l;
     localStorage.setItem(LOCALE_STORAGE_KEY, l);
     notifyLocaleChange();
   };
 
-  return { locale, setLocale: set, t };
+  return { locale, setLocale, t };
 }

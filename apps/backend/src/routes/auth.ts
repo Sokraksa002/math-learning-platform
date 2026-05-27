@@ -5,18 +5,15 @@ import { registerJsonSchema, loginJsonSchema } from '../validators/auth';
 
 /**
  * Authentication routes
- * Prefix: /api/auth
  */
 export async function authRoutes(app: FastifyInstance) {
   /**
-   * POST /api/auth/register
-   * Create a new user (NO JWT here)
+   * ✅ REGISTER (RETURN TOKEN → AUTO LOGIN)
    */
   app.post(
     '/register',
     { schema: { body: registerJsonSchema } },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // Fastify has already validated `request.body` against registerJsonSchema
       const { email, name, password } = request.body as {
         email: string;
         name: string;
@@ -45,9 +42,16 @@ export async function authRoutes(app: FastifyInstance) {
           },
         });
 
+        // ✅ AUTO LOGIN TOKEN
+        const token = await reply.jwtSign({
+          userId: user.id,
+          role: user.role,
+        });
+
         return reply.code(201).send({
           success: true,
           data: {
+            token,
             user: {
               id: user.id,
               email: user.email,
@@ -68,15 +72,16 @@ export async function authRoutes(app: FastifyInstance) {
   );
 
   /**
-   * POST /api/auth/login
-   * Authenticate user and ISSUE JWT
+   * ✅ LOGIN
    */
   app.post(
     '/login',
     { schema: { body: loginJsonSchema } },
     async (request: FastifyRequest, reply: FastifyReply) => {
-      // Fastify has already validated `request.body` against loginJsonSchema
-      const { email, password } = request.body as { email: string; password: string };
+      const { email, password } = request.body as {
+        email: string;
+        password: string;
+      };
 
       try {
         const user = await prisma.user.findUnique({
@@ -91,6 +96,7 @@ export async function authRoutes(app: FastifyInstance) {
         }
 
         const isMatch = await bcrypt.compare(password, user.passwordHash);
+
         if (!isMatch) {
           return reply.code(401).send({
             success: false,
@@ -98,7 +104,6 @@ export async function authRoutes(app: FastifyInstance) {
           });
         }
 
-        // ✅ JWT SIGNING (plugin must be registered before routes)
         const token = await reply.jwtSign({
           userId: user.id,
           role: user.role,
@@ -125,4 +130,76 @@ export async function authRoutes(app: FastifyInstance) {
       }
     },
   );
+
+  /**
+   * ✅ FORGOT PASSWORD
+   */
+  app.post('/forgot-password', async (request: FastifyRequest, reply: FastifyReply) => {
+    const { email } = request.body as { email: string };
+
+    try {
+      const user = await prisma.user.findUnique({
+        where: { email },
+      });
+
+      // ✅ Do NOT reveal if email exists
+      if (!user) {
+        return reply.send({
+          message: 'If this email exists, a reset link will be sent',
+        });
+      }
+
+      // ✅ Generate simple reset token (in real app: save in DB)
+      const resetToken = Buffer.from(`${user.id}:${Date.now()}`).toString('base64');
+
+      console.log('Reset token:', resetToken);
+
+      // ✅ In real app → send email here
+      // e.g. sendEmail(user.email, link)
+
+      return reply.send({
+        message: 'Password reset link generated (check backend log)',
+        resetToken,
+      });
+    } catch (error) {
+      console.error('[auth/forgot-password]', error);
+      return reply.code(500).send({
+        message: 'Internal server error',
+      });
+    }
+  });
+
+  /**
+   * ✅ RESET PASSWORD
+   */
+  app.post('/reset-password', async (request: FastifyRequest, reply: FastifyReply) => {
+    const { token, newPassword } = request.body as {
+      token: string;
+      newPassword: string;
+    };
+
+    try {
+      // ✅ Decode token
+      const decoded = Buffer.from(token, 'base64').toString('ascii');
+
+      const [userId] = decoded.split(':');
+
+      const passwordHash = await bcrypt.hash(newPassword, 12);
+
+      await prisma.user.update({
+        where: { id: userId },
+        data: { passwordHash },
+      });
+
+      return reply.send({
+        message: 'Password reset successful',
+      });
+    } catch (error) {
+      console.error('[auth/reset-password]', error);
+      return reply.code(400).send({
+        message: 'Invalid or expired token',
+      });
+    }
+  });
 }
+``;

@@ -1,11 +1,13 @@
 import { Box, Container, Typography, Chip, Button } from '@mui/material';
 import { useLocale } from '../../hooks/useLocale';
 import { ArrowRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const MATH_SYMBOLS = ['∑', '∫', 'π', '√', 'θ', 'x²', '∞', '∂'];
 
 export default function HeroSection() {
   const { t } = useLocale();
+  const navigate = useNavigate();
   return (
     <Box sx={{ position: 'relative', py: { xs: 4, md: 8 }, overflow: 'hidden' }}>
       <Container maxWidth="lg">
@@ -127,8 +129,9 @@ export default function HeroSection() {
                   '&:hover': { backgroundColor: '#F3F4F6' },
                 }}
                 endIcon={<ArrowRight size={18} />}
+                onClick={() => navigate('/chapter')}
               >
-                Get Started
+                {t('start_learning', 'Start Learning')}
               </Button>
             </Box>
           </Box>

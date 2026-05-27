@@ -1,37 +1,37 @@
-// Green theme color palette inspired by Math-Vision design
+// Blue theme color palette — modern blue tones
 export const colorPalette = {
-  // Primary Green
+  // Primary Blue
   primary: {
-    main: '#16a34a',
-    light: '#22c55e',
-    lighter: '#86efac',
-    dark: '#15803d',
+    main: '#2563EB', // blue-600
+    light: '#60A5FA', // blue-400
+    lighter: '#DBF3FF', // pale blue
+    dark: '#1E3A8A', // blue-800
   },
-  
+
   // Background
   background: {
-    light: '#f0fdf4',
-    lighter: '#e8faef',
+    light: '#F0F7FF',
+    lighter: '#EAF6FF',
     default: '#ffffff',
   },
-  
+
   // Accent Colors
   accent: {
     blue: '#0ea5e9',
     yellow: '#f59e0b',
-    purple: '#d946ef',
+    purple: '#7C3AED',
     pink: '#ec4899',
     red: '#ef4444',
   },
-  
+
   // Text
   text: {
-    primary: '#1f2937',
-    secondary: '#6b7280',
-    light: '#9ca3af',
+    primary: '#0F172A',
+    secondary: '#475569',
+    light: '#9CA3AF',
   },
-  
+
   // Border
-  border: '#e5e7eb',
-  borderLight: '#f3f4f6',
+  border: '#E6EEF9',
+  borderLight: '#F3F8FF',
 };

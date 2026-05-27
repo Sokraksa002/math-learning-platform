@@ -1,13 +1,17 @@
 {
   "nav": {
-    "home": "ទំព័រដើម",
-    "chapter": "មេរៀន",
-    "quiz": "សំណួរ",
-    "flashcard": "ការចងចាំ",
-    "profile": "ប្រវត្តិ",
-    "quizHistory": "ប្រវត្តិការប្រឡង",
-    "flashcardHistory": "ប្រវត្តិការចងចាំ",
-    "ability": "សមត្ថភាពរបស់ខ្ញុំ"
+    
+"home": "ទំព័រដើម",
+  "chapter": "មេរៀន",
+  "quiz": "កម្រងសំណួរ",
+  "flashcard": "កាតរំលឹក",
+  "ability": "សមត្ថភាព",
+  "certificate": "វិញ្ញាបនប័ត្រ",
+  "history": "ប្រវត្តិ",
+  "login": "ចូលប្រើ",
+  "register": "ចុះឈ្មោះ",
+  "logout": "ចាកចេញ"
+
   },
   "sidebar": {
     "admin": "អ្នកគ្រប់គ្រង",

@@ -18,9 +18,23 @@ export async function chapterRoutes(app: FastifyInstance) {
       },
     });
 
+    // Map `titleKm` -> localized title object for frontend
+    const normalized = chapters.map((c) => {
+      const titleKm = (c as any).titleKm ?? null;
+      const titleObj: any = { km: titleKm };
+      return {
+        id: c.id,
+        title: titleObj,
+        fallbackTitle: titleKm,
+        orderIndex: (c as any).orderIndex,
+        isPublished: (c as any).isPublished,
+        createdAt: (c as any).createdAt,
+      };
+    });
+
     return {
       success: true,
-      data: chapters,
+      data: normalized,
     };
   });
 }

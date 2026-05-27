@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { GoogleAuth } from 'google-auth-library';
-import { LessonContent } from '../contentJson';
+import { LessonContent, TextBlock, FormulaBlock } from '../contentJson';
 import { buildGeminiPrompt } from './prompts/geminiPrompt';
 import { aiFlashcardSchema } from './aiFlashcard.schema';
 
@@ -34,7 +34,10 @@ export interface AIGeneratedFlashcard {
  */
 function extractLessonText(content: LessonContent): string {
   return content.blocks
-    .filter((block) => block.type === 'text' || block.type === 'formula')
+    .filter(
+      (block): block is TextBlock | FormulaBlock =>
+        block.type === 'text' || block.type === 'formula',
+    )
     .map((block) => block.value)
     .join('\n');
 }

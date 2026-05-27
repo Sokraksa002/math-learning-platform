@@ -1,32 +1,42 @@
 import '@fastify/jwt';
 import type { FastifyRequest, FastifyReply } from 'fastify';
 
-/**
- * Extend JWT payload (request.user)
- */
+// ================= AUTH USER TYPE =================
+type AuthUser = {
+  userId: string;
+  role: 'STUDENT' | 'ADMIN';
+};
+
+// ================= JWT TYPES =================
 declare module '@fastify/jwt' {
   interface FastifyJWT {
-    user: {
-      userId: string;
-      role: 'STUDENT' | 'ADMIN';
-    };
+    /**
+     * Data stored inside JWT token
+     * (when you call reply.jwtSign)
+     */
+    payload: AuthUser;
+
+    /**
+     * Data available after request.jwtVerify()
+     */
+    user: AuthUser;
   }
 }
 
-/**
- * Extend FastifyInstance with decorators
- */
+// ================= FASTIFY DECORATORS =================
 declare module 'fastify' {
   interface FastifyInstance {
     /**
-     * Authentication guard (any logged‑in user)
-     * Usage: preHandler: app.authenticate
+     * ✅ Protect route (logged-in users only)
+     * Example:
+     * preHandler: app.authenticate
      */
     authenticate(request: FastifyRequest, reply: FastifyReply): Promise<void>;
 
     /**
-     * Admin‑only guard
-     * Usage: preHandler: app.requireAdmin
+     * ✅ Admin-only route protection
+     * Example:
+     * preHandler: app.requireAdmin
      */
     requireAdmin(request: FastifyRequest, reply: FastifyReply): Promise<void>;
   }

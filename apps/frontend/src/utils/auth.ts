@@ -17,10 +17,18 @@ export const getUser = (): AuthUser | null => {
   return user ? JSON.parse(user) : null;
 };
 
+import { clearToken } from './api';
+
 export const logout = (): void => {
-  localStorage.removeItem("user");
+  localStorage.removeItem('user');
+  try {
+    clearToken();
+  } catch {
+    // fallback
+    localStorage.removeItem('mlp_token');
+  }
 };
 
 export const isLoggedIn = (): boolean => {
-  return Boolean(localStorage.getItem("user"));
+  return Boolean(localStorage.getItem('user') || localStorage.getItem('mlp_token'));
 };

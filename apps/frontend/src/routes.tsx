@@ -1,55 +1,93 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+// PUBLIC
 import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register.tsx";
 import ForgotPassword from "./pages/ForgotPassword";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
+// FEATURE
 import Quiz from "./pages/Quiz";
 import Flashcard from "./pages/Flashcard";
 import Chapter from "./pages/Chapter";
 import LessonDetail from "./pages/LessonDetail";
 import Focus from "./pages/Focus";
+import Calendar from "./pages/Calendar";
+import ChapterLessons from "./pages/ChapterLessons";
 
+// USER
 import Profile from "./pages/Profile";
 import Certificate from "./pages/Certificate";
 import Dashboard from "./pages/Dashboard";
+
+// ADMIN
 import AdminDashboard from "./pages/AdminDashboard";
 import ManageUsers from "./pages/admin/ManageUsers";
 import ManageQuizzes from "./pages/admin/ManageQuizzes";
 import ManageLessons from "./pages/admin/ManageLessons";
 import VerifyCertificates from "./pages/admin/VerifyCertificates";
 
+// COMPONENTS
 import Quizepaper from "./components/Quiz/Quizepaper";
 import ManageProfile from "./components/Profile/ManageProfile";
 import Security from "./components/Profile/Security";
 import Notifications from "./components/Profile/Notifications";
-import QuizHistory from "./components/Profile/QuizHistory.tsx";
-import FlashcardHistory from "./pages/FlashcardHistory.tsx";
-import Ability from "./pages/Ability.tsx";
+import QuizHistory from "./components/Profile/QuizHistory";
+import FlashcardHistory from "./pages/FlashcardHistory";
+import Ability from "./pages/Ability";
 
+// ROUTING
 import ProtectedRoute from "./routes/ProtectedRoute";
 import MainLayout from "./components/Layout/MainLayout";
-import { AuthModalProvider } from "./contexts/AuthModalContext";
 
 export default function AppRoutes() {
   return (
     <BrowserRouter>
-      <AuthModalProvider>
-        <MainLayout>
-          <Routes>
-          {/* Public Routes */}
+      <Routes>
+
+        {/* ✅ PUBLIC ROUTES */}
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        {/* ✅ MAIN LAYOUT */}
+        <Route element={<MainLayout />}>
+
+          {/* HOME */}
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          
-          {/* Protected Routes */}
+
+          {/* LEARNING */}
+          <Route path="/chapter" element={<Chapter />} />
+          <Route path="/chapter/:chapterId" element={<ChapterLessons />} />
+          <Route path="/lesson/:lessonId" element={<LessonDetail />} />
+
+          {/* TOOLS */}
+          <Route path="/flashcard" element={<Flashcard />} />
+          <Route path="/focus" element={<Focus />} />
+          <Route path="/calendar" element={<Calendar />} />
+
+          {/* HISTORY */}
+          <Route path="/quiz-history" element={<QuizHistory />} />
+          <Route path="/flashcard-history" element={<FlashcardHistory />} />
+          <Route path="/ability" element={<Ability />} />
+
+          <Route path="/certificate" element={<Certificate />} />
+
+          {/* ✅ PROTECTED ROUTES */}
           <Route
             path="/quiz"
             element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
+              <ProtectedRoute>
+                <Quiz />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/quiz/:lessonId"
+            element={
+              <ProtectedRoute>
                 <Quiz />
               </ProtectedRoute>
             }
@@ -58,44 +96,8 @@ export default function AppRoutes() {
           <Route
             path="/quiz/paper/:chapterId"
             element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
+              <ProtectedRoute>
                 <Quizepaper />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/chapter"
-            element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
-                <Chapter />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/lesson/:lessonId"
-            element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
-                <LessonDetail />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/flashcard"
-            element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
-                <Flashcard />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/focus"
-            element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
-                <Focus />
               </ProtectedRoute>
             }
           />
@@ -103,7 +105,7 @@ export default function AppRoutes() {
           <Route
             path="/profile"
             element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
+              <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
             }
@@ -112,7 +114,7 @@ export default function AppRoutes() {
           <Route
             path="/profile/manage"
             element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
+              <ProtectedRoute>
                 <ManageProfile />
               </ProtectedRoute>
             }
@@ -121,35 +123,8 @@ export default function AppRoutes() {
           <Route
             path="/profile/security"
             element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
+              <ProtectedRoute>
                 <Security />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/quiz-history"
-            element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
-                <QuizHistory />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/flashcard-history"
-            element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
-                <FlashcardHistory />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/ability"
-            element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
-                <Ability />
               </ProtectedRoute>
             }
           />
@@ -157,17 +132,8 @@ export default function AppRoutes() {
           <Route
             path="/profile/notifications"
             element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
+              <ProtectedRoute>
                 <Notifications />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/certificate"
-            element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
-                <Certificate />
               </ProtectedRoute>
             }
           />
@@ -175,16 +141,20 @@ export default function AppRoutes() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute allowedRoles={["student"]} redirectTo="/admin">
+              <ProtectedRoute>
                 <Dashboard />
               </ProtectedRoute>
             }
           />
 
+          {/* ✅ ADMIN */}
           <Route
             path="/admin"
             element={
-              <ProtectedRoute allowedRoles={["admin"]} redirectTo="/dashboard">
+              <ProtectedRoute
+                allowedRoles={["admin"]}
+                redirectTo="/dashboard"
+              >
                 <AdminDashboard />
               </ProtectedRoute>
             }
@@ -193,7 +163,10 @@ export default function AppRoutes() {
           <Route
             path="/admin/users"
             element={
-              <ProtectedRoute allowedRoles={["admin"]} redirectTo="/dashboard">
+              <ProtectedRoute
+                allowedRoles={["admin"]}
+                redirectTo="/dashboard"
+              >
                 <ManageUsers />
               </ProtectedRoute>
             }
@@ -202,7 +175,10 @@ export default function AppRoutes() {
           <Route
             path="/admin/quizzes"
             element={
-              <ProtectedRoute allowedRoles={["admin"]} redirectTo="/dashboard">
+              <ProtectedRoute
+                allowedRoles={["admin"]}
+                redirectTo="/dashboard"
+              >
                 <ManageQuizzes />
               </ProtectedRoute>
             }
@@ -211,7 +187,10 @@ export default function AppRoutes() {
           <Route
             path="/admin/lessons"
             element={
-              <ProtectedRoute allowedRoles={["admin"]} redirectTo="/dashboard">
+              <ProtectedRoute
+                allowedRoles={["admin"]}
+                redirectTo="/dashboard"
+              >
                 <ManageLessons />
               </ProtectedRoute>
             }
@@ -220,15 +199,21 @@ export default function AppRoutes() {
           <Route
             path="/admin/certificates"
             element={
-              <ProtectedRoute allowedRoles={["admin"]} redirectTo="/dashboard">
+              <ProtectedRoute
+                allowedRoles={["admin"]}
+                redirectTo="/dashboard"
+              >
                 <VerifyCertificates />
               </ProtectedRoute>
             }
           />
 
-          </Routes>
-        </MainLayout>
-      </AuthModalProvider>
+        </Route>
+
+        {/* ✅ FALLBACK */}
+        <Route path="*" element={<Home />} />
+
+      </Routes>
     </BrowserRouter>
   );
 }

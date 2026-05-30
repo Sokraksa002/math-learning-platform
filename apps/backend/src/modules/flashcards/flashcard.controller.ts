@@ -24,19 +24,21 @@ export async function handleGenerateFlashcard(
     const result = await generateAndSaveFlashcard({ userId, chapterId, question });
     return reply.code(200).send(result.flashcard);
   } catch (err: any) {
+    // log full error for easier diagnosis in server logs
+    request.log?.error?.(err);
     if (err instanceof AiRateLimitError) {
-      return reply.code(429).send({ error: { code: 'RATE_LIMIT', message: err.message } });
+      return reply.code(429).send({ success: false, code: 'RATE_LIMIT', message: err.message });
     }
     if (err instanceof AiParseError) {
-      return reply.code(422).send({ error: { code: 'AI_PARSE_ERROR', message: err.message } });
+      return reply.code(422).send({ success: false, code: 'AI_PARSE_ERROR', message: err.message });
     }
     if (err instanceof AiProviderError) {
-      return reply.code(502).send({ error: { code: 'AI_UNAVAILABLE', message: err.message } });
+      return reply.code(502).send({ success: false, code: 'AI_UNAVAILABLE', message: err.message });
     }
 
     // fallback
-    return reply
-      .code(500)
-      .send({ error: { code: 'INTERNAL_ERROR', message: 'Internal server error' } });
+    const isProd = process.env.NODE_ENV === 'production';
+    const safeMessage = isProd ? 'Internal server error' : err?.message || 'Internal server error';
+    return reply.code(500).send({ success: false, code: 'INTERNAL_ERROR', message: safeMessage });
   }
 }

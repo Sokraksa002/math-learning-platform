@@ -9,7 +9,8 @@ export interface AuthUser {
 /* ================= AUTH FUNCTIONS ================= */
 
 export const login = (user: AuthUser): void => {
-  localStorage.setItem("user", JSON.stringify(user));
+  const normalized = user.role && typeof user.role === 'string' ? { ...user, role: user.role.toLowerCase() } : user;
+  localStorage.setItem("user", JSON.stringify(normalized));
 };
 
 export function getUser() {

@@ -35,6 +35,45 @@ import { quizRoutes } from './routes/quiz';
 
 dotenv.config();
 
+// Startup check for AI configuration (will run after `app` is created)
+function checkAiConfig() {
+  const mock = process.env.MOCK_AI === 'true';
+  const project = process.env.GCP_PROJECT_ID;
+  const region = process.env.GCP_REGION;
+  const creds = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+
+  if (mock) {
+    // eslint-disable-next-line no-console
+    console.info('MOCK_AI=true — skipping AI provider config checks');
+    return;
+  }
+
+  const missing: string[] = [];
+  if (!project) missing.push('GCP_PROJECT_ID');
+  if (!region) missing.push('GCP_REGION');
+  if (!creds) missing.push('GOOGLE_APPLICATION_CREDENTIALS');
+
+  if (missing.length > 0) {
+    // when called after app is created, prefer app.log; otherwise console
+    const logger = typeof app !== 'undefined' && app?.log ? app.log : console;
+    logger.error('Missing Google Cloud AI configuration: ' + missing.join(', '));
+    logger.error(
+      'To fix: set the required environment variables or enable MOCK_AI for local development.',
+    );
+    logger.error(
+      'Example (macOS):\n  export GCP_PROJECT_ID=your-project-id\n  export GCP_REGION=us-central1\n  export GOOGLE_APPLICATION_CREDENTIALS=$HOME/keys/vertex-ai-sa-key.json',
+    );
+    if (process.env.NODE_ENV === 'production') {
+      logger.error('Running in production without AI config — exiting.');
+      process.exit(1);
+    } else {
+      logger.warn(
+        'Continuing in development: server will start but AI features will be disabled unless MOCK_AI=true.',
+      );
+    }
+  }
+}
+
 const app = Fastify({ logger: true });
 
 app.register(corsPlugin);
@@ -54,7 +93,8 @@ app.register(flashcardRoutes, { prefix: '/api' });
 app.register(flashcardReviewRoutes, { prefix: '/api' });
 app.register(flashcardsDueRoutes, { prefix: '/api' });
 
-/* ✅ ✅ ✅ THIS IS THE MOST IMPORTANT LINE */
+// Move the AI config check after app creation
+checkAiConfig();
 app.register(aiFlashcardRoutes, { prefix: '/api' });
 
 // ✅ Progress + Certificate

@@ -12,11 +12,27 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { isLoggedIn } from '../../utils/auth';
+import { getAllLessons, protectedPost } from '../../utils/api';
 
 // ✅ FIXED IMPORTS
 
 
-import type { Lesson } from "../../utils/api";
+type AiFlashcardResponse = {
+  id?: string;
+  questionKm?: string;
+  answerJson?: unknown;
+};
+
+type LessonResp = {
+  id: string;
+  fallbackTitle?: string | null;
+  title?: { km?: string } | null;
+  chapterId?: string;
+};
+
+function hasAnswerField(x: unknown): x is { answer?: string } {
+  return typeof x === 'object' && x !== null && 'answer' in x;
+}
 
 
 /* ✅ TYPE */
@@ -32,7 +48,7 @@ export default function FlashcardBoard() {
 
   /* ✅ STATE */
   const [lessonOptions, setLessonOptions] = useState<
-    { label: string; value: string }[]
+    { label: string; value: string; chapterId?: string }[]
   >([]);
 
   const [lesson, setLesson] = useState("");
@@ -46,12 +62,11 @@ export default function FlashcardBoard() {
 
   /* ✅ LOAD LESSONS FROM BACKEND */
   useEffect(() => {
-    getAllLessons().then((lessons: Lesson[]) => {
-
-      // ✅ FIX: use chapterId (NOT lesson.id)
-      const mapped = lessons.map((lesson) => ({
-        label: lesson.titleKm || "Untitled",
-        value: lesson.chapterId || "",   // ✅ IMPORTANT FIX
+    getAllLessons().then((lessons) => {
+      const mapped = (lessons as LessonResp[]).map((l) => ({
+        label: l.fallbackTitle ?? (l.title?.km ?? 'Untitled'),
+        value: l.id,
+        chapterId: l.chapterId ?? undefined,
       }));
 
       setLessonOptions(mapped);
@@ -80,19 +95,31 @@ export default function FlashcardBoard() {
     }
 
     try {
-      // ✅ USE CORRECT API FUNCTION
-      const data = await generateFlashcard(lesson, topic);
+      // ✅ CALL BACKEND GENERATE ENDPOINT
+      // find selected lesson to obtain its chapterId (flashcards reference chapters)
+      const selected = lessonOptions.find((o) => o.value === lesson);
+      const chapterIdToSend = selected?.chapterId;
+      if (!chapterIdToSend) {
+        alert('Selected lesson has no associated chapter — cannot generate flashcard');
+        return;
+      }
+
+      const data = await protectedPost<AiFlashcardResponse>('/api/flashcard/generate', {
+        chapterId: chapterIdToSend,
+        question: topic,
+      });
 
       console.log("FLASHCARD RESPONSE:", data);
 
       const transformed: FlashcardData[] = [
         {
           // ✅ Use user input OR AI question
-          front: topic || data.questionKm,
+          front: (topic || data.questionKm || "") as string,
           backTitle: "Answer",
           backExplanation:
-            data.answerJson?.answer ||
-            JSON.stringify(data.answerJson),
+            (hasAnswerField(data.answerJson) && data.answerJson.answer) ||
+            JSON.stringify(data.answerJson) ||
+            "",
         },
       ];
 
@@ -102,7 +129,8 @@ export default function FlashcardBoard() {
 
     } catch (err) {
       console.error("Flashcard error:", err);
-      alert("Failed to generate flashcard");
+      const msg = err instanceof Error ? err.message : String(err);
+      alert(msg || "Failed to generate flashcard");
     }
   };
 

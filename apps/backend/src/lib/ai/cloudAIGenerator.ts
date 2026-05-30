@@ -81,12 +81,16 @@ export async function generateFlashcardsWithGemini(
       response = await axios.post(
         `https://${process.env.GCP_REGION}-aiplatform.googleapis.com/v1/projects/${process.env.GCP_PROJECT_ID}/locations/${process.env.GCP_REGION}/publishers/google/models/gemini-pro:generateContent`,
         {
+          // request body: message contents and model parameters
           contents: [
             {
               role: 'user',
               parts: [{ text: prompt }],
             },
           ],
+          // optional tuning params to encourage stable JSON output in Khmer
+          temperature: 0.2,
+          maxOutputTokens: 512,
         },
         {
           headers: {
@@ -145,6 +149,56 @@ export async function generateFlashcardsWithGemini(
 
   // ✅ Zod validation gives full type safety
   const validatedFlashcards = aiFlashcardSchema.parse(parsedJson);
+
+  // Quick heuristic: ensure output contains Khmer characters; if not, retry once with stronger instruction
+  const hasKhmer = (s: string) => /[\u1780-\u17FF]/.test(s);
+  const containsKhmer = validatedFlashcards.some((f: any) => hasKhmer(f.question) || hasKhmer(f.answer));
+  if (!containsKhmer) {
+    console.warn('Gemini response did not contain Khmer; retrying once with stronger Khmer-only instruction');
+    const retryPrompt = prompt + '\n\nIMPORTANT: Respond ONLY in Khmer (ភាសាខ្មែរ) using Khmer script. Output ONLY valid JSON as previously requested.';
+
+    let retryResponse: any;
+    try {
+      retryResponse = await axios.post(
+        `https://${process.env.GCP_REGION}-aiplatform.googleapis.com/v1/projects/${process.env.GCP_PROJECT_ID}/locations/${process.env.GCP_REGION}/publishers/google/models/gemini-pro:generateContent`,
+        {
+          contents: [
+            {
+              role: 'user',
+              parts: [{ text: retryPrompt }],
+            },
+          ],
+          temperature: 0.2,
+          maxOutputTokens: 512,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${accessTokenResponse.token}`,
+            'Content-Type': 'application/json',
+          },
+        },
+      );
+    } catch (err: any) {
+      throw new GeminiProviderError('Gemini retry failed: ' + (err?.message ?? 'unknown'));
+    }
+
+    const rawRetry = retryResponse.data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!rawRetry) throw new GeminiEmptyResponseError('Gemini returned empty response on retry');
+
+    try {
+      parsedJson = JSON.parse(rawRetry);
+    } catch (err) {
+      console.error('Invalid JSON from Gemini on retry:', rawRetry);
+      throw new GeminiParseError('Gemini response is not valid JSON on retry', rawRetry);
+    }
+
+    const validatedRetry = aiFlashcardSchema.parse(parsedJson);
+    const retryContainsKhmer = validatedRetry.some((f: any) => hasKhmer(f.question) || hasKhmer(f.answer));
+    if (!retryContainsKhmer) {
+      console.warn('Gemini still did not return Khmer after retry');
+    }
+    return validatedRetry;
+  }
 
   return validatedFlashcards;
 }

@@ -30,7 +30,7 @@ const emptyUser: AdminUser = {
   id: 0,
   name: '',
   email: '',
-  role: 'student',
+  role: 'ADMIN',
   joinDate: new Date().toISOString().slice(0, 10),
   status: 'active',
   progress: 0,
@@ -52,7 +52,7 @@ export default function ManageUsers() {
     () => [
       { label: 'Total users', value: users.length },
       { label: 'Active users', value: users.filter((user) => user.status === 'active').length },
-      { label: 'Admins', value: users.filter((user) => user.role === 'admin').length },
+      { label: 'Admins', value: users.filter((user) => user.role === 'ADMIN').length },
     ],
     [users]
   );
@@ -141,7 +141,7 @@ export default function ManageUsers() {
               <TableBody>
                 {users.map((user) => (
                   <TableRow key={user.id} hover>
-                    <TableCell fontWeight={700}>{user.name}</TableCell>
+                    <TableCell sx={{ fontWeight: 700 }}>{user.name}</TableCell>
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.role}</TableCell>
                     <TableCell>
@@ -172,24 +172,78 @@ export default function ManageUsers() {
             <TextField label="Name" value={form.name} onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))} fullWidth />
             <TextField label="Email" value={form.email} onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))} fullWidth />
             <FormControl fullWidth>
-              <InputLabel>Role</InputLabel>
-              <Select value={form.role} label="Role" onChange={(event) => setForm((prev) => ({ ...prev, role: event.target.value }))}>
-                <MenuItem value="student">student</MenuItem>
-                <MenuItem value="teacher">teacher</MenuItem>
-                <MenuItem value="admin">admin</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField label="Join date" type="date" value={form.joinDate} onChange={(event) => setForm((prev) => ({ ...prev, joinDate: event.target.value }))} fullWidth InputLabelProps={{ shrink: true }} />
-            <FormControl fullWidth>
-              <InputLabel>Status</InputLabel>
-              <Select value={form.status} label="Status" onChange={(event) => setForm((prev) => ({ ...prev, status: event.target.value as AdminUserStatus }))}>
-                <MenuItem value="active">active</MenuItem>
-                <MenuItem value="inactive">inactive</MenuItem>
-              </Select>
-            </FormControl>
-            <TextField label="Progress" type="number" value={form.progress} onChange={(event) => setForm((prev) => ({ ...prev, progress: event.target.value }))} fullWidth />
-            <TextField label="Attempts" type="number" value={form.attempts} onChange={(event) => setForm((prev) => ({ ...prev, attempts: event.target.value }))} fullWidth />
-          </Stack>
+  <InputLabel>Role</InputLabel>
+  <Select
+    value={form.role}
+    label="Role"
+    onChange={(event) =>
+      setForm((prev) => ({ ...prev, role: event.target.value as AdminUser['role'] }))
+    }
+  >
+    <MenuItem value="student">student</MenuItem>
+    <MenuItem value="teacher">teacher</MenuItem>
+    <MenuItem value="admin">admin</MenuItem>
+  </Select>
+</FormControl>
+
+<TextField
+  label="Join date"
+  type="date"
+  value={form.joinDate}
+  onChange={(event) =>
+    setForm((prev) => ({ ...prev, joinDate: event.target.value }))
+  }
+  fullWidth
+  InputLabelProps={{ shrink: true }}
+/>
+
+<FormControl fullWidth>
+  <InputLabel>Status</InputLabel>
+  <Select
+    value={form.status}
+    label="Status"
+    onChange={(event) =>
+      setForm((prev) => ({ ...prev, status: event.target.value as AdminUserStatus }))
+    }
+  >
+    <MenuItem value="active">active</MenuItem>
+    <MenuItem value="inactive">inactive</MenuItem>
+  </Select>
+</FormControl>
+
+<TextField
+  label="Progress"
+  type="number"
+  value={form.progress}
+  onChange={(event) =>
+    setForm((prev) => ({ ...prev, progress: Number(event.target.value) }))
+  }
+  fullWidth
+/>
+
+<TextField
+  label="Attempts"
+  type="number"
+  value={form.attempts}
+  onChange={(event) =>
+    setForm((prev) => ({ ...prev, attempts: Number(event.target.value) }))
+  }
+  fullWidth
+/><TextField
+  label="Progress"
+  type="number"
+  value={form.progress}
+  onChange={(e) => setForm((prev) => ({ ...prev, progress: Number(e.target.value) }))}
+  fullWidth
+/>
+<TextField
+  label="Attempts"
+  type="number"
+  value={form.attempts}
+  onChange={(e) => setForm((prev) => ({ ...prev, attempts: Number(e.target.value) }))}
+  fullWidth
+/>
+</Stack>
         </DialogContent>
         <DialogActions>
           <Button onClick={closeEditor}>Cancel</Button>

@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { getUser, isLoggedIn } from "../utils/auth";
 
-type AllowedRole = "ADMIN" | "STUDENT";
+type AllowedRole = "ADMIN" | "STUDENT" | "admin" | "student";
 
 export default function ProtectedRoute({
   children,
@@ -12,21 +12,27 @@ export default function ProtectedRoute({
   allowedRoles?: AllowedRole[];
   redirectTo?: string;
 }) {
-  // ✅ if not logged in → go to login page
+  /* ✅ NOT LOGGED IN */
   if (!isLoggedIn()) {
     return <Navigate to="/login" replace />;
   }
 
-  // ✅ role protection (optional)
-  if (allowedRoles?.length) {
-    const user = getUser();
-    const role = user?.role;
+  /* ✅ GET USER (ALWAYS) */
+  const user = getUser();
+  const role = (user?.role ?? "").toString();
 
-    if (!role || !allowedRoles.includes(role)) {
+  console.log("ProtectedRoute role:", role); // DEBUG
+  console.log("Allowed roles:", allowedRoles); // DEBUG
+
+  /* ROLE CHECK (case-insensitive) */
+  if (allowedRoles && allowedRoles.length > 0) {
+    const roleNormalized = role.toLowerCase();
+    const allowedNormalized = allowedRoles.map((r) => r.toString().toLowerCase());
+    if (!role || !allowedNormalized.includes(roleNormalized)) {
       return <Navigate to={redirectTo ?? "/dashboard"} replace />;
     }
   }
 
-  // ✅ allow access
+  /* ✅ ALLOW ACCESS */
   return <>{children}</>;
 }

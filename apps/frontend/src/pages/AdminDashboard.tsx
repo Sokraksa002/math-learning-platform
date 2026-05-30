@@ -128,7 +128,7 @@ export default function AdminDashboard() {
   const [editingId, setEditingId] = useState<number | string | null>(null);
   const [form, setForm] = useState<FormState>(emptyForm);
 
-  const isAdmin = currentUser?.role === "admin";
+  const isAdmin = (currentUser?.role ?? "").toLowerCase() === "admin";
 
   useEffect(() => {
     saveAdminUsers(users);
@@ -205,7 +205,7 @@ export default function AdminDashboard() {
         id: editingId ?? Date.now(),
         name: form.name.trim() || "New User",
         email: form.email.trim() || "user@example.com",
-        role: form.role || "student",
+        role: (form.role || "student").toLowerCase() as AdminUser['role'],
         joinDate: form.joinDate,
         status: form.status,
         progress: Number(form.progress) || 0,

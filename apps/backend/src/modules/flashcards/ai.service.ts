@@ -14,7 +14,18 @@ export async function generateFlashcardsForLesson(lessonId: string, save = false
   const content = (lesson.contentJson ?? null) as unknown as LessonContent | null;
   if (!content) return [];
 
-  const aiCards: AIGeneratedFlashcard[] = await generateFlashcardsWithGemini(content);
+  // Development fallback: allow mocking AI responses when MOCK_AI=true
+  let aiCards: AIGeneratedFlashcard[];
+  if (process.env.MOCK_AI === 'true') {
+    aiCards = [
+      {
+        question: (content as any)?.title?.km ?? 'Sample question',
+        answer: 'Sample answer',
+      },
+    ];
+  } else {
+    aiCards = await generateFlashcardsWithGemini(content);
+  }
 
   if (!save) return aiCards;
 

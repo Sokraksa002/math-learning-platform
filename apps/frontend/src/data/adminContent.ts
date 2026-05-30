@@ -1,4 +1,4 @@
-export type AdminUserRole = 'admin' | 'student' | 'teacher';
+export type AdminUserRole = 'ADMIN' | 'STUDENT' | 'TEACHER';
 export type AdminUserStatus = 'active' | 'inactive';
 
 export interface AdminUser {
@@ -43,7 +43,7 @@ const DEFAULT_USERS: AdminUser[] = [
     id: 1,
     name: 'Admin User',
     email: 'admin@school.com',
-    role: 'admin',
+    role: 'ADMIN',
     joinDate: '2025-01-01',
     status: 'active',
     progress: 100,
@@ -53,7 +53,7 @@ const DEFAULT_USERS: AdminUser[] = [
     id: 2,
     name: 'Student One',
     email: 'student1@gmail.com',
-    role: 'student',
+    role: 'STUDENT',
     joinDate: '2025-01-15',
     status: 'active',
     progress: 78,
@@ -63,7 +63,7 @@ const DEFAULT_USERS: AdminUser[] = [
     id: 3,
     name: 'Student Two',
     email: 'student2@gmail.com',
-    role: 'student',
+    role: 'STUDENT',
     joinDate: '2025-02-20',
     status: 'active',
     progress: 64,
@@ -73,7 +73,7 @@ const DEFAULT_USERS: AdminUser[] = [
     id: 4,
     name: 'Student Three',
     email: 'student3@gmail.com',
-    role: 'student',
+    role: 'STUDENT',
     joinDate: '2025-03-10',
     status: 'inactive',
     progress: 32,

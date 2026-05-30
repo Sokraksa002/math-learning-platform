@@ -10,6 +10,7 @@
     "test:integration": "NODE_ENV=test jest --runInBand src/integration --passWithNoTests",
     "coverage": "jest --coverage --passWithNoTests",
     "dev": "ts-node-dev --respawn --transpile-only --project tsconfig.json src/server.ts",
+    "dev:mock": "MOCK_AI=true ts-node-dev --respawn --transpile-only --project tsconfig.json src/server.ts",
     "build": "tsc",
     "start": "node dist/server.js",
     "prisma:init": "prisma init",

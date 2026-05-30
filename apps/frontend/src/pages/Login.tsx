@@ -39,56 +39,63 @@ export default function Login() {
 
   /* ✅ LOGIN HANDLER */
   const handleLogin = async () => {
-    if (!email || !password) {
-      setError("Please enter email and password");
-      return;
+  if (!email || !password) {
+    setError("Please enter email and password");
+    return;
+  }
+
+  setLoading(true);
+  setError("");
+
+  try {
+    const res = await apiLogin(email, password);
+
+    console.log("FULL RESPONSE:", res);
+
+    const token = res.token;
+    let user = res.user;
+
+    if (!token || !user) {
+      throw new Error("Login failed: missing data");
     }
 
-    setLoading(true);
-    setError("");
-
-    try {
-      const res = await apiLogin(email, password);
-
-      console.log("USER FROM API:", res.user); // ✅ debug
-
-      /* ✅ ✅ FIX HERE */
-      
-const token = res.token;
-const user = res.user;
-
-      if (!token) {
-        throw new Error("Login failed: token missing");
-      }
-
-      saveToken(token);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      /* ✅ REMEMBER */
-      if (remember) {
-        localStorage.setItem("remember", "true");
-      } else {
-        localStorage.removeItem("remember");
-      }
-
-      /* ✅ REDIRECT */
-      const params = new URLSearchParams(location.search);
-      const next = params.get("next");
-
-      navigate(next || "/dashboard");
-
-    } catch (err: unknown) {
-      console.error("Login error:", err);
-
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError("Login failed");
-      }
-    } finally {
-      setLoading(false);
+    // Normalize role casing to match frontend checks (use lowercase 'admin'/'student')
+    if (user.role && typeof user.role === 'string') {
+      user = { ...user, role: user.role.toString().toLowerCase() };
     }
-  };
+
+    saveToken(token);
+    localStorage.setItem("user", JSON.stringify(user));
+
+    if (remember) {
+      localStorage.setItem("remember", "true");
+    } else {
+      localStorage.removeItem("remember");
+    }
+
+    const params = new URLSearchParams(location.search);
+    const next = params.get("next");
+
+    if (next) {
+      navigate(next);
+    } else if (user.role === "ADMIN") {
+      navigate("/admin");
+    } else {
+      navigate("/dashboard");
+    }
+
+  } catch (err: unknown) {
+    console.error("Login error:", err);
+
+    if (err instanceof Error) {
+      setError(err.message);
+    } else {
+      setError("Login failed");
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <Box

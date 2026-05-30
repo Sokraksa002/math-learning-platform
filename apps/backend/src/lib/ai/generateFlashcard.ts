@@ -27,6 +27,15 @@ export class AiAuthError extends AiError {}
  * Retries on 5xx / network errors with exponential backoff. Max 2 retries.
  */
 export async function generateFlashcardWithAi(promptQuestion: string): Promise<AiFlashcard> {
+  // Development mock fallback
+  if (process.env.MOCK_AI === 'true') {
+    return {
+      question: promptQuestion,
+      answer: 'This is a mocked AI answer (MOCK_AI=true)',
+      steps: ['Mocked step 1', 'Mocked step 2'],
+    } as AiFlashcard;
+  }
+
   if (!process.env.GCP_PROJECT_ID || !process.env.GCP_REGION) {
     throw new AiProviderError('AI provider configuration missing');
   }

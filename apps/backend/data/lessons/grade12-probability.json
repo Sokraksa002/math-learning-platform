@@ -1,8 +1,5 @@
 {
-  "id": "grade12-probability-lesson8",
-  "chapterId": "grade12-probability",
   "titleKm": "ប្រូបាប",
-  "content": {
     "blocks": [
       {
         "type": "text",
@@ -117,5 +114,4 @@
         "value": "15. P(A ∩ B) = 0.1"
       }
     ]
-  }
 }

@@ -28,7 +28,7 @@ import ManageLessons from "./pages/admin/ManageLessons";
 import VerifyCertificates from "./pages/admin/VerifyCertificates";
 
 // COMPONENTS
-import Quizepaper from "./components/Quiz/Quizepaper";
+import Quizepaper from "./components/Quiz/Quizpaper";
 import ManageProfile from "./components/Profile/ManageProfile";
 import Security from "./components/Profile/Security";
 import Notifications from "./components/Profile/Notifications";
@@ -71,41 +71,43 @@ export default function AppRoutes() {
           <Route path="/quiz-history" element={<QuizHistory />} />
           <Route path="/flashcard-history" element={<FlashcardHistory />} />
           <Route path="/ability" element={<Ability />} />
-
           <Route path="/certificate" element={<Certificate />} />
 
-          {/* ✅ PROTECTED ROUTES */}
+          {/* ✅ QUIZ */}
           <Route
             path="/quiz"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["STUDENT"]}>
                 <Quiz />
               </ProtectedRoute>
             }
           />
 
+          {/* ✅ (optional route — safe to keep) */}
           <Route
             path="/quiz/:lessonId"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["STUDENT"]}>
                 <Quiz />
               </ProtectedRoute>
             }
           />
 
+          {/* ✅ ✅ ✅ FIXED HERE */}
           <Route
-            path="/quiz/paper/:chapterId"
+            path="/quiz/paper/:lessonId"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["STUDENT"]}>
                 <Quizepaper />
               </ProtectedRoute>
             }
           />
 
+          {/* PROFILE */}
           <Route
             path="/profile"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["STUDENT"]}>
                 <Profile />
               </ProtectedRoute>
             }
@@ -114,7 +116,7 @@ export default function AppRoutes() {
           <Route
             path="/profile/manage"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["STUDENT"]}>
                 <ManageProfile />
               </ProtectedRoute>
             }
@@ -123,7 +125,7 @@ export default function AppRoutes() {
           <Route
             path="/profile/security"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["STUDENT"]}>
                 <Security />
               </ProtectedRoute>
             }
@@ -132,7 +134,7 @@ export default function AppRoutes() {
           <Route
             path="/profile/notifications"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["STUDENT"]}>
                 <Notifications />
               </ProtectedRoute>
             }
@@ -141,7 +143,7 @@ export default function AppRoutes() {
           <Route
             path="/dashboard"
             element={
-              <ProtectedRoute>
+              <ProtectedRoute allowedRoles={["STUDENT"]}>
                 <Dashboard />
               </ProtectedRoute>
             }
@@ -152,7 +154,7 @@ export default function AppRoutes() {
             path="/admin"
             element={
               <ProtectedRoute
-                allowedRoles={["admin"]}
+                allowedRoles={["ADMIN"]}
                 redirectTo="/dashboard"
               >
                 <AdminDashboard />
@@ -164,7 +166,7 @@ export default function AppRoutes() {
             path="/admin/users"
             element={
               <ProtectedRoute
-                allowedRoles={["admin"]}
+                allowedRoles={["ADMIN"]}
                 redirectTo="/dashboard"
               >
                 <ManageUsers />
@@ -176,7 +178,7 @@ export default function AppRoutes() {
             path="/admin/quizzes"
             element={
               <ProtectedRoute
-                allowedRoles={["admin"]}
+                allowedRoles={["ADMIN"]}
                 redirectTo="/dashboard"
               >
                 <ManageQuizzes />
@@ -188,7 +190,7 @@ export default function AppRoutes() {
             path="/admin/lessons"
             element={
               <ProtectedRoute
-                allowedRoles={["admin"]}
+                allowedRoles={["ADMIN"]}
                 redirectTo="/dashboard"
               >
                 <ManageLessons />
@@ -200,7 +202,7 @@ export default function AppRoutes() {
             path="/admin/certificates"
             element={
               <ProtectedRoute
-                allowedRoles={["admin"]}
+                allowedRoles={["ADMIN"]}
                 redirectTo="/dashboard"
               >
                 <VerifyCertificates />

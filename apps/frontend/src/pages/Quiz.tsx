@@ -3,176 +3,136 @@ import {
   Button,
   Card,
   CardContent,
-  LinearProgress,
   Container,
   Typography,
-} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { useLocale } from '../hooks/useLocale';
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useLocale } from "../hooks/useLocale";
+import QuizHeader from "../components/Quiz/QuizHeader"; // ✅ NEW HEADER
 
-const quizChapters = [
-  { id: 1, name: 'Chapter 1', lesson: 'Lesson: Limit', color: '#3D86E8' },
-  { id: 2, name: 'Chapter 2', lesson: 'Lesson: Limit', color: '#5CA8F2' },
-  { id: 3, name: 'Chapter 3', lesson: 'Lesson: Limit', color: '#2F6FD4' },
-  { id: 4, name: 'Chapter 4', lesson: 'Lesson: Limit', color: '#78B4F6' },
+/* ✅ LESSON LIST (STATIC FOR NOW) */
+const quizLessons = [
+  {
+    id: "grade12-complex-lesson1",
+    title: "Lesson 1",
+    subject: "Complex Numbers",
+    color: "#4F9CF9",
+  },
+  {
+    id: "grade12-limits-lesson2",
+    title: "Lesson 2",
+    subject: "Limits",
+    color: "#6BB6FF",
+  },
+  {
+    id: "grade12-derivatives-lesson3",
+    title: "Lesson 3",
+    subject: "Derivatives",
+    color: "#3D86E8",
+  },
+  {
+    id: "grade12-integrals-lesson4",
+    title: "Lesson 4",
+    subject: "Integrals",
+    color: "#8EC5FF",
+  },
+  {
+    id: "grade12-derivatives-lesson5",
+    title: "Lesson 5",
+    subject: "Derivatives",
+    color: "#3D86E8",
+  },
+  {
+    id: "grade12-functions-lesson6",
+    title: "Lesson 6",
+    subject: "Functions",
+    color: "#6BB6FF",
+  },
+  {
+    id: "grade12-conics-lesson7",
+    title: "Lesson 7",
+    subject: "Conic Sections",
+    color: "#6BB6FF",
+  },
+  {
+    id: "grade12-probability-lesson8",
+    title: "Lesson 8",
+    subject: "Probability",
+    color: "#6BB6FF",
+  },
 ];
 
 export default function Quiz() {
   const navigate = useNavigate();
   const { t } = useLocale();
-  const weeklyGoal = 70;
-  const completedToday = 2;
 
   return (
     <Box
       sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        background: 'linear-gradient(180deg, #f4f8ff 0%, #eef4ff 100%)',
+        minHeight: "100vh",
+        background: "#f8fbff", // ✅ cleaner background
       }}
     >
       <Container maxWidth="md" sx={{ py: 6 }}>
-        <Box
-          sx={{
-            backgroundColor: '#fff',
-            borderLeft: '6px solid #3D86E8',
-            borderRadius: 3,
-            boxShadow: '0 6px 16px rgba(0,0,0,0.12)',
-            p: 3,
-            mb: 3,
-          }}
-        >
-          <Typography sx={{ color: '#7d8ca3', fontSize: 12, letterSpacing: 1, fontWeight: 700 }}>
-            {t('pages.Quiz.quiz_hub', 'QUIZ HUB')}
-          </Typography>
+        {/* ✅ DASHBOARD HEADER */}
+        <QuizHeader navigate={navigate} />
 
-          <Typography
-            variant="h4"
-            sx={{
-              fontWeight: 'bold',
-              mb: 1,
-              textAlign: 'left',
-              color: '#1F2937',
-            }}
-          >
-            {t('pages.Quiz.quiz_time', 'Quiz Time')}
-          </Typography>
-
-          <Typography sx={{ color: '#5f6c80', mb: 2 }}>
-            {t('pages.Quiz.subtitle', 'Complete quick rounds, keep your streak, and level up your score.')}
-          </Typography>
-
-          <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1.2fr 0.8fr' }, gap: 2 }}>
-            <Box sx={{ p: 2, borderRadius: 2, backgroundColor: '#F5FAFF', border: '1px solid #D8E8FF' }}>
-              <Typography sx={{ fontSize: 12, color: '#6e8099', fontWeight: 700, mb: 0.5 }}>
-                {t('pages.Quiz.weekly_challenge', 'Weekly challenge')}
-              </Typography>
-              <Typography sx={{ fontWeight: 800, color: '#1F2937', mb: 1 }}>
-                {t('pages.Quiz.reach_weekly_goal', 'Reach {weeklyGoal}% average score').replace('{weeklyGoal}', String(weeklyGoal))}
-              </Typography>
-              <LinearProgress
-                variant="determinate"
-                value={Math.min(100, weeklyGoal)}
-                sx={{
-                  height: 8,
-                  borderRadius: 99,
-                  backgroundColor: '#DCEBFF',
-                  '& .MuiLinearProgress-bar': { backgroundColor: '#3D86E8' },
-                }}
-              />
-            </Box>
-
-            <Box sx={{ p: 2, borderRadius: 2, backgroundColor: '#F8FBFF', border: '1px solid #D8E8FF' }}>
-              <Typography sx={{ fontSize: 12, color: '#6e8099', fontWeight: 700 }}>
-                {t('pages.Quiz.today', 'Today')}
-              </Typography>
-              <Typography sx={{ fontSize: 28, lineHeight: 1.1, fontWeight: 900, color: '#2F6FC0' }}>
-                {completedToday}
-              </Typography>
-              <Typography sx={{ color: '#5f6c80', fontSize: 13 }}>
-                {t('pages.Quiz.quizzes_completed', 'quizzes completed')}
-              </Typography>
-            </Box>
-          </Box>
-        </Box>
-
+        {/* ✅ TITLE */}
         <Typography
-          variant="h4"
-          sx={{
-            fontWeight: 'bold',
-            mb: 3,
-            textAlign: 'left',
-            color: '#1F2937',
-            fontSize: 24,
-          }}
+          variant="h6"
+          sx={{ fontWeight: 600, mb: 3 }}
         >
-          {t('pages.Quiz.pick_a_chapter', 'Pick a chapter')}
+          {t("pages.Quiz.pick_a_lesson", "Pick a lesson")}
         </Typography>
 
-        {/* ✅ HAMBURGER / LIST STYLE */}
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-          {quizChapters.map((chapter) => (
+        {/* ✅ LESSON LIST */}
+        <Box display="flex" flexDirection="column" gap={2}>
+          {quizLessons.map((lesson) => (
             <Card
-              key={chapter.id}
-              onClick={() => navigate(`/quiz/paper/${chapter.id}`)}
+              key={lesson.id}
+              onClick={() => navigate(`/quiz/paper/${lesson.id}`)}
               sx={{
-                backgroundColor: '#fff',
-                borderLeft: `6px solid ${chapter.color}`,
-                borderRadius: '12px',
-                boxShadow: '0 6px 16px rgba(0,0,0,0.12)',
-                cursor: 'pointer',
-                transition: 'transform 0.2s',
-                '&:hover': {
-                  transform: 'translateY(-4px)',
+                borderLeft: `5px solid ${lesson.color}`,
+                borderRadius: 2,
+                backgroundColor: "#ffffff",
+                boxShadow: "0 2px 8px rgba(0,0,0,0.06)", // ✅ softer
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+
+                "&:hover": {
+                  transform: "translateY(-3px)",
+                  boxShadow: "0 6px 14px rgba(0,0,0,0.08)",
                 },
               }}
             >
               <CardContent
                 sx={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  px: 3,
-                  py: 2.5,
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
                 }}
               >
-                {/* Left content */}
+                {/* ✅ LEFT */}
                 <Box>
-                  <Typography
-                    sx={{
-                      fontWeight: 'bold',
-                      color: '#1F2937',
-                      fontSize: '15px',
-                      mb: 0.5,
-                    }}
-                  >
-                    {chapter.name}
+                  <Typography fontWeight={600}>
+                    {lesson.title}
                   </Typography>
 
-                  <Typography sx={{ fontSize: '13px', color: '#5f6c80' }}>
-                    {chapter.lesson}
+                  <Typography
+                    fontSize={13}
+                    color="text.secondary"
+                  >
+                    {lesson.subject}
                   </Typography>
                 </Box>
 
-                {/* Right action */}
+                {/* ✅ RIGHT */}
                 <Button
                   onClick={(e) => {
-                    e.stopPropagation(); // ✅ prevent double navigation
-                    navigate(`/quiz/paper/${chapter.id}`);
+                    e.stopPropagation();
+                    navigate(`/quiz/paper/${lesson.id}`);
                   }}
-                  variant="text"
-                  sx={{
-                    textTransform: 'none',
-                    fontSize: '13px',
-                    fontWeight: 700,
-                    color: '#2196F3',
-                    minWidth: 'auto',
-                    '&:hover': {
-                      backgroundColor: 'transparent',
-                      textDecoration: 'underline',
-                    },
-                  }}
+                  sx={{ minWidth: "auto" }}
                 >
                   →
                 </Button>

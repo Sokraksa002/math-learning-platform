@@ -4,7 +4,10 @@ import type { LessonContent } from '../../lib/contentJson';
 
 export async function generateFlashcardsForLesson(lessonId: string, save = false, userId?: string) {
   // load lesson content
-  const lesson = await prisma.lesson.findUnique({ where: { id: lessonId } });
+  const lesson = await prisma.lesson.findUnique({
+    where: { id: lessonId },
+  });
+
   if (!lesson) throw new Error('Lesson not found');
 
   // lesson.contentJson may be nullable in schema — guard

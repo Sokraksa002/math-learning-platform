@@ -57,7 +57,7 @@ export default function QuizTimeSection() {
         },
       }}
     >
-      <Typography sx={{ fontSize: 16, fontWeight: 600, color: '#2B2B2B' }}>
+      <Typography sx={{ fontSize: 16, fontWeight: 600, color: '#161a1d' }}>
         {quiz.title}
       </Typography>
 

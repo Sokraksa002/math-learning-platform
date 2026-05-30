@@ -75,7 +75,7 @@ model LessonCompletion {
   lessonId    String   @map("lesson_id") @db.Uuid
   completedAt DateTime @default(now()) @map("completed_at")
 
-  user   User   @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson Lesson @relation(fields: [lessonId], references: [id])
 
   @@unique([userId, lessonId])
@@ -91,7 +91,7 @@ model QuizSession {
   createdAt DateTime @default(now()) @map("created_at")
   completedAt DateTime? @map("completed_at")
 
-  user   User              @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson Lesson            @relation(fields: [lessonId], references: [id])
   items  QuizSessionItem[]
 
@@ -128,7 +128,7 @@ model Flashcard {
   totalReviews    Int      @default(0) @map("total_reviews")
   createdAt       DateTime @default(now()) @map("created_at")
 
-  user    User              @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   chapter Chapter           @relation(fields: [chapterId], references: [id])
   deck    Deck?             @relation(fields: [deckId], references: [id])
   reviews FlashcardReview[]
@@ -146,7 +146,7 @@ model FlashcardReview {
   reviewedAt  DateTime @default(now()) @map("reviewed_at")
 
   flashcard Flashcard @relation(fields: [flashcardId], references: [id])
-  user      User      @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("flashcard_reviews")
 }
@@ -160,7 +160,7 @@ model Deck {
   cardCount Int      @default(0) @map("card_count")
   createdAt DateTime @default(now()) @map("created_at")
 
-  user       User        @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   chapter    Chapter?    @relation(fields: [chapterId], references: [id])
   flashcards Flashcard[]
 
@@ -178,7 +178,7 @@ model UserProgress {
   accuracyRate  Float    @default(0) @map("accuracy_rate")
   lastStudiedAt DateTime @default(now()) @map("last_studied_at")
 
-  user   User   @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   lesson Lesson @relation(fields: [lessonId], references: [id])
 
   @@unique([userId, lessonId])
@@ -193,7 +193,7 @@ model ActivityEvent {
   entity    String?
   createdAt DateTime @default(now()) @map("created_at")
 
-  user User? @relation(fields: [userId], references: [id])
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("activity_events")
 }
@@ -210,8 +210,7 @@ model Certificate {
   revokedAt       DateTime? @map("revoked_at")
   pdfUrl          String?   @map("pdf_url")
 
-  user User @relation(fields: [userId], references: [id])
-
+  user User? @relation(fields: [userId], references: [id], onDelete: Cascade)
   @@unique([userId, course])
   @@map("certificates")
 }

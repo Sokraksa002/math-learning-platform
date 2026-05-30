@@ -9,7 +9,7 @@ export const generateFlashcardsJsonSchema = {
   type: 'object',
   required: ['lessonId'],
   properties: {
-    lessonId: { type: 'string', format: 'uuid' },
+    lessonId: { type: 'string' },
     save: { type: 'boolean', default: false },
   },
   additionalProperties: false,

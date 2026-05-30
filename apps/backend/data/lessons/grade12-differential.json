@@ -1,9 +1,5 @@
 {
-  
-"id": "grade12-differential-lesson5",
-"chapterId": "grade12-differential",
   "titleKm": "សមីការឌីផេរ៉ង់ស្យែល",
-  "content": {
       "blocks": [
     {
       "type": "text",
@@ -82,5 +78,4 @@
       "value": "ដំណោះស្រាយ៖ y_h = Ae^{-x}។ តាង y = A(x)e^{-x} នាំឱ្យ y' = A'(x)e^{-x} - A(x)e^{-x}។ ជំនួសក្នុងសមីការ៖ [A'(x)e^{-x} - A(x)e^{-x}] + [A(x)e^{-x}] = e^x។ សម្រួលបាន A'(x)e^{-x} = e^x នាំឱ្យ A'(x) = e^{2x}។ នាំឱ្យ A(x) = (1/2)e^{2x} + c។ ដូចនេះ y = [(1/2)e^{2x} + c]e^{-x} = (1/2)e^x + ce^{-x}។"
     }
   ]
-  }
 }

@@ -12,10 +12,11 @@ export const login = (user: AuthUser): void => {
   localStorage.setItem("user", JSON.stringify(user));
 };
 
-export const getUser = (): AuthUser | null => {
-  const user = localStorage.getItem("user");
-  return user ? JSON.parse(user) : null;
-};
+export function getUser() {
+  const user = JSON.parse(localStorage.getItem("user") || "{}");
+  console.log("GET USER:", user);
+  return user;
+}
 
 import { clearToken } from './api';
 

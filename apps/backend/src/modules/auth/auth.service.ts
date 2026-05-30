@@ -1,59 +1,65 @@
 import bcrypt from 'bcrypt';
 import { prisma } from '../../lib/prisma';
 
-/**
- * Register a new user
- */
+/* ✅ REGISTER */
 export async function register(data: { email: string; name: string; password: string }) {
-  // Check if email already exists
+  const email = data.email.toLowerCase().trim();
+
   const existing = await prisma.user.findUnique({
-    where: { email: data.email },
+    where: { email },
   });
 
   if (existing) {
     throw new Error('Email already exists');
   }
 
-  // Hash password
   const passwordHash = await bcrypt.hash(data.password, 10);
 
-  // Create user
-  return prisma.user.create({
+  const user = await prisma.user.create({
     data: {
-      email: data.email,
+      email,
       name: data.name,
-      passwordHash, // ✅ camelCase mapped to password_hash
+      passwordHash,
     },
     select: {
       id: true,
       email: true,
       name: true,
-      createdAt: true, // ✅ camelCase mapped to created_at
+      role: true,
+      createdAt: true,
     },
   });
+
+  return user;
 }
 
-/**
- * Login user
- */
+/* ✅ LOGIN */
 export async function login(data: { email: string; password: string }) {
+  const email = data.email.toLowerCase().trim();
+
   const user = await prisma.user.findUnique({
-    where: { email: data.email },
+    where: { email },
   });
 
   if (!user) {
     throw new Error('Invalid credentials');
   }
 
-  // Compare password
-  const valid = await bcrypt.compare(
-    data.password,
-    user.passwordHash, // ✅ mapped field
-  );
+  /* ✅ SAFETY CHECK */
+  if (!user.passwordHash) {
+    throw new Error('User password not set');
+  }
 
-  if (!valid) {
+  const isValid = await bcrypt.compare(data.password, user.passwordHash);
+
+  if (!isValid) {
     throw new Error('Invalid credentials');
   }
 
-  return user;
+  return {
+    id: user.id,
+    email: user.email,
+    name: user.name,
+    role: user.role,
+  };
 }

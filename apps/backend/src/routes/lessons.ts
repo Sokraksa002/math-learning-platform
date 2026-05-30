@@ -4,23 +4,41 @@ import { ensureExists } from '../lib/authHelpers';
 import { isValidUuid } from '../lib/validators';
 
 /**
- * Student-safe lesson routes (read-only)
+ * ✅ PUBLIC LESSON ROUTES (Guest-safe)
  */
 export async function lessonRoutes(app: FastifyInstance) {
   /**
-   * Get all published lessons (public)
+   * ✅ GET ALL LESSONS (PUBLIC)
+   * Used by frontend Lesson page
    */
   app.get('/lessons', async () => {
     const lessons = await prisma.lesson.findMany({
-      where: { isPublished: true },
-      orderBy: { orderIndex: 'asc' },
-      select: { id: true, titleKm: true, orderIndex: true, chapterId: true, contentJson: true },
+      where: {
+        isPublished: true, // ✅ only visible content
+        chapter: {
+          isPublished: true, // ✅ ensure chapter also visible
+        },
+      },
+      orderBy: {
+        orderIndex: 'asc',
+      },
+      select: {
+        id: true,
+        titleKm: true,
+        orderIndex: true,
+        chapterId: true,
+        contentJson: true,
+      },
     });
 
+    // ✅ Normalize for frontend
     const normalized = lessons.map((l) => {
       const content = (l as any).contentJson ?? null;
-      const titleKm = (l as any).titleKm ?? null;
-      const titleObj: any = { km: titleKm };
+      const titleKm = l.titleKm ?? null;
+
+      const titleObj: { en?: string; km?: string } = {
+        km: titleKm ?? undefined,
+      };
 
       try {
         if (content && typeof content === 'object') {
@@ -28,52 +46,50 @@ export async function lessonRoutes(app: FastifyInstance) {
             if (content.title.en) titleObj.en = content.title.en;
             if (content.title.km) titleObj.km = content.title.km;
           } else {
-            if (content.en && (content.en.title || typeof content.en === 'string'))
+            if (content.en && (content.en.title || typeof content.en === 'string')) {
               titleObj.en = content.en.title ?? content.en;
-            if (content.km && (content.km.title || typeof content.km === 'string'))
+            }
+
+            if (content.km && (content.km.title || typeof content.km === 'string')) {
               titleObj.km = content.km.title ?? content.km;
+            }
           }
         }
-      } catch (e) {
-        // ignore
+      } catch {
+        // ignore parsing errors
       }
 
       return {
         id: l.id,
         title: titleObj,
-        fallbackTitle: titleObj.km ?? titleObj.en ?? null,
+        fallbackTitle: titleObj.km ?? titleObj.en ?? 'Untitled',
         orderIndex: l.orderIndex,
-        chapterId: l.chapterId,
+        chapterId: l.chapterId, // ✅ IMPORTANT FOR FRONTEND GROUPING
         contentJson: content,
       };
     });
 
-    return { success: true, data: normalized };
+    return {
+      success: true,
+      data: normalized,
+    };
   });
 
   /**
-   * Get lessons by chapter (only if chapter is published)
+   * ✅ GET LESSONS BY CHAPTER
    */
   app.get('/chapters/:chapterId/lessons', async (request: FastifyRequest, reply: FastifyReply) => {
-    const { chapterId } = request.params as {
-      chapterId: string;
-    };
+    const { chapterId } = request.params as { chapterId: string };
 
-    // Validate chapterId
     if (!isValidUuid(chapterId)) {
-      app.log.warn(
-        {
-          invalidChapterId: chapterId,
-          url: request.raw?.url ?? request.url,
-          ua: request.headers?.['user-agent'],
-        },
-        'Invalid chapter id received',
-      );
-      reply.code(400).send({ success: false, error: 'Invalid chapter id' });
+      reply.code(400).send({
+        success: false,
+        error: 'Invalid chapter id',
+      });
       return;
     }
 
-    // 1️⃣ Check that the chapter exists AND is published
+    // ✅ ensure chapter exists and published
     const chapter = await prisma.chapter.findFirst({
       where: {
         id: chapterId,
@@ -83,10 +99,10 @@ export async function lessonRoutes(app: FastifyInstance) {
 
     if (!ensureExists(chapter, reply, 'Chapter')) return;
 
-    // 2️⃣ Fetch lessons for the chapter
     const lessons = await prisma.lesson.findMany({
       where: {
         chapterId,
+        isPublished: true,
       },
       orderBy: {
         orderIndex: 'asc',
@@ -98,10 +114,9 @@ export async function lessonRoutes(app: FastifyInstance) {
       },
     });
 
-    // Normalize titleKm -> title for frontend
     const normalized = lessons.map((l) => ({
       id: l.id,
-      title: (l as any).titleKm ?? null,
+      title: l.titleKm || 'Untitled',
       orderIndex: l.orderIndex,
     }));
 
@@ -112,32 +127,36 @@ export async function lessonRoutes(app: FastifyInstance) {
   });
 
   /**
-   * Get exercises for a lesson (public minimal info)
+   * ✅ GET LESSON EXERCISE COUNT
    */
   app.get('/lessons/:lessonId/exercises', async (request: FastifyRequest, reply: FastifyReply) => {
     const { lessonId } = request.params as { lessonId: string };
 
     if (!isValidUuid(lessonId)) {
-      app.log.warn(
-        {
-          invalidLessonId: lessonId,
-          url: request.raw?.url ?? request.url,
-          ua: request.headers?.['user-agent'],
-        },
-        'Invalid lesson id received',
-      );
-      reply.code(400).send({ success: false, error: 'Invalid lesson id' });
+      reply.code(400).send({
+        success: false,
+        error: 'Invalid lesson id',
+      });
       return;
     }
 
-    const lesson = await prisma.lesson.findUnique({ where: { id: lessonId } });
+    const lesson = await prisma.lesson.findUnique({
+      where: { id: lessonId },
+    });
+
     if (!ensureExists(lesson, reply, 'Lesson')) return;
 
-    const exercises = await prisma.exercise.findMany({ where: { lessonId }, select: { id: true } });
+    const exercises = await prisma.exercise.findMany({
+      where: { lessonId },
+      select: { id: true },
+    });
 
     return {
       success: true,
-      data: { count: exercises.length, ids: exercises.map((e) => e.id) },
+      data: {
+        count: exercises.length,
+        ids: exercises.map((e) => e.id),
+      },
     };
   });
 }

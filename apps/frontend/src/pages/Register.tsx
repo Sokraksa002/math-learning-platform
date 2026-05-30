@@ -125,7 +125,7 @@ export default function Register() {
         justifyContent: "center",
         alignItems: "center",
         background:
-          "linear-gradient(135deg,#6366F1,#4F46E5,#4338CA)",
+          "linear-gradient(135deg,#0096c7,#0096c7,#4338CA)",
       }}
     >
       <motion.div
@@ -292,7 +292,7 @@ export default function Register() {
               borderRadius: 2,
               fontWeight: 700,
               background:
-                "linear-gradient(135deg,#6366F1,#4F46E5)",
+                "linear-gradient(135deg,#ffff)",
             }}
           >
             {loading ? <CircularProgress size={20} /> : "Register"}

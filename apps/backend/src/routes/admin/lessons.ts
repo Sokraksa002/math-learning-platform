@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyRequest } from 'fastify';
 import { prisma } from '../../lib/prisma';
 import { Prisma } from '../../generated/prisma/client';
 import { lessonContentSchema, lessonContentJsonSchema } from '../../lib/contentJson.schema';
+import { requireAdmin } from '../../modules/admin/admin.controller';
 
 /**
  * Admin-only lesson management
@@ -13,7 +14,7 @@ export async function adminLessonRoutes(app: FastifyInstance) {
   app.post(
     '/admin/lessons',
     {
-      preHandler: app.requireAdmin, // 👑 ADMIN ONLY
+      preHandler: [app.authenticate, requireAdmin], // 👑 ADMIN ONLY
       schema: {
         body: {
           type: 'object',

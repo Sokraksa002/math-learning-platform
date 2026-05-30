@@ -1,9 +1,19 @@
-import { Box, Button, Container, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Typography,
+  LinearProgress,
+} from "@mui/material";
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 import { startQuiz, submitQuiz } from "../../utils/api";
-import type { QuizSession, QuizAnswer, QuizResult } from "../../utils/api";
+import type {
+  QuizSession,
+  QuizAnswer,
+  QuizResult,
+} from "../../utils/api";
 
 export default function QuizPaper() {
   const { lessonId } = useParams<{ lessonId: string }>();
@@ -17,7 +27,7 @@ export default function QuizPaper() {
   const [finished, setFinished] = useState(false);
   const [result, setResult] = useState<QuizResult | null>(null);
 
-  // ✅ Load quiz
+  /* ✅ LOAD QUIZ */
   useEffect(() => {
     if (!lessonId) return;
 
@@ -44,7 +54,7 @@ export default function QuizPaper() {
   const question = session.items[currentIndex];
   const total = session.items.length;
 
-  // ✅ Handle answer
+  /* ✅ SELECT ANSWER */
   const handleSelect = (choice: string) => {
     if (selected) return;
 
@@ -67,10 +77,10 @@ export default function QuizPaper() {
         setSelected(null);
         setShowAnswer(false);
       }
-    }, 2000);
+    }, 1500);
   };
 
-  // ✅ Submit quiz
+  /* ✅ SUBMIT QUIZ */
   const handleSubmit = async () => {
     if (!session) return;
 
@@ -83,97 +93,125 @@ export default function QuizPaper() {
     }
   };
 
+  /* ✅ PROGRESS */
+  const progress = ((currentIndex + 1) / total) * 100;
+
   return (
-    <Box sx={{ minHeight: "100vh", backgroundColor: "#F4F6FB", py: 8 }}>
+    <Box sx={{ minHeight: "100vh", py: 8, background: "#F4F6FB" }}>
       <Container maxWidth="md">
         <Box
           sx={{
-            backgroundColor: "#fff",
-            borderRadius: 4,
+            background: "#fff",
+            borderRadius: 3,
             p: 5,
-            boxShadow: "0 12px 25px rgba(0,0,0,0.05)",
+            boxShadow: "0 10px 25px rgba(0,0,0,0.05)",
           }}
         >
           {!finished ? (
             <>
-              {/* HEADER */}
+              {/* ✅ HEADER */}
               <Typography fontWeight={700}>
                 Question {currentIndex + 1} / {total}
               </Typography>
 
+              <LinearProgress
+                variant="determinate"
+                value={progress}
+                sx={{ my: 2 }}
+              />
+
               {/* ✅ QUESTION */}
-              <Typography sx={{ mt: 2 }}>
+              <Typography sx={{ mt: 2, fontSize: 18 }}>
                 {question.exercise.questionKm}
               </Typography>
 
-              {/* ✅ OPTIONS */}
+              {/* ✅ OPTIONS (FIXED 🔥) */}
               <Box mt={3} display="flex" flexDirection="column" gap={2}>
-                {["A", "B", "C", "D"].map((opt) => {
-                  const correct = question.exercise.correctAnswer;
-                  const isCorrect = opt === correct;
-                  const isSelected = selected === opt;
+                {Object.entries(question.exercise.choices).map(
+                  ([key, value]) => {
+                    const correct = question.exercise.correctAnswer;
+                    const isCorrect = key === correct;
+                    const isSelected = selected === key;
 
-                  let bg = "#fff";
-                  let border = "#ccc";
+                    let bg = "#fff";
+                    let border = "#161a1d";
 
-                  if (showAnswer) {
-                    if (isCorrect) {
-                      bg = "#E8F5E9";
-                      border = "green";
-                    } else if (isSelected) {
-                      bg = "#FFF3E0";
-                      border = "orange";
+                    if (showAnswer) {
+                      if (isCorrect) {
+                        bg = "#E8F5E9";
+                        border = "green";
+                      } else if (isSelected) {
+                        bg = "#FFE4E6";
+                        border = "red";
+                      }
                     }
-                  }
 
-                  return (
-                    <Box
-                      key={opt}
-                      onClick={() => handleSelect(opt)}
-                      sx={{
-                        border: `2px solid ${border}`,
-                        borderRadius: 2,
-                        p: 2,
-                        cursor: selected ? "default" : "pointer",
-                        backgroundColor: bg,
-                      }}
-                    >
-                      {opt}
-                    </Box>
-                  );
-                })}
+                    return (
+                      <Box
+                        key={key}
+                        onClick={() => handleSelect(key)}
+                        sx={{
+                          border: `2px solid ${border}`,
+                          borderRadius: 2,
+                          p: 2,
+                          cursor: selected ? "default" : "pointer",
+                          backgroundColor: bg,
+                          transition: "0.2s",
+                          "&:hover": {
+                            backgroundColor: "#F9FAFB",
+                          },
+                        }}
+                      >
+                        <Typography>
+                          {key}. {value}
+                        </Typography>
+                      </Box>
+                    );
+                  }
+                )}
               </Box>
 
               {/* ✅ EXPLANATION */}
               {showAnswer && (
-                <Box mt={3} p={2} bgcolor="#F9FAFB" borderRadius={2}>
-                  <Typography fontWeight={600}>Explanation:</Typography>
+                <Box mt={3} p={2} bgcolor="#F8FAFC" borderRadius={2}>
+                  <Typography fontWeight={600}>
+                    Explanation:
+                  </Typography>
                   <Typography>
-                    {question.exercise.solutionKm || "No explanation available"}
+                    {question.exercise.solutionKm ||
+                      "No explanation available"}
                   </Typography>
                 </Box>
               )}
             </>
           ) : (
             <Box textAlign="center">
-              <Typography variant="h5">🎉 Finished</Typography>
+              <Typography variant="h5">
+                🎉 Quiz Finished
+              </Typography>
 
-              <Typography mt={2}>
+              <Typography mt={2} fontSize={18}>
                 Score: {result?.score} / {result?.total}
               </Typography>
 
               {/* ✅ WRONG ANSWERS */}
               {result?.wrongAnswers.map((w, i) => (
-                <Box key={i} mt={2} p={2} bgcolor="#FFF3E0">
+                <Box key={i} mt={3} p={2} bgcolor="#FFF3E0">
                   <Typography>{w.question}</Typography>
                   <Typography>Your: {w.selected}</Typography>
-                  <Typography>Correct: {w.correctAnswer}</Typography>
+                  <Typography>
+                    Correct: {w.correctAnswer}
+                  </Typography>
                   <Typography>{w.solutionKm}</Typography>
                 </Box>
               ))}
 
-              <Button sx={{ mt: 3 }} onClick={() => navigate("/dashboard")}>
-                Back
+              <Button
+                sx={{ mt: 3 }}
+                variant="contained"
+                onClick={() => navigate("/quiz")}
+              >
+                Back to Quiz Hub
               </Button>
             </Box>
           )}

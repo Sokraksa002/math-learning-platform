@@ -1,7 +1,5 @@
-{"id": "grade12-derivatives-lesson3",
-  "chapterId": "grade12-derivatives",
+{
   "titleKm": "ដេរីវេនៃអនុគមន៍",
-  "content": {
         "blocks": [
     {
       "type": "text",
@@ -132,5 +130,4 @@
       "value": "ដំណោះស្រាយ៖ f'(x) = 2x - 4។ ឱ្យ f'(x) = 0 នាំឱ្យ x = 2។ តម្លៃអប្បបរមាគឺ f(2) = 2² - 4(2) + 5 = 1។"
     }
   ]
-}
 }

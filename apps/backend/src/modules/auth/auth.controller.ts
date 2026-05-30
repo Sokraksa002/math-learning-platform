@@ -2,32 +2,60 @@ import type { FastifyReply, FastifyRequest } from 'fastify';
 import * as authService from './auth.service';
 import { registerSchema, loginSchema } from '../../validators/auth';
 
+/* ✅ REGISTER */
 export async function register(req: FastifyRequest, reply: FastifyReply) {
-  // Fastify has already validated the request body using the route schema
-  const payload = req.body as unknown as ReturnType<typeof registerSchema.parse>;
-  const user = await authService.register(payload as any);
+  const payload = registerSchema.parse(req.body);
 
-  return reply.code(201).send(user);
-}
-
-export async function login(req: FastifyRequest, reply: FastifyReply) {
-  const payload = req.body as unknown as ReturnType<typeof loginSchema.parse>;
-  const user = await authService.login(payload as any);
+  const user = await authService.register(payload);
 
   const token = await reply.jwtSign({
-    id: user.id,
+    userId: user.id,
+    role: user.role,
   });
 
-  return reply.send({
-    token,
-    user: {
-      id: user.id,
-      email: user.email,
-      name: user.name,
+  return reply.code(201).send({
+    success: true,
+    data: {
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
     },
   });
 }
 
+/* ✅ LOGIN */
+export async function login(req: FastifyRequest, reply: FastifyReply) {
+  const payload = loginSchema.parse(req.body);
+
+  const user = await authService.login(payload);
+
+  const token = await reply.jwtSign({
+    userId: user.id,
+    role: user.role,
+  });
+
+  return reply.send({
+    success: true,
+    data: {
+      token,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+      },
+    },
+  });
+}
+
+/* ✅ CURRENT USER */
 export async function me(req: FastifyRequest, reply: FastifyReply) {
-  return reply.send(req.user);
+  return reply.send({
+    success: true,
+    user: req.user,
+  });
 }

@@ -1,7 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { getUser, isLoggedIn } from "../utils/auth";
 
-type AllowedRole = "admin" | "student";
+type AllowedRole = "ADMIN" | "STUDENT";
 
 export default function ProtectedRoute({
   children,

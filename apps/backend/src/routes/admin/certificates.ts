@@ -1,6 +1,7 @@
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { prisma } from '../../lib/prisma';
 import { ensureExists } from '../../lib/authHelpers';
+import { requireAdmin } from '../../modules/admin/admin.controller';
 
 /**
  * Admin-only certificate management
@@ -12,7 +13,7 @@ export async function adminCertificateRoutes(app: FastifyInstance) {
   app.post(
     '/admin/certificates/:certificateId/revoke',
     {
-      preHandler: app.requireAdmin, // 👑 ADMIN ONLY
+      preHandler: [app.authenticate, requireAdmin], // 👑 ADMIN ONLY
     },
     async (request: FastifyRequest, reply: FastifyReply) => {
       const { certificateId } = request.params as {

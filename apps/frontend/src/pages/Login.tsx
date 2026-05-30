@@ -37,6 +37,7 @@ export default function Login() {
 
   const [showPassword, setShowPassword] = useState(false);
 
+  /* ✅ LOGIN HANDLER */
   const handleLogin = async () => {
     if (!email || !password) {
       setError("Please enter email and password");
@@ -49,23 +50,36 @@ export default function Login() {
     try {
       const res = await apiLogin(email, password);
 
-      if (!res?.token || !res?.user) {
-        throw new Error("Invalid email or password");
+      console.log("USER FROM API:", res.user); // ✅ debug
+
+      /* ✅ ✅ FIX HERE */
+      
+const token = res.token;
+const user = res.user;
+
+      if (!token) {
+        throw new Error("Login failed: token missing");
       }
 
-      saveToken(res.token);
-      localStorage.setItem("user", JSON.stringify(res.user));
+      saveToken(token);
+      localStorage.setItem("user", JSON.stringify(user));
 
+      /* ✅ REMEMBER */
       if (remember) {
         localStorage.setItem("remember", "true");
+      } else {
+        localStorage.removeItem("remember");
       }
 
-      // ✅ redirect back if needed
+      /* ✅ REDIRECT */
       const params = new URLSearchParams(location.search);
       const next = params.get("next");
 
-      navigate(next ?? "/dashboard");
+      navigate(next || "/dashboard");
+
     } catch (err: unknown) {
+      console.error("Login error:", err);
+
       if (err instanceof Error) {
         setError(err.message);
       } else {
@@ -83,8 +97,7 @@ export default function Login() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background:
-          "linear-gradient(135deg,#6366F1,#4F46E5,#4338CA)",
+        background: "linear-gradient(135deg,#48cae4,#0077b6,#4338CA)",
         px: 2,
       }}
     >
@@ -104,7 +117,7 @@ export default function Login() {
             boxShadow: "0 20px 50px rgba(0,0,0,0.25)",
           }}
         >
-          {/* ✅ HEADER */}
+
           <Typography fontSize={26} fontWeight={800} mb={1}>
             Welcome back 👋
           </Typography>
@@ -113,7 +126,7 @@ export default function Login() {
             Login to continue learning
           </Typography>
 
-          {/* ✅ EMAIL */}
+          {/* EMAIL */}
           <TextField
             label="Email"
             fullWidth
@@ -133,7 +146,7 @@ export default function Login() {
             }}
           />
 
-          {/* ✅ PASSWORD */}
+          {/* PASSWORD */}
           <TextField
             label="Password"
             type={showPassword ? "text" : "password"}
@@ -144,9 +157,7 @@ export default function Login() {
               setPassword(e.target.value);
               setError("");
             }}
-            onKeyDown={(e) =>
-              e.key === "Enter" && handleLogin()
-            }
+            onKeyDown={(e) => e.key === "Enter" && handleLogin()}
             sx={{ mb: 1 }}
             InputProps={{
               startAdornment: (
@@ -159,55 +170,32 @@ export default function Login() {
                   onClick={() => setShowPassword((prev) => !prev)}
                   sx={{ color: "white" }}
                 >
-                  {showPassword ? (
-                    <VisibilityOff />
-                  ) : (
-                    <Visibility />
-                  )}
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               ),
             }}
           />
 
-          {/* ✅ FORGOT PASSWORD */}
-          <Typography
-            component={Link}
-            to="/forgot-password"
-            sx={{
-              display: "block",
-              textAlign: "right",
-              fontSize: 13,
-              mb: 1,
-              color: "#E0E7FF",
-              textDecoration: "none",
-              "&:hover": { textDecoration: "underline" },
-            }}
-          >
-            Forgot password?
-          </Typography>
-
-          {/* ✅ ERROR */}
+          {/* ERROR */}
           {error && (
             <Alert severity="error" sx={{ mb: 1 }}>
               {error}
             </Alert>
           )}
 
-          {/* ✅ REMEMBER */}
+          {/* REMEMBER */}
           <FormControlLabel
             control={
               <Checkbox
                 checked={remember}
-                onChange={(e) =>
-                  setRemember(e.target.checked)
-                }
+                onChange={(e) => setRemember(e.target.checked)}
                 sx={{ color: "#fff" }}
               />
             }
             label="Remember me"
           />
 
-          {/* ✅ LOGIN BUTTON */}
+          {/* BUTTON */}
           <Button
             fullWidth
             onClick={handleLogin}
@@ -217,22 +205,17 @@ export default function Login() {
               py: 1.2,
               borderRadius: 2,
               fontWeight: 700,
-              background:
-                "linear-gradient(135deg,#7C3AED,#4F46E5)",
-              boxShadow: "0 8px 20px rgba(0,0,0,0.2)",
+              background: "white",
+              color: "#111",
               "&:hover": {
                 transform: "translateY(-2px)",
               },
             }}
           >
-            {loading ? (
-              <CircularProgress size={20} sx={{ color: "#fff" }} />
-            ) : (
-              "Sign In"
-            )}
+            {loading ? <CircularProgress size={20} /> : "Sign In"}
           </Button>
 
-          {/* ✅ FOOTER */}
+          {/* FOOTER */}
           <Typography textAlign="center" mt={2} fontSize={14}>
             Don't have an account?{" "}
             <Typography

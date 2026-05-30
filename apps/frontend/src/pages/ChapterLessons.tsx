@@ -1,85 +1,118 @@
 import { useEffect, useState } from "react";
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Grid, Typography, CircularProgress } from "@mui/material";
 import { useParams } from "react-router-dom";
+
 import { getAllLessons } from "../utils/api";
 import type { Lesson } from "../utils/api";
+
 import LessonCard from "../components/Lessons/LessonCard";
 import { useLocale } from "../hooks/useLocale";
-import { isValidUuid } from "../utils/validators";
+
+import { getCompletedLessonIds } from "../utils/learningProgress";
 
 export default function ChapterLessons() {
   const { chapterId } = useParams();
   const { t } = useLocale();
 
-  // ✅ VALIDATION OUTSIDE EFFECT
-  const isValid = chapterId && isValidUuid(String(chapterId));
-
   const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [loading, setLoading] = useState(isValid); // ✅ depends on valid
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  /**
+   * ✅ LOAD LESSONS
+   */
   useEffect(() => {
-    if (!isValid) return; // ✅ no setState here
-
     let mounted = true;
 
-    getAllLessons()
-      .then((data) => {
+    const load = async () => {
+      if (!chapterId) {
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const data = await getAllLessons();
+
         if (!mounted) return;
 
         const filtered = Array.isArray(data)
           ? data.filter(
-              (l) => String(l.chapterId) === String(chapterId)
+              (lesson) => String(lesson.chapterId) === String(chapterId)
             )
           : [];
 
         setLessons(filtered);
-      })
-      .catch((err: unknown) => {
+
+      } catch (err: unknown) {
         if (!mounted) return;
 
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError(
-            t("errors.failed_fetch", "Failed to load lessons")
-          );
-        }
-      })
-      .finally(() => {
+        setError(
+          err instanceof Error
+            ? err.message
+            : t("errors.failed_fetch", "Failed to load lessons")
+        );
+      } finally {
         if (mounted) setLoading(false);
-      });
+      }
+    };
+
+    load();
 
     return () => {
       mounted = false;
     };
-  }, [chapterId, isValid, t]);
+  }, [chapterId, t]);
+
+  /**
+   * ✅ GET COMPLETED IDS
+   */
+  const completedIds = getCompletedLessonIds();
 
   return (
     <Box sx={{ minHeight: "100vh", py: 6 }}>
       <Container maxWidth="lg">
+
+        {/* ✅ TITLE */}
         <Typography fontWeight={800} fontSize={28} mb={4}>
-          {t("components.Chapter.lessons", "Lessons")}
+          {t("nav.chapter")} - {t("components.Chapter.lessons", "Lessons")}
         </Typography>
 
-        {/* ✅ INVALID CASE */}
-        {!isValid ? (
-          <Typography color="error">
-            Invalid chapter ID
-          </Typography>
-        ) : loading ? (
-          <Typography>Loading lessons...</Typography>
-        ) : error ? (
+        {/* ✅ LOADING */}
+        {loading && (
+          <Box textAlign="center" py={5}>
+            <CircularProgress />
+          </Box>
+        )}
+
+        {/* ✅ ERROR */}
+        {!loading && error && (
           <Typography color="error">{error}</Typography>
-        ) : lessons.length === 0 ? (
-          <Typography>No lessons available.</Typography>
-        ) : (
+        )}
+
+        {/* ✅ EMPTY */}
+        {!loading && !error && lessons.length === 0 && (
+          <Box textAlign="center" py={5}>
+            <Typography fontSize={18}>
+              {t("no_lessons", "No lessons available.")}
+            </Typography>
+          </Box>
+        )}
+
+        {/* ✅ LESSON LIST */}
+        {!loading && !error && lessons.length > 0 && (
           <Grid container spacing={3}>
-            {lessons.map((lesson) => (
-              <Grid item xs={12} md={6} key={String(lesson.id)}>
-                <LessonCard lesson={lesson} />
-              </Grid>
-            ))}
+            {lessons.map((lesson) => {
+              const isCompleted = completedIds.includes(String(lesson.id));
+
+              return (
+                <Grid item xs={12} md={6} key={String(lesson.id)}>
+                  <LessonCard
+                    lesson={lesson}
+                    completed={isCompleted} // ✅ NEW PROP
+                  />
+                </Grid>
+              );
+            })}
           </Grid>
         )}
       </Container>

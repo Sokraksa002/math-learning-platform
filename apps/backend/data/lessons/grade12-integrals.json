@@ -1,7 +1,5 @@
-{"id": "grade12-integrals-lesson4",
-  "chapterId": "grade12-integrals",
+{
   "titleKm": "អាំងតេក្រាល",
-  "content":{
         "blocks": [
     {
       "type": "text",
@@ -92,5 +90,4 @@
       "value": "ដំណោះស្រាយ៖ V = π ∫[0 to 4] (√x)^2 dx = π ∫[0 to 4] x dx = π [x^2/2] ចន្លោះ 0 ទៅ 4 = π(16/2 - 0) = 8π ឯកតាមាឌ។"
     }
   ]
-}
 }

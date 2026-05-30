@@ -1,6 +1,7 @@
-import { prisma } from '../../lib/prisma';
-import type { Prisma, Exercise } from '@prisma/client';
+import fs from 'fs';
+import path from 'path';
 
+/* ✅ ERROR CLASS */
 export class QuizSessionCompletedError extends Error {
   constructor(message?: string) {
     super(message ?? 'Quiz session already completed');
@@ -8,162 +9,155 @@ export class QuizSessionCompletedError extends Error {
   }
 }
 
-/**
- * Answer item provided by frontend
- */
+/* ✅ ANSWER TYPE */
 export interface AnswerItem {
   exerciseId: string;
   selectedChoice: string;
 }
 
-/**
- * ✅ Start Quiz
- * - create session
- * - include exercise details (IMPORTANT ✅)
- */
-export async function startQuiz(userId: string, lessonId: string, count?: number) {
-  const DEFAULT_MAX = 10;
-  const max = typeof count === 'number' && count > 0 ? count : DEFAULT_MAX;
-
-  const exercises = await prisma.exercise.findMany({
-    where: { lessonId },
-  });
-
-  if (!exercises || exercises.length === 0) {
-    throw new Error('No exercises found for the given lesson');
-  }
-
-  // ✅ Shuffle
-  const shuffled = exercises.slice();
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-
-  const selected = shuffled.slice(0, Math.min(max, shuffled.length));
-
-  // ✅ Create session
-  const session = await prisma.quizSession.create({
-    data: {
-      userId,
-      lessonId,
-      score: 0,
-      items: {
-        create: selected.map((e: Exercise) => ({
-          exerciseId: e.id,
-        })),
-      },
-    },
-
-    // 🔥 IMPORTANT: include exercise data so frontend can display
-    include: {
-      items: {
-        include: {
-          exercise: true,
-        },
-      },
-    },
-  });
-
-  return session;
+/* ✅ JSON TYPES */
+interface JsonExercise {
+  id: string;
+  question: string;
+  choices: string[];
+  correctIndex: number;
+  explanation: string;
 }
 
-/**
- * ✅ Submit Quiz
- */
+interface LessonJson {
+  lessonId: string;
+  exercises: JsonExercise[];
+}
+
+/* ✅ ✅ ✅ LOAD JSON (FIXED PATH 🔥) */
+function loadLessonJson(lessonId: string): LessonJson {
+  const parts = lessonId.split('-');
+
+  if (parts.length < 3) {
+    throw new Error('Invalid lessonId format');
+  }
+
+  const folder = `${parts[0]}-${parts[1]}`;
+  const lessonFile = parts[2];
+
+  const filePath = path.join(
+    process.cwd(),
+    'data/exercises', // ✅ ✅ FIXED HERE
+    folder,
+    `${lessonFile}.json`,
+  );
+
+  if (!fs.existsSync(filePath)) {
+    throw new Error(`Lesson file not found: ${filePath}`);
+  }
+
+  const raw = fs.readFileSync(filePath, 'utf-8');
+  return JSON.parse(raw);
+}
+
+/* ✅ START QUIZ */
+export async function startQuiz(userId: string, lessonId: string, count?: number) {
+  const data = loadLessonJson(lessonId);
+  const exercises = data.exercises;
+
+  if (!exercises.length) {
+    throw new Error('No exercises found');
+  }
+
+  const max = count ?? 10;
+
+  /* ✅ Shuffle */
+  const shuffled = [...exercises].sort(() => Math.random() - 0.5);
+
+  const selected = shuffled.slice(0, max);
+
+  /* ✅ Transform for frontend */
+  const items = selected.map((ex) => ({
+    id: ex.id,
+    exerciseId: ex.id,
+    exercise: {
+      id: ex.id,
+      questionKm: ex.question,
+      solutionKm: ex.explanation,
+      correctAnswer: ['A', 'B', 'C', 'D'][ex.correctIndex],
+      choices: {
+        A: ex.choices[0],
+        B: ex.choices[1],
+        C: ex.choices[2],
+        D: ex.choices[3],
+      },
+    },
+  }));
+
+  return {
+    id: `session-${lessonId}-${Date.now()}`, // ✅ GOOD FORMAT
+    lessonId,
+    items,
+  };
+}
+
+/* ✅ SUBMIT QUIZ */
 export async function submitQuiz(sessionId: string, answers: AnswerItem[]) {
-  let correctCount = 0;
   const wrongAnswers: Array<{
     question?: string;
     correctAnswer?: string;
     selected?: string;
-    solutionKm?: string | null;
+    solutionKm?: string;
   }> = [];
 
-  let finalTotal = 0;
-  let finalScore = 0;
+  let correctCount = 0;
 
-  await prisma.$transaction(async (tx: Prisma.TransactionClient) => {
-    const session = await tx.quizSession.findUnique({
-      where: { id: sessionId },
-      include: { items: true },
-    });
+  /* ✅ extract lessonId */
+  const parts = sessionId.split('-');
 
-    if (!session) throw new Error('Quiz session not found');
+  if (parts.length < 4) {
+    throw new Error('Invalid sessionId');
+  }
 
-    if (session.completedAt) {
-      throw new QuizSessionCompletedError();
-    }
+  const lessonId = `${parts[1]}-${parts[2]}-${parts[3]}`;
 
-    const total = session.items.length;
+  const data = loadLessonJson(lessonId);
+  const exercises = data.exercises;
 
-    for (const ans of answers) {
-      const exercise = await tx.exercise.findUnique({
-        where: { id: ans.exerciseId },
-      });
+  const exerciseMap = new Map<string, JsonExercise>(exercises.map((ex) => [ex.id, ex]));
 
-      if (!exercise) continue;
+  for (const ans of answers) {
+    const ex = exerciseMap.get(ans.exerciseId);
 
-      const isCorrect = ans.selectedChoice === exercise.correctAnswer;
+    if (!ex) continue;
 
-      if (isCorrect) {
-        correctCount++;
-      } else {
-        wrongAnswers.push({
-          question: exercise.questionKm,
-          correctAnswer: exercise.correctAnswer,
-          selected: ans.selectedChoice,
-          solutionKm: exercise.solutionKm,
-        });
-      }
+    const correctAnswer = ['A', 'B', 'C', 'D'][ex.correctIndex];
 
-      await tx.quizSessionItem.updateMany({
-        where: { sessionId, exerciseId: ans.exerciseId },
-        data: {
-          selectedChoice: ans.selectedChoice,
-          isCorrect,
-        },
+    const isCorrect = ans.selectedChoice === correctAnswer;
+
+    if (isCorrect) {
+      correctCount++;
+    } else {
+      wrongAnswers.push({
+        question: ex.question,
+        correctAnswer,
+        selected: ans.selectedChoice,
+        solutionKm: ex.explanation,
       });
     }
+  }
 
-    const score = total === 0 ? 0 : Math.round((correctCount / total) * 100);
+  const total = answers.length;
 
-    await tx.quizSession.update({
-      where: { id: sessionId },
-      data: {
-        score,
-        completedAt: new Date(),
-      },
-    });
-
-    finalTotal = total;
-    finalScore = score;
-  });
+  const score = total === 0 ? 0 : Math.round((correctCount / total) * 100);
 
   return {
-    score: finalScore,
-    total: finalTotal,
+    score,
+    total,
     correct: correctCount,
     wrongAnswers,
   };
 }
 
-/**
- * ✅ Get Quiz Result
- */
+/* ✅ GET RESULT */
 export async function getQuizResult(sessionId: string) {
-  const session = await prisma.quizSession.findUnique({
-    where: { id: sessionId },
-    include: {
-      items: {
-        include: {
-          exercise: true, // ✅ includes full question info
-        },
-      },
-    },
-  });
-
-  if (!session) throw new Error('Quiz session not found');
-
-  return session;
+  return {
+    id: sessionId,
+    items: [],
+  };
 }

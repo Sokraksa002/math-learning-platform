@@ -89,26 +89,33 @@ export default function StudentDashboard() {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    let mounted = true;
-    setLoading(true);
-    getProgress()
-      .then((data) => {
-        if (!mounted) return;
-        // backend returns { totalLessons, completedLessons, progressPercent }
-        setProgress((data as unknown) as ProgressSummary);
-      })
-      .catch((err) => {
-        if (!mounted) return;
-        // eslint-disable-next-line no-console
-        console.error("getProgress failed", err);
-        setProgress({ totalLessons: 0, completedLessons: 0, progressPercent: 0 });
-      })
-      .finally(() => mounted && setLoading(false));
+  let mounted = true;
 
-    return () => {
-      mounted = false;
-    };
-  }, [t]);
+  getProgress()
+    .then((data) => {
+      if (!mounted) return;
+
+      setProgress(data as ProgressSummary);
+    })
+    .catch((err) => {
+      if (!mounted) return;
+
+      console.error("getProgress failed", err);
+
+      setProgress({
+        totalLessons: 0,
+        completedLessons: 0,
+        progressPercent: 0,
+      });
+    })
+    .finally(() => {
+      if (mounted) setLoading(false);
+    });
+
+  return () => {
+    mounted = false;
+  };
+}, [t]);
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#f3f7ff" }}>

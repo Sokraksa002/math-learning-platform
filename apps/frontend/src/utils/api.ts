@@ -24,6 +24,17 @@ export type Chapter = {
   titleKm: string;
 };
 
+export async function publicGet<T>(path: string): Promise<T> {
+  const res = await fetch(`${API_URL}${path}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  return handleResponse<T>(res);
+}
+
 // ✅ ✅ ✅ FIXED LESSON TYPE (IMPORTANT)
 export type Lesson = {
   id: string;
@@ -57,6 +68,14 @@ export type Exercise = {
   questionKm: string;
   solutionKm: string;
   correctAnswer: string;
+
+choices: {
+    A: string;
+    B: string;
+    C: string;
+    D: string;
+  };
+
 };
 
 export type QuizItem = {
@@ -183,26 +202,47 @@ export async function login(
   email: string,
   password: string
 ): Promise<LoginData> {
-  return publicPost<LoginData>("/api/auth/login", {
+  const res = await publicPost<{
+    success: boolean;
+    data: LoginData;
+  }>("/api/auth/login", {
     email,
     password,
   });
+
+  return res.data;
 }
 
-// ================= CHAPTER =================
+
+// ================= ✅ CHAPTER =================
 
 export async function getChapters(): Promise<Chapter[]> {
-  return protectedGet<Chapter[]>("/api/chapters");
+  const res = await publicGet<{
+    success: boolean;
+    data: Chapter[];
+  }>("/api/chapters");
+
+  return res.data || [];
 }
 
-// ================= LESSON =================
+// ================= ✅ LESSON =================
 
 export async function getAllLessons(): Promise<Lesson[]> {
-  return protectedGet<Lesson[]>("/api/lessons");
+  const res = await publicGet<{
+    success: boolean;
+    data: Lesson[];
+  }>("/api/lessons");
+
+  return res.data || [];
 }
 
 export async function getLesson(id: string): Promise<Lesson> {
-  return protectedGet<Lesson>(`/api/lesson/${id}`);
+  const res = await publicGet<{
+    success: boolean;
+    data: Lesson;
+  }>(`/api/lesson/${id}`);
+
+  return res.data;
 }
 
 // ✅ ✅ ✅ REQUIRED FOR LessonDetail
@@ -214,31 +254,56 @@ export async function getLessonExercises(
   );
 }
 
+
 // ================= QUIZ =================
 
 export async function startQuiz(
   lessonId: string,
   count = 10
 ): Promise<QuizSession> {
-  return protectedPost<QuizSession>("/api/quiz/start", {
-    lessonId,
-    count,
+  if (!lessonId) {
+    throw new Error("Missing lessonId");
+  }
+
+  const res = await fetch(`${API_URL}/api/quiz/start`, {
+    method: "POST",
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      lessonId,   // ✅ MUST MATCH BACKEND
+      count,
+    }),
   });
+
+  return handleResponse<QuizSession>(res);
 }
 
 export async function submitQuiz(
   sessionId: string,
   answers: QuizAnswer[]
 ): Promise<QuizResult> {
-  return protectedPost<QuizResult>("/api/quiz/submit", {
-    sessionId,
-    answers,
+  if (!sessionId) {
+    throw new Error("Missing sessionId");
+  }
+
+  const res = await fetch(`${API_URL}/api/quiz/submit`, {
+    method: "POST",
+    headers: buildHeaders(),
+    body: JSON.stringify({
+      sessionId,
+      answers,
+    }),
   });
+
+  return handleResponse<QuizResult>(res);
 }
 
 export async function getQuizResult(
   sessionId: string
 ): Promise<QuizSession> {
+  if (!sessionId) {
+    throw new Error("Missing sessionId");
+  }
+
   return protectedGet<QuizSession>(
     `/api/quiz/result/${sessionId}`
   );

@@ -1,8 +1,5 @@
 {
-  "id": "grade12-complex-lesson1",
-  "chapterId": "grade12-complex",
   "titleKm": "ចំនួនកុំផ្លិច",
-  "content": {
 	"blocks": [
   	{
     	"type": "text",
@@ -98,7 +95,7 @@
   	},
   	{
     	"type": "text",
-    	"value": "2. រក z បើ \u0304z = 2+3i → z = 2-3i"
+    	"value": "2. រក z បើ z̄ = 2+3i → z = 2-3i"
   	},
   	{
     	"type": "text",
@@ -122,6 +119,5 @@
   	}
 
 ]
-  }
 }
 

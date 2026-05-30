@@ -1,47 +1,82 @@
-const COMPLETED_LESSON_STORAGE_KEY = 'math-learning-completed-lessons';
+const STORAGE_KEY = "math-learning-completed-lessons";
 
-export const REQUIRED_LESSON_IDS = [101, 102, 201, 202] as const;
-
-const readCompletedLessonIds = (): number[] => {
-  if (typeof window === 'undefined') {
-    return [];
-  }
-
+/**
+ * ✅ READ PROGRESS
+ */
+const readCompletedLessonIds = (): string[] => {
   try {
-    const rawValue = window.localStorage.getItem(COMPLETED_LESSON_STORAGE_KEY);
-    if (!rawValue) {
-      return [];
-    }
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
 
-    const parsed = JSON.parse(rawValue);
+    const parsed = JSON.parse(raw);
+
     return Array.isArray(parsed)
-      ? parsed.map((value) => Number(value)).filter((value) => Number.isFinite(value))
+      ? parsed.filter((id) => typeof id === "string")
       : [];
   } catch {
     return [];
   }
 };
 
-const writeCompletedLessonIds = (lessonIds: number[]): void => {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  window.localStorage.setItem(COMPLETED_LESSON_STORAGE_KEY, JSON.stringify(lessonIds));
+/**
+ * ✅ WRITE PROGRESS
+ */
+const writeCompletedLessonIds = (lessonIds: string[]): void => {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(lessonIds));
 };
 
-export const getCompletedLessonIds = (): number[] => readCompletedLessonIds();
-
-export const markLessonCompleted = (lessonId: number): number[] => {
-  const currentLessonIds = readCompletedLessonIds();
-  if (currentLessonIds.includes(lessonId)) {
-    return currentLessonIds;
-  }
-
-  const updatedLessonIds = [...currentLessonIds, lessonId];
-  writeCompletedLessonIds(updatedLessonIds);
-  return updatedLessonIds;
+/**
+ * ✅ GET PROGRESS
+ */
+export const getCompletedLessonIds = (): string[] => {
+  return readCompletedLessonIds();
 };
 
-export const areAllLessonsCompleted = (): boolean =>
-  REQUIRED_LESSON_IDS.every((lessonId) => readCompletedLessonIds().includes(lessonId));
+/**
+ * ✅ MARK COMPLETE
+ */
+export const markLessonCompleted = (lessonId: string): string[] => {
+  const current = readCompletedLessonIds();
+
+  if (current.includes(lessonId)) {
+    return current;
+  }
+
+  const updated = [...current, lessonId];
+  writeCompletedLessonIds(updated);
+
+  return updated;
+};
+
+/**
+ * ✅ REMOVE (optional)
+ */
+export const unmarkLessonCompleted = (lessonId: string): string[] => {
+  const current = readCompletedLessonIds();
+  const updated = current.filter((id) => id !== lessonId);
+
+  writeCompletedLessonIds(updated);
+  return updated;
+};
+
+/**
+ * ✅ CHECK SINGLE LESSON
+ */
+export const isLessonCompleted = (lessonId: string): boolean => {
+  return readCompletedLessonIds().includes(lessonId);
+};
+
+/**
+ * ✅ COUNT COMPLETED (for Ability page)
+ */
+export const getCompletedCount = (): number => {
+  return readCompletedLessonIds().length;
+};
+
+/**
+ * ✅ OPTIONAL: CHECK ALL COMPLETED (dynamic)
+ */
+export const areAllLessonsCompleted = (allLessonIds: string[]): boolean => {
+  const completed = readCompletedLessonIds();
+  return allLessonIds.every((id) => completed.includes(id));
+};

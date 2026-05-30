@@ -5,7 +5,7 @@ import authPlugin from './plugins/auth';
 import { corsPlugin } from './plugins/cors';
 
 // routes
-import { authRoutes } from './routes/auth';
+import { authRoutes } from './modules/auth/auth.routes';
 import { meRoutes } from './routes/me';
 
 import { adminChapterRoutes } from './routes/admin/chapters';
@@ -23,8 +23,10 @@ import { certificateRoutes } from './routes/certificate';
 import { certificateVerificationRoutes } from './routes/certificate-verification';
 import { certificateEmailRoutes } from './routes/certificate-email';
 
+// ✅ FLASHCARD ROUTES
 import { flashcardReviewRoutes } from './routes/flashcard-review';
 import { flashcardsDueRoutes } from './routes/flashcards-due';
+import { aiFlashcardRoutes } from './routes/ai.flashcards'; // ✅ ✅ ADD THIS
 
 import { flashcardRoutes } from './modules/flashcards/flashcard.routes';
 import { adminRoutes as adminModuleRoutes } from './modules/admin/admin.routes';
@@ -39,7 +41,7 @@ app.register(corsPlugin);
 app.register(authPlugin);
 
 // ✅ Auth
-app.register(authRoutes, { prefix: '/api/auth' });
+app.register(authRoutes, { prefix: '/api' });
 app.register(meRoutes, { prefix: '/api' });
 
 // ✅ Student content
@@ -47,10 +49,13 @@ app.register(chapterRoutes, { prefix: '/api' });
 app.register(lessonRoutes, { prefix: '/api' });
 app.register(lessonDetailRoutes, { prefix: '/api' });
 
-// ✅ Flashcards
+// ✅ ✅ FLASHCARDS (FINAL FIX SECTION)
 app.register(flashcardRoutes, { prefix: '/api' });
 app.register(flashcardReviewRoutes, { prefix: '/api' });
 app.register(flashcardsDueRoutes, { prefix: '/api' });
+
+/* ✅ ✅ ✅ THIS IS THE MOST IMPORTANT LINE */
+app.register(aiFlashcardRoutes, { prefix: '/api' });
 
 // ✅ Progress + Certificate
 app.register(lessonCompletionRoutes, { prefix: '/api' });
@@ -60,7 +65,7 @@ app.register(certificateRoutes, { prefix: '/api' });
 app.register(certificateVerificationRoutes, { prefix: '/api' });
 app.register(certificateEmailRoutes, { prefix: '/api' });
 
-//quiz
+// ✅ Quiz
 app.register(quizRoutes, { prefix: '/api' });
 
 // ✅ Admin

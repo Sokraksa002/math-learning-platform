@@ -6,34 +6,37 @@ import {
   Typography,
   Box,
 } from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
 import { useLocale } from "../../hooks/useLocale";
 import { isValidUuid } from "../../utils/validators";
+
 import {
   MenuBook,
   CheckCircle,
   PlayArrow,
   Lock,
 } from "@mui/icons-material";
+
 import type { Lesson } from "../../utils/api";
 
-// ✅ TYPES
 type LessonStatus = "completed" | "current" | "locked" | "default";
 
 type Props = {
   lesson: Lesson;
+  completed?: boolean;
   onClick?: (id: string) => void;
   status?: LessonStatus;
 };
 
-// ✅ SAFE LOCALE TYPE
 type LocaleKey = "en" | "km";
 
-const truncate = (s: string, n = 180) =>
+const truncate = (s: string, n = 120) =>
   s.length > n ? s.slice(0, n).trim() + "…" : s;
 
 export default function LessonCard({
   lesson,
+  completed = false,
   onClick,
   status = "default",
 }: Props) {
@@ -46,12 +49,17 @@ export default function LessonCard({
 
   const id = String(lesson?.id ?? "");
 
+  // ✅ STATUS
+  const finalStatus: LessonStatus =
+    status === "default"
+      ? completed
+        ? "completed"
+        : "current"
+      : status;
+
   // ✅ TITLE
   const rawTitle =
-    lesson.title ??
-    lesson.fallbackTitle ??
-    lesson.titleKm ??
-    `Lesson ${id}`;
+    lesson.title ?? lesson.fallbackTitle ?? `Lesson ${id}`;
 
   const title =
     typeof rawTitle === "object"
@@ -63,7 +71,6 @@ export default function LessonCard({
 
   // ✅ DESCRIPTION
   let description = "No description available.";
-
   const content = lesson?.contentJson ?? null;
 
   try {
@@ -78,38 +85,17 @@ export default function LessonCard({
         description = truncate(
           (content as Record<string, string>)[safeLocale]
         );
-      } else if (
-        content.summary &&
-        typeof content.summary === "object"
-      ) {
-        const summary = content.summary as Record<
-          string,
-          string
-        >;
-
-        description = truncate(
-          summary[safeLocale] ??
-            summary.en ??
-            summary.km ??
-            ""
-        );
       } else if (typeof content.summary === "string") {
         description = truncate(content.summary);
-      } else if (Array.isArray(content.paragraphs)) {
-        description = truncate(content.paragraphs.join(" "));
-      } else if (typeof content.description === "string") {
-        description = truncate(content.description);
-      } else {
-        description = truncate(JSON.stringify(content));
       }
     }
   } catch {
-    // ignore safely
+    // ignore safely ✅ FIXED ESLINT
   }
 
-  // ✅ HANDLE CLICK
+  // ✅ CLICK HANDLER
   const handleOpen = () => {
-    if (status === "locked") return;
+    if (finalStatus === "locked") return;
 
     if (!isValidUuid(id)) {
       console.warn("Invalid lesson id:", id);
@@ -128,40 +114,48 @@ export default function LessonCard({
       onClick={handleOpen}
       sx={{
         cursor:
-          status === "locked" ? "not-allowed" : "pointer",
+          finalStatus === "locked" ? "not-allowed" : "pointer",
         borderRadius: 3,
-        boxShadow: "0 8px 24px rgba(17,24,39,0.06)",
-        transition: "0.2s",
+        backgroundColor: "#ffffff",
+        border: "1px solid #ffffff",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.04)",
+        transition: "0.25s",
+
         "&:hover": {
           transform:
-            status === "locked"
+            finalStatus === "locked"
               ? "none"
-              : "translateY(-6px)",
+              : "translateY(-4px)",
           boxShadow:
-            status === "locked"
+            finalStatus === "locked"
               ? undefined
-              : "0 18px 40px rgba(17,24,39,0.12)",
+              : "0 10px 24px rgba(0,0,0,0.08)",
         },
       }}
     >
       <CardContent
         sx={{
           display: "flex",
-          gap: 2,
           justifyContent: "space-between",
+          gap: 2,
         }}
       >
         {/* LEFT */}
         <Box sx={{ flex: 1 }}>
           <Box
-            sx={{ display: "flex", alignItems: "center", gap: 1 }}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              gap: 1,
+            }}
           >
             <MenuBook sx={{ color: "#3B82F6" }} />
+
             <Typography
               sx={{
                 fontSize: 16,
-                fontWeight: 800,
-                color: "#1F2937",
+                fontWeight: 700,
+                color: "#1E293B",
               }}
             >
               {title}
@@ -171,7 +165,7 @@ export default function LessonCard({
           <Typography
             sx={{
               fontSize: 13,
-              color: "#6B7280",
+              color: "#64748B",
               mt: 1,
             }}
           >
@@ -180,59 +174,47 @@ export default function LessonCard({
         </Box>
 
         {/* RIGHT STATUS */}
-        <Box sx={{ minWidth: 88, textAlign: "right" }}>
-          {status === "completed" && (
+        <Box sx={{ minWidth: 100, textAlign: "right" }}>
+          {finalStatus === "completed" && (
             <Box
               sx={{
                 display: "flex",
-                alignItems: "center",
-                gap: 1,
                 justifyContent: "flex-end",
-                mb: 1,
+                gap: 1,
               }}
             >
               <CheckCircle sx={{ color: "#10B981" }} />
-              <Typography
-                sx={{ fontSize: 13, fontWeight: 700 }}
-              >
+              <Typography fontWeight={700} fontSize={13}>
                 Completed
               </Typography>
             </Box>
           )}
 
-          {status === "current" && (
+          {finalStatus === "current" && (
             <Box
               sx={{
                 display: "flex",
-                alignItems: "center",
-                gap: 1,
                 justifyContent: "flex-end",
-                mb: 1,
+                gap: 1,
               }}
             >
               <PlayArrow sx={{ color: "#3B82F6" }} />
-              <Typography
-                sx={{ fontSize: 13, fontWeight: 700 }}
-              >
+              <Typography fontWeight={700} fontSize={13}>
                 Continue
               </Typography>
             </Box>
           )}
 
-          {status === "locked" && (
+          {finalStatus === "locked" && (
             <Box
               sx={{
                 display: "flex",
-                alignItems: "center",
-                gap: 1,
                 justifyContent: "flex-end",
-                mb: 1,
+                gap: 1,
               }}
             >
-              <Lock sx={{ color: "#9CA3AF" }} />
-              <Typography
-                sx={{ fontSize: 13, fontWeight: 700 }}
-              >
+              <Lock sx={{ color: "#ffffff" }} />
+              <Typography fontWeight={700} fontSize={13}>
                 Locked
               </Typography>
             </Box>
@@ -248,21 +230,31 @@ export default function LessonCard({
             handleOpen();
           }}
           variant={
-            status === "completed" ? "outlined" : "contained"
+            finalStatus === "completed"
+              ? "outlined"
+              : "contained"
           }
-          disabled={status === "locked"}
+          disabled={finalStatus === "locked"}
           sx={{
             textTransform: "none",
             borderRadius: 2,
             px: 2,
+            fontWeight: 600,
+
+            ...(finalStatus !== "completed" && {
+              backgroundColor: "#2563EB",
+              "&:hover": {
+                backgroundColor: "#1E40AF",
+              },
+            }),
           }}
         >
-          {status === "completed"
+          {finalStatus === "completed"
             ? "Review"
-            : status === "current"
+            : finalStatus === "current"
             ? "Continue"
-            : status === "locked"
-            ? "Locked 🔒"
+            : finalStatus === "locked"
+            ? "Locked"
             : "Start"}
         </Button>
       </CardActions>

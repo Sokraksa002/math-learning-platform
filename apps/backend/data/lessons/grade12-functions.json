@@ -1,8 +1,5 @@
 {
-  "id": "grade12-functions-lesson6",
-  "chapterId": "grade12-functions",
   "titleKm": "ការសិក្សាអនុគមន៍",
-  "content": {
     "blocks": [
       {
         "type": "text",
@@ -125,7 +122,6 @@
   }
 }
     ]
-  }
 }
 
 

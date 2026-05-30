@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { getChapters, getAllLessons } from "../../utils/api";
 import type { Lesson } from "../../utils/api";
 import { isValidUuid } from "../../utils/validators";
-import LessonList from "../Lessons/LessonList";
 
 // 🎨 Pastel colors
 const PASTEL_PALETTE = [
@@ -21,7 +20,7 @@ const PASTEL_PALETTE = [
   "#B2DFDB",
 ];
 
-// ✅ SAFE TEXT HELPER (VERY IMPORTANT FIX)
+// ✅ SAFE TEXT
 const getText = (value: unknown): string => {
   if (typeof value === "string") return value;
 
@@ -43,201 +42,193 @@ export default function ChapterLessonList() {
   const navigate = useNavigate();
 
   const [chapters, setChapters] = useState<ChapterApi[]>([]);
-  const [lessonsByChapter, setLessonsByChapter] = useState<
-    Record<string, Lesson[]>
-  >({});
-  const [openChapterId, setOpenChapterId] = useState<string | null>(
-    null
-  );
-
-  const [loadingChapters, setLoadingChapters] = useState(true);
-  const [loadingLessonsId, setLoadingLessonsId] =
+  const [lessonsByChapter, setLessonsByChapter] =
+    useState<Record<string, Lesson[]>>({});
+  const [openChapterId, setOpenChapterId] =
     useState<string | null>(null);
 
-  // ✅ LOAD CHAPTERS
+  const [loadingChapters, setLoadingChapters] = useState(true);
+
+  // ✅ LOAD DATA
   useEffect(() => {
     let mounted = true;
 
-    getChapters()
-      .then((data) => {
+    const loadData = async () => {
+      try {
+        const chaptersData = await getChapters();
+        const lessonsData = await getAllLessons();
+
         if (!mounted) return;
-        setChapters(Array.isArray(data) ? data : []);
-      })
-      .catch((err) => {
-        console.error("Failed to load chapters", err);
-        setChapters([]);
-      })
-      .finally(() => {
+
+        setChapters(chaptersData || []);
+
+        const grouped: Record<string, Lesson[]> = {};
+        lessonsData.forEach((lesson) => {
+          const key = String(lesson.chapterId || "unknown");
+          if (!grouped[key]) grouped[key] = [];
+          grouped[key].push(lesson);
+        });
+
+        setLessonsByChapter(grouped);
+      } catch (err) {
+        console.error(err);
+      } finally {
         if (mounted) setLoadingChapters(false);
-      });
+      }
+    };
+
+    loadData();
 
     return () => {
       mounted = false;
     };
   }, []);
 
-  // ✅ TOGGLE CHAPTER + LOAD LESSONS
-  const toggleChapter = async (id: string | number) => {
+  const toggleChapter = (id: string | number) => {
     const idStr = String(id);
-
-    if (openChapterId === idStr) {
-      setOpenChapterId(null);
-      return;
-    }
-
-    setOpenChapterId(idStr);
-
-    if (lessonsByChapter[idStr]) return;
-
-    setLoadingLessonsId(idStr);
-
-    try {
-      const allLessons = await getAllLessons();
-
-      const filtered = allLessons.filter(
-        (lesson) => String(lesson.chapterId) === idStr
-      );
-
-      setLessonsByChapter((prev) => ({
-        ...prev,
-        [idStr]: filtered,
-      }));
-    } catch {
-      setLessonsByChapter((prev) => ({
-        ...prev,
-        [idStr]: [],
-      }));
-    } finally {
-      setLoadingLessonsId(null);
-    }
+    setOpenChapterId(openChapterId === idStr ? null : idStr);
   };
 
   return (
-    <Container maxWidth="sm" sx={{ py: 6 }}>
-      <Box display="flex" flexDirection="column" gap={3}>
-        {loadingChapters ? (
-          <Typography>Loading chapters...</Typography>
-        ) : chapters.length === 0 ? (
-          <LessonList />
-        ) : (
-          chapters.map((chapter, index) => {
-            const idStr = String(chapter.id);
-            const isOpen = openChapterId === idStr;
-            const accent =
-              PASTEL_PALETTE[index % PASTEL_PALETTE.length];
+    <Box sx={{ background: "#ffffff", minHeight: "100vh" }}>
+      <Container maxWidth="md" sx={{ py: 6 }}>
+        <Box display="flex" flexDirection="column" gap={3}>
 
-            const lessons = lessonsByChapter[idStr] ?? [];
-            const loadingLessons =
-              loadingLessonsId === idStr;
+          {loadingChapters ? (
+            <Typography>Loading...</Typography>
+          ) : chapters.length === 0 ? (
+            <Typography>No chapters available</Typography>
+          ) : (
+            chapters.map((chapter, index) => {
+              const idStr = String(chapter.id);
+              const isOpen = openChapterId === idStr;
+              const accent =
+                PASTEL_PALETTE[index % PASTEL_PALETTE.length];
 
-            return (
-              <Box key={idStr}>
-                {/* ✅ CHAPTER */}
-                <Box
-                  onClick={() => toggleChapter(idStr)}
-                  sx={{
-                    backgroundColor: isOpen
-                      ? `${accent}22`
-                      : "#fff",
-                    borderLeft: `6px solid ${accent}`,
-                    borderRadius: 3,
-                    px: 3,
-                    py: 2,
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    cursor: "pointer",
-                  }}
-                >
-                  <Typography fontWeight={700}>
-                    {getText(chapter.title) ||
-                      chapter.name ||
-                      "Untitled"}
-                  </Typography>
+              const lessons = lessonsByChapter[idStr] ?? [];
 
+              return (
+                <Box key={idStr}>
+
+                  {/* ✅ CHAPTER CARD */}
                   <Box
+                    onClick={() => toggleChapter(idStr)}
                     sx={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: "50%",
-                      backgroundColor: accent,
-                      display: "grid",
-                      placeItems: "center",
-                      fontWeight: 800,
-                    }}
-                  >
-                    {isOpen ? "▲" : "▼"}
-                  </Box>
-                </Box>
-
-                {/* ✅ LESSONS */}
-                {isOpen && (
-                  <Box
-                    sx={{
-                      mt: 1.5,
-                      ml: 3,
-                      pl: 2,
-                      borderLeft: `3px solid ${accent}`,
+                      backgroundColor: "#ffffff",
+                      borderLeft: `6px solid ${accent}`,
+                      borderRadius: 3,
+                      px: 3,
+                      py: 2,
                       display: "flex",
-                      flexDirection: "column",
-                      gap: 1,
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      cursor: "pointer",
+                      boxShadow: "0 4px 12px rgba(0,0,0,0.05)",
                     }}
                   >
-                    {loadingLessons ? (
-                      <Typography>
-                        Loading lessons...
-                      </Typography>
-                    ) : lessons.length === 0 ? (
-                      <Typography>No lessons</Typography>
-                    ) : (
-                      lessons.map((lesson) => {
-                        const idStr = String(lesson.id);
+                    <Typography sx={{ fontWeight: 700 }}>
+                      {getText(chapter.title) ||
+                        chapter.name ||
+                        "Untitled"}
+                    </Typography>
 
-                        return (
-                          <Box
-                            key={idStr}
-                            sx={{
-                              display: "flex",
-                              justifyContent:
-                                "space-between",
-                              alignItems: "center",
-                              px: 2,
-                              py: 1.2,
-                              backgroundColor: `${accent}66`,
-                              borderRadius: 2,
-                            }}
-                          >
-                            <Typography>
-                              {getText(lesson.title) ||
-                                lesson.titleKm}
-                            </Typography>
+                    <Box
+                      sx={{
+                        width: 28,
+                        height: 28,
+                        borderRadius: "50%",
+                        backgroundColor: accent,
+                        display: "grid",
+                        placeItems: "center",
+                        fontSize: 12,
+                      }}
+                    >
+                      {isOpen ? "▲" : "▼"}
+                    </Box>
+                  </Box>
 
-                            <Button
-                              onClick={() => {
-                                if (!isValidUuid(idStr)) {
-                                  console.warn(
-                                    "Invalid lesson id",
-                                    idStr
-                                  );
-                                  return;
-                                }
+                  {/* ✅ LESSON LIST */}
+                  {isOpen && (
+                    <Box
+                      sx={{
+                        mt: 1.5,
+                        ml: 3,
+                        pl: 2,
+                        borderLeft: `3px solid ${accent}`,
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 1.2,
+                      }}
+                    >
+                      {lessons.length === 0 ? (
+                        <Typography color="text.secondary">
+                          No lessons
+                        </Typography>
+                      ) : (
+                        lessons.map((lesson) => {
+                          const lessonId = String(lesson.id);
 
-                                navigate(`/lesson/${idStr}`);
+                          return (
+                            <Box
+                              key={lessonId}
+                              sx={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                                px: 2,
+                                py: 1.4,
+                                backgroundColor: "#ffffff",
+                                borderRadius: 2,
+                                border: `1px solid ${accent}33`,
+                                boxShadow:
+                                  "0 2px 8px rgba(0,0,0,0.04)",
+                                transition: "0.2s",
+
+                                "&:hover": {
+                                  transform: "translateY(-2px)",
+                                  boxShadow:
+                                    "0 6px 14px rgba(0,0,0,0.06)",
+                                },
                               }}
                             >
-                              →
-                            </Button>
-                          </Box>
-                        );
-                      })
-                    )}
-                  </Box>
-                )}
-              </Box>
-            );
-          })
-        )}
-      </Box>
-    </Container>
+                              <Typography
+                                sx={{
+                                  fontWeight: 600,
+                                  color: "#1E293B",
+                                }}
+                              >
+                                {getText(lesson.title) ||
+                                  lesson.titleKm}
+                              </Typography>
+
+                              <Button
+                                size="small"
+                                sx={{
+                                  minWidth: "unset",
+                                  fontSize: 18,
+                                  color: "#2563EB",
+                                  fontWeight: 700,
+                                }}
+                                onClick={() => {
+                                  if (!isValidUuid(lessonId)) return;
+                                  navigate(`/lesson/${lessonId}`);
+                                }}
+                              >
+                                →
+                              </Button>
+                            </Box>
+                          );
+                        })
+                      )}
+                    </Box>
+                  )}
+
+                </Box>
+              );
+            })
+          )}
+        </Box>
+      </Container>
+    </Box>
   );
 }

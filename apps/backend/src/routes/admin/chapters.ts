@@ -1,5 +1,6 @@
 import { FastifyInstance, FastifyRequest } from 'fastify';
 import { prisma } from '../../lib/prisma';
+import { requireAdmin } from '../../modules/admin/admin.controller';
 
 /**
  * Admin-only chapter management
@@ -11,7 +12,7 @@ export async function adminChapterRoutes(app: FastifyInstance) {
   app.post(
     '/admin/chapters',
     {
-      preHandler: app.requireAdmin, // 👑 ADMIN ONLY
+      preHandler: [app.authenticate, requireAdmin], // 👑 ADMIN ONLY
     },
     async (request: FastifyRequest) => {
       const { titleKm, orderIndex } = request.body as {

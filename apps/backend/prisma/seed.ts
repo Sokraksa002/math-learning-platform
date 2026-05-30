@@ -32,14 +32,14 @@ async function main() {
       update: {
         name: u.name,
         passwordHash: u.passwordHash,
-        role: (u as any).role,
+        role: u.role as any,
         isBanned: u.isBanned,
       },
       create: {
         name: u.name,
         email: u.email,
         passwordHash: u.passwordHash,
-        role: (u as any).role,
+        role: u.role as any,
         isBanned: u.isBanned,
       },
     });
@@ -48,6 +48,7 @@ async function main() {
   // ================= CHAPTER =================
   async function ensureChapter(titleKm: string, orderIndex: number) {
     let ch = await prisma.chapter.findFirst({ where: { titleKm } });
+
     if (!ch) {
       ch = await prisma.chapter.create({
         data: {
@@ -56,37 +57,72 @@ async function main() {
           isPublished: true,
         },
       });
+
       console.log('✅ Created chapter:', ch.titleKm);
     }
+
     return ch;
   }
 
-  // ================= LESSON =================
-  async function ensureLesson(chapterId: string, titleKm: string, orderIndex: number) {
-    let l = await prisma.lesson.findFirst({
+  // ================= LESSON (AUTO-LOAD JSON ✅) =================
+  async function ensureLesson(chapterId: string, titleKm: string, orderIndex: number, key: string) {
+    let lesson = await prisma.lesson.findFirst({
       where: { titleKm, chapterId },
     });
 
-    if (!l) {
-      l = await prisma.lesson.create({
+    let contentJson: any = { blocks: [] };
+
+    try {
+      const filePath = path.join(__dirname, `../data/lessons/${key}.json`);
+
+      if (fs.existsSync(filePath)) {
+        const raw = fs.readFileSync(filePath, 'utf-8');
+        const parsed = JSON.parse(raw);
+
+        // ✅ SUPPORT BOTH formats
+        if (parsed.blocks) {
+          contentJson = { blocks: parsed.blocks };
+        } else if (parsed.content?.blocks) {
+          contentJson = { blocks: parsed.content.blocks };
+        }
+
+        console.log(`✅ Loaded JSON for ${key}`);
+      } else {
+        console.log(`⚠️ No JSON file for ${key}`);
+      }
+    } catch (err) {
+      console.log(`❌ Error loading JSON for ${key}`);
+    }
+
+    if (!lesson) {
+      lesson = await prisma.lesson.create({
         data: {
           chapterId,
           titleKm,
           orderIndex,
           isPublished: true,
-          contentJson: {},
+          contentJson,
         },
       });
-      console.log('✅ Created lesson:', l.titleKm);
+
+      console.log('✅ Created lesson:', lesson.titleKm);
+    } else {
+      // ✅ update existing lesson with new JSON
+      await prisma.lesson.update({
+        where: { id: lesson.id },
+        data: { contentJson },
+      });
+
+      console.log('♻️ Updated lesson:', lesson.titleKm);
     }
 
-    return l;
+    return lesson;
   }
 
-  // ✅ Create ONE main chapter (Grade 12)
+  // ================= CREATE CHAPTER =================
   const chapter = await ensureChapter('Grade 12 Mathematics', 1);
 
-  // ✅ Map folders → lesson names
+  // ================= LESSON MAP =================
   const lessonMap: Record<string, string> = {
     'grade12-complex': 'Complex Numbers',
     'grade12-conics': 'Conic Sections',
@@ -103,12 +139,18 @@ async function main() {
   let index = 1;
 
   for (const key in lessonMap) {
-    const lesson = await ensureLesson(chapter.id, `Lesson ${index} - ${lessonMap[key]}`, index);
+    const lesson = await ensureLesson(
+      chapter.id,
+      `Lesson ${index} - ${lessonMap[key]}`,
+      index,
+      key, // ✅ IMPORTANT
+    );
+
     lessonCache[key] = lesson.id;
     index++;
   }
 
-  // ================= SEED EXERCISES =================
+  // ================= EXERCISES =================
   async function seedExercises() {
     const basePath = path.join(__dirname, '../data/exercises');
 
@@ -132,48 +174,40 @@ async function main() {
 
       for (const file of files) {
         const filePath = path.join(folderPath, file);
-
         const raw = fs.readFileSync(filePath, 'utf-8');
 
         let data;
         try {
           data = JSON.parse(raw);
-        } catch (err) {
+        } catch {
           console.log(`❌ Invalid JSON in ${file}`);
           continue;
         }
 
-        // ✅ Support both formats:
-        // [{...}, {...}] OR { questions: [...] }
         const questions = Array.isArray(data) ? data : data.questions || [];
 
         for (const item of questions) {
           if (!item.question || !item.answer) continue;
 
           try {
-            await prisma.exercise.upsert({
-              where: {
-                id: item.id || 'skip', // fallback to avoid crash
-              },
-              update: {},
-              create: {
+            await prisma.exercise.create({
+              data: {
                 lessonId,
                 questionKm: item.question,
                 solutionKm: item.solution || '',
                 correctAnswer: String(item.answer),
               },
             });
-          } catch (err) {
+          } catch {
             console.log('⚠️ Skip duplicate:', item.question);
           }
         }
       }
 
-      console.log(`✅ Seeded: ${folder}`);
+      console.log(`✅ Seeded exercises: ${folder}`);
     }
   }
 
-  // ✅ RUN exercise seeding
   await seedExercises();
 
   console.log('\n🚀 SEED COMPLETE ✅');

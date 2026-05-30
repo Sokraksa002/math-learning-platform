@@ -1,9 +1,5 @@
 {
-
-"id": "grade12-limits-lesson2",
-"chapterId": "grade12-limits",
   "titleKm": "លីមីតនៃអនុគមន៍",
-  "content": {
     "blocks": [
       {
         "type": "text",
@@ -118,5 +114,4 @@
         "value": "ចម្លើយ៖ e^2"
       }
     ]
-  }
 }

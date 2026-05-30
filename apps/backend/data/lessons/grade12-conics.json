@@ -1,8 +1,5 @@
 {
-  "id": "grade12-conics-lesson7",
-  "chapterId": "grade12-conics",
   "titleKm": "កោនិក (Conic Sections)",
-  "content": {
     "blocks": [
       {
         "type": "text",
@@ -115,5 +112,4 @@
         }
       }
     ]
-  }
 }

@@ -1,9 +1,10 @@
 // Mock the prisma module before importing anything that uses it
 jest.mock('../../../lib/prisma', () => ({
   prisma: {
-    exercise: { findMany: jest.fn() },
+    user: { findUnique: jest.fn() },
+    lesson: { findFirst: jest.fn() },
     quizSession: { create: jest.fn(), findUnique: jest.fn() },
-    quizSessionItem: { updateMany: jest.fn() },
+    quizSessionItem: { create: jest.fn() },
     $transaction: jest.fn(),
   },
 }));
@@ -17,13 +18,18 @@ describe('quiz.service', () => {
   beforeEach(() => jest.clearAllMocks());
 
   test('startQuiz selects up to default count', async () => {
-    const exercises = Array.from({ length: 5 }).map((_, i) => ({ id: `e${i}`, lessonId: 'l1' }));
-    mockedPrisma.exercise.findMany.mockResolvedValue(exercises);
-    mockedPrisma.quizSession.create.mockResolvedValue({ id: 's1', items: [] });
+    mockedPrisma.user.findUnique.mockResolvedValue({ id: 'u1' });
+    mockedPrisma.lesson.findFirst.mockResolvedValue({ id: 'real-lesson-id' });
+    mockedPrisma.quizSession.create.mockResolvedValue({ id: 's1' });
+    mockedPrisma.quizSessionItem.create.mockResolvedValue({ id: 'item-1' });
 
-    const session = await quizService.startQuiz('u1', 'l1');
+    const session = await quizService.startQuiz('u1', 'math-grade12-lesson5-graphs');
 
-    expect(mockedPrisma.exercise.findMany).toHaveBeenCalledWith({ where: { lessonId: 'l1' } });
+    expect(mockedPrisma.user.findUnique).toHaveBeenCalledWith({
+      where: { id: 'u1' },
+      select: { id: true },
+    });
+    expect(mockedPrisma.lesson.findFirst).toHaveBeenCalled();
     expect(mockedPrisma.quizSession.create).toHaveBeenCalled();
     expect(session).toBeDefined();
   });

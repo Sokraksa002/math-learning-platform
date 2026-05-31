@@ -18,13 +18,15 @@ import ChapterLessons from "./pages/ChapterLessons";
 // USER
 import Profile from "./pages/Profile";
 import Certificate from "./pages/Certificate";
+import CertificateView from "./pages/CertificateView";
 import Dashboard from "./pages/Dashboard";
 
 // ADMIN
 import AdminDashboard from "./pages/AdminDashboard";
-import ManageUsers from "./pages/admin/ManageUsers";
+import ManageUsers from "./pages/admin/ManageUsers.tsx";
 import ManageQuizzes from "./pages/admin/ManageQuizzes";
 import ManageLessons from "./pages/admin/ManageLessons";
+import ManageChapters from "./pages/admin/ManageChapters";
 import VerifyCertificates from "./pages/admin/VerifyCertificates";
 
 // COMPONENTS
@@ -71,7 +73,23 @@ export default function AppRoutes() {
           <Route path="/quiz-history" element={<QuizHistory />} />
           <Route path="/flashcard-history" element={<FlashcardHistory />} />
           <Route path="/ability" element={<Ability />} />
-          <Route path="/certificate" element={<Certificate />} />
+          <Route
+            path="/certificate"
+            element={
+              <ProtectedRoute allowedRoles={["STUDENT"]}>
+                <Certificate />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/certificate/view"
+            element={
+              <ProtectedRoute allowedRoles={["STUDENT"]}>
+                <CertificateView />
+              </ProtectedRoute>
+            }
+          />
 
           {/* ✅ QUIZ */}
           <Route
@@ -194,6 +212,18 @@ export default function AppRoutes() {
                 redirectTo="/dashboard"
               >
                 <ManageLessons />
+              </ProtectedRoute>
+            }
+          />
+
+          <Route
+            path="/admin/chapters"
+            element={
+              <ProtectedRoute
+                allowedRoles={["ADMIN"]}
+                redirectTo="/dashboard"
+              >
+                <ManageChapters />
               </ProtectedRoute>
             }
           />

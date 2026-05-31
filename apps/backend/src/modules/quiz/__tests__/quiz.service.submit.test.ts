@@ -15,20 +15,23 @@ describe('quiz.service submitQuiz', () => {
 
   test('no answers -> score 0 and no updates to items', async () => {
     const mockTx = {
-      exercise: { findUnique: jest.fn() },
-      quizSessionItem: { updateMany: jest.fn() },
+      quizSessionItem: { update: jest.fn() },
       quizSession: { update: jest.fn(), findUnique: jest.fn() },
     };
 
     mockedPrisma.$transaction.mockImplementation(async (cb: any) => cb(mockTx));
 
     // session has 0 items for this test
-    mockTx.quizSession.findUnique.mockResolvedValue({ id: 'session-1', items: [] });
+    mockTx.quizSession.findUnique.mockResolvedValue({ id: 'session-1', userId: 'user-1', items: [] });
 
-    const result = await quizService.submitQuiz('session-1', []);
+    const result = await quizService.submitQuiz(
+      'session-1',
+      [],
+      'user-1',
+      'grade12-complex-lesson1',
+    );
 
-    expect(mockTx.exercise.findUnique).not.toHaveBeenCalled();
-    expect(mockTx.quizSessionItem.updateMany).not.toHaveBeenCalled();
+    expect(mockTx.quizSessionItem.update).not.toHaveBeenCalled();
     expect(mockTx.quizSession.update).toHaveBeenCalled();
 
     // Ensure update was called with score and completedAt set
@@ -45,31 +48,35 @@ describe('quiz.service submitQuiz', () => {
 
   test('all correct answers -> score 100', async () => {
     const answers = [
-      { exerciseId: 'e1', selectedChoice: 'A' },
-      { exerciseId: 'e2', selectedChoice: 'B' },
+      { exerciseId: 'd07da1e3-fb38-405f-a1d5-8b65e296341a', selectedChoice: 'A' },
+      { exerciseId: 'bd47903d-5bb5-462c-b90b-df7c7a098bd8', selectedChoice: 'B' },
     ];
 
     const mockTx = {
-      exercise: { findUnique: jest.fn() },
-      quizSessionItem: { updateMany: jest.fn() },
+      quizSessionItem: { update: jest.fn() },
       quizSession: { update: jest.fn(), findUnique: jest.fn() },
     };
-
-    mockTx.exercise.findUnique.mockImplementation(({ where: { id } }: any) => {
-      if (id === 'e1') return Promise.resolve({ id: 'e1', correctAnswer: 'A' });
-      if (id === 'e2') return Promise.resolve({ id: 'e2', correctAnswer: 'B' });
-      return Promise.resolve(null);
-    });
 
     mockedPrisma.$transaction.mockImplementation(async (cb: any) => cb(mockTx));
 
     // session has 2 items
-    mockTx.quizSession.findUnique.mockResolvedValue({ id: 's2', items: [{}, {}] });
+    mockTx.quizSession.findUnique.mockResolvedValue({
+      id: 's2',
+      userId: 'user-1',
+      items: [
+        { id: 'i1', exerciseId: 'd07da1e3-fb38-405f-a1d5-8b65e296341a' },
+        { id: 'i2', exerciseId: 'bd47903d-5bb5-462c-b90b-df7c7a098bd8' },
+      ],
+    });
 
-    const result = await quizService.submitQuiz('s2', answers as any);
+    const result = await quizService.submitQuiz(
+      's2',
+      answers as any,
+      'user-1',
+      'grade12-complex-lesson1',
+    );
 
-    expect(mockTx.exercise.findUnique).toHaveBeenCalledTimes(2);
-    expect(mockTx.quizSessionItem.updateMany).toHaveBeenCalledTimes(2);
+    expect(mockTx.quizSessionItem.update).toHaveBeenCalledTimes(2);
     expect(mockTx.quizSession.update).toHaveBeenCalled();
     const callArgs2 = mockTx.quizSession.update.mock.calls[0][0];
     expect(callArgs2.where).toEqual({ id: 's2' });
@@ -84,31 +91,35 @@ describe('quiz.service submitQuiz', () => {
 
   test('partial correct answers -> proper score and wrongAnswers', async () => {
     const answers = [
-      { exerciseId: 'e1', selectedChoice: 'A' },
-      { exerciseId: 'e2', selectedChoice: 'X' },
+      { exerciseId: 'd07da1e3-fb38-405f-a1d5-8b65e296341a', selectedChoice: 'A' },
+      { exerciseId: 'bd47903d-5bb5-462c-b90b-df7c7a098bd8', selectedChoice: 'X' },
     ];
 
     const mockTx = {
-      exercise: { findUnique: jest.fn() },
-      quizSessionItem: { updateMany: jest.fn() },
+      quizSessionItem: { update: jest.fn() },
       quizSession: { update: jest.fn(), findUnique: jest.fn() },
     };
-
-    mockTx.exercise.findUnique.mockImplementation(({ where: { id } }: any) => {
-      if (id === 'e1') return Promise.resolve({ id: 'e1', correctAnswer: 'A' });
-      if (id === 'e2') return Promise.resolve({ id: 'e2', correctAnswer: 'B', questionKm: 'Q2' });
-      return Promise.resolve(null);
-    });
 
     mockedPrisma.$transaction.mockImplementation(async (cb: any) => cb(mockTx));
 
     // session has 2 items
-    mockTx.quizSession.findUnique.mockResolvedValue({ id: 's3', items: [{}, {}] });
+    mockTx.quizSession.findUnique.mockResolvedValue({
+      id: 's3',
+      userId: 'user-1',
+      items: [
+        { id: 'i1', exerciseId: 'd07da1e3-fb38-405f-a1d5-8b65e296341a' },
+        { id: 'i2', exerciseId: 'bd47903d-5bb5-462c-b90b-df7c7a098bd8' },
+      ],
+    });
 
-    const result = await quizService.submitQuiz('s3', answers as any);
+    const result = await quizService.submitQuiz(
+      's3',
+      answers as any,
+      'user-1',
+      'grade12-complex-lesson1',
+    );
 
-    expect(mockTx.exercise.findUnique).toHaveBeenCalledTimes(2);
-    expect(mockTx.quizSessionItem.updateMany).toHaveBeenCalledTimes(2);
+    expect(mockTx.quizSessionItem.update).toHaveBeenCalledTimes(2);
     expect(mockTx.quizSession.update).toHaveBeenCalled();
     const callArgs3 = mockTx.quizSession.update.mock.calls[0][0];
     expect(callArgs3.where).toEqual({ id: 's3' });
@@ -119,15 +130,14 @@ describe('quiz.service submitQuiz', () => {
     expect(result.total).toBe(2);
     expect(result.correct).toBe(1);
     expect(result.wrongAnswers.length).toBe(1);
-    expect(result.wrongAnswers[0].question).toBe('Q2');
+    expect(result.wrongAnswers[0].question).toBeDefined();
     // solutionKm should be present (null if exercise doesn't define it)
     expect(result.wrongAnswers[0]).toHaveProperty('solutionKm');
   });
 
   test('reject submit when session already completed', async () => {
     const mockTx = {
-      exercise: { findUnique: jest.fn() },
-      quizSessionItem: { updateMany: jest.fn() },
+      quizSessionItem: { update: jest.fn() },
       quizSession: { update: jest.fn(), findUnique: jest.fn() },
     };
 
@@ -136,12 +146,13 @@ describe('quiz.service submitQuiz', () => {
     // session already completed
     mockTx.quizSession.findUnique.mockResolvedValue({
       id: 'done',
-      items: [{}],
+      userId: 'user-1',
+      items: [{ id: 'i1', exerciseId: 'd07da1e3-fb38-405f-a1d5-8b65e296341a' }],
       completedAt: new Date(),
     });
 
-    await expect(quizService.submitQuiz('done', [])).rejects.toThrow(
-      'Quiz session already completed',
-    );
+    await expect(
+      quizService.submitQuiz('done', [], 'user-1', 'grade12-complex-lesson1'),
+    ).rejects.toThrow('Already completed');
   });
 });

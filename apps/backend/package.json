@@ -21,6 +21,7 @@
     "verify-seed": "tsx scripts/verifySeed.ts",
     "lint": "eslint 'src/**/*.ts' --max-warnings=0",
     "format": "prettier --write 'src/**/*.ts'"
+    
   },
   "dependencies": {
     "@fastify/cors": "^11.2.0",

@@ -27,6 +27,7 @@ import { certificateEmailRoutes } from './routes/certificate-email';
 import { flashcardReviewRoutes } from './routes/flashcard-review';
 import { flashcardsDueRoutes } from './routes/flashcards-due';
 import { aiFlashcardRoutes } from './routes/ai.flashcards'; // ✅ ✅ ADD THIS
+import { aiDebugRoutes } from './routes/ai.debug';
 
 import { flashcardRoutes } from './modules/flashcards/flashcard.routes';
 import { adminRoutes as adminModuleRoutes } from './modules/admin/admin.routes';
@@ -42,6 +43,12 @@ function checkAiConfig() {
   const region = process.env.GCP_REGION;
   const creds = process.env.GOOGLE_APPLICATION_CREDENTIALS;
 
+  console.log('=== AI CONFIG DEBUG ===');
+  console.log('MOCK_AI:', process.env.MOCK_AI);
+  console.log('Credentials:', process.env.GOOGLE_APPLICATION_CREDENTIALS);
+  console.log('Project:', process.env.GCP_PROJECT_ID);
+  console.log('Region:', process.env.GCP_REGION);
+  console.log('=======================');
   if (mock) {
     // eslint-disable-next-line no-console
     console.info('MOCK_AI=true — skipping AI provider config checks');
@@ -92,6 +99,9 @@ app.register(lessonDetailRoutes, { prefix: '/api' });
 app.register(flashcardRoutes, { prefix: '/api' });
 app.register(flashcardReviewRoutes, { prefix: '/api' });
 app.register(flashcardsDueRoutes, { prefix: '/api' });
+
+// Dev-only AI debug endpoint
+app.register(aiDebugRoutes, { prefix: '/api' });
 
 // Move the AI config check after app creation
 checkAiConfig();

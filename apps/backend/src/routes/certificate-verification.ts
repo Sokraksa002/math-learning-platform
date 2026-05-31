@@ -1,4 +1,4 @@
-import { FastifyInstance, FastifyRequest } from 'fastify';
+import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { prisma } from '../lib/prisma';
 
 /**
@@ -8,7 +8,7 @@ export async function certificateVerificationRoutes(app: FastifyInstance) {
   /**
    * Verify a certificate by its code
    */
-  app.get('/certificates/verify/:certificateCode', async (request: FastifyRequest) => {
+  app.get('/certificates/verify/:certificateCode', async (request: FastifyRequest, reply: FastifyReply) => {
     const { certificateCode } = request.params as {
       certificateCode: string;
     };
@@ -26,17 +26,17 @@ export async function certificateVerificationRoutes(app: FastifyInstance) {
     });
 
     if (!certificate) {
-      return {
+      return reply.code(404).send({
         success: false,
         message: 'Certificate not found',
-      };
+      });
     }
 
     if (certificate.revokedAt) {
-      return {
+      return reply.code(410).send({
         success: false,
         message: 'Certificate has been revoked',
-      };
+      });
     }
 
     return {

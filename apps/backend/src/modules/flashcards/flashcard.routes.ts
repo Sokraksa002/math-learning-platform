@@ -6,14 +6,16 @@ export async function flashcardRoutes(fastify: FastifyInstance) {
     '/flashcard/generate',
     {
       preHandler: fastify.authenticate,
+
       schema: {
         body: {
           type: 'object',
           properties: {
-            chapterId: { type: 'string', format: 'uuid' },
-            question: { type: 'string', minLength: 3 },
+            lessonId: { type: 'string', format: 'uuid' },
+            topic: { type: 'string', minLength: 3 },
+            save: { type: 'boolean' },
           },
-          required: ['chapterId', 'question'],
+          required: ['lessonId', 'topic'],
           additionalProperties: false,
         },
       },

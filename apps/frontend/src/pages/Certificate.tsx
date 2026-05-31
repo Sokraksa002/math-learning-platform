@@ -1,134 +1,256 @@
-import { Box, Button, Container, Paper, Stack, Typography, Chip } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Paper,
+  Stack,
+  Typography,
+  Chip,
+  CircularProgress,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import { useLocale } from "../hooks/useLocale";
+import { useEffect, useState } from "react";
 
-const COMPLETED_LESSON_STORAGE_KEY = 'math-learning-completed-lessons';
+import {
+  getCertificateEligibility,
+  getQuizLessons,
+  issueCertificate,
+} from "../utils/api";
 
-const areAllLessonsCompleted = (): boolean => {
-  if (typeof window === 'undefined') {
-    return false;
-  }
-
-  try {
-    const rawValue = window.localStorage.getItem(COMPLETED_LESSON_STORAGE_KEY);
-    const completedLessonIds = rawValue ? JSON.parse(rawValue) : [];
-
-    return [101, 102, 201, 202].every((lessonId) => Array.isArray(completedLessonIds) && completedLessonIds.includes(lessonId));
-  } catch {
-    return false;
-  }
-};
+import type {
+  CertificateEligibility,
+  CertificateRecord,
+  QuizLessonSummary,
+} from "../utils/api";
 
 export default function Certificate() {
   const navigate = useNavigate();
-  const { t } = useLocale();
-  const allLessonsCompleted = areAllLessonsCompleted();
+
+  const [eligibility, setEligibility] =
+    useState<CertificateEligibility & {
+      missingQuizLessons?: { lessonId: string; title: string }[];
+    } | null>(null);
+
+  const [lessons, setLessons] = useState<QuizLessonSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const [certificate, setCertificate] = useState<CertificateRecord | null>(null);
+  const [issuing, setIssuing] = useState(false);
+
+  const normalizeLessonTitle = (value: string) => {
+    return value
+      .split(' - ')
+      .pop()
+      ?.trim()
+      .toLowerCase() ?? value.trim().toLowerCase();
+  };
+
+  /* ✅ ISSUE CERTIFICATE */
+  const handleIssueCertificate = async () => {
+    setIssuing(true);
+    try {
+      const res = await issueCertificate();
+      console.log("✅ certificate:", res);
+      setCertificate(res);
+    } catch (err) {
+      console.error("❌ issue error:", err);
+      alert("Failed to issue certificate");
+    } finally {
+      setIssuing(false);
+    }
+  };
+
+  /* ✅ LOAD DATA */
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const [eligibilityData, lessonData] = await Promise.all([
+          getCertificateEligibility(),
+          getQuizLessons(),
+        ]);
+
+        setEligibility(eligibilityData);
+        setLessons(lessonData);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    load();
+  }, []);
+
+  if (loading) {
+    return (
+      <Container sx={{ py: 10, textAlign: "center" }}>
+        <CircularProgress />
+      </Container>
+    );
+  }
+
+  if (!eligibility) return null;
+
+  const isLessonCompleted =
+    eligibility.completedLessons === eligibility.totalLessons;
+
+  const missingQuizLessonTitles = new Set(
+    (eligibility.missingQuizLessons ?? []).map((lesson) => normalizeLessonTitle(lesson.title)),
+  );
 
   return (
-    <Box sx={{ minHeight: "100vh", background: "linear-gradient(180deg, #f3f7ff 0%, #ffffff 100%)", py: { xs: 4, md: 8 } }}>
+    <Box
+      sx={{
+        minHeight: "100vh",
+        background:
+          "linear-gradient(180deg, #f3f7ff 0%, #ffffff 100%)",
+        py: 6,
+      }}
+    >
       <Container maxWidth="md">
+
+        {/* HEADER */}
         <Paper
           sx={{
-            p: { xs: 3, md: 4 },
+            p: 4,
             mb: 3,
             borderRadius: 4,
             color: "white",
-            background: "linear-gradient(135deg, #0f172a 0%, #1d4ed8 45%, #2563eb 100%)",
+            background:
+              "linear-gradient(135deg, #0f172a 0%, #1d4ed8 50%, #2563eb 100%)",
           }}
         >
-          <Typography variant="overline" sx={{ letterSpacing: 1.2, opacity: 0.85 }}>
-            {t('pages.Certificate.review_center', 'Review center')}
+          <Typography variant="h4" fontWeight={900}>
+            🎓 Certificate Center
           </Typography>
-          <Typography variant="h4" fontWeight={900} sx={{ mt: 1 }}>
-            {t('pages.Certificate.chapter_review_history', 'Chapter review history')}
+
+          <Typography mt={1}>
+            Complete all lessons + quizzes ≥80%
           </Typography>
-          <Typography sx={{ mt: 1, opacity: 0.9, maxWidth: 720 }}>
-            {t('pages.Certificate.subtitle', 'Open a chapter to review the quiz answers. Chapters stay locked until the quiz score is at least 80% and all lessons are complete.')}
+
+          <Typography mt={2}>
+            {eligibility.completedLessons}/{eligibility.totalLessons} lessons
           </Typography>
         </Paper>
 
-        {[
-          { chapterId: "1", score: 90, title: "Chapter 1" },
-          { chapterId: "2", score: 60, title: "Chapter 2" },
-          { chapterId: "3", score: 85, title: "Chapter 3" },
-          { chapterId: "4", score: 70, title: "Chapter 4" },
-        ].map((item) => {
-          const unlocked = item.score >= 80 && allLessonsCompleted;
+        {/* REQUIREMENTS */}
+        <Paper sx={{ p: 3, mb: 3 }}>
+          <Stack spacing={1}>
+            <Chip
+              label={`Lessons: ${eligibility.completedLessons}/${eligibility.totalLessons}`}
+              color={isLessonCompleted ? "success" : "default"}
+            />
+
+            <Chip
+              label={`Quizzes: ${eligibility.completedQuizzes}/${eligibility.totalLessons}`}
+              color={
+                eligibility.completedQuizzes === eligibility.totalLessons
+                  ? "success"
+                  : "default"
+              }
+            />
+
+            <Chip
+              label={`Score: ${eligibility.averageScore}%`}
+              color={
+                eligibility.averageScore >= 80 ? "success" : "warning"
+              }
+            />
+          </Stack>
+        </Paper>
+
+        {/* LESSON LIST */}
+        {lessons.map((lesson) => {
+          const completed = !missingQuizLessonTitles.has(normalizeLessonTitle(lesson.title));
 
           return (
             <Paper
-              key={item.chapterId}
+              key={lesson.lessonId}
               sx={{
-                p: { xs: 2.5, md: 3 },
+                p: 3,
                 mb: 3,
-                borderRadius: 4,
+                borderRadius: 3,
                 display: "flex",
-                gap: 2,
-                flexDirection: { xs: "column", sm: "row" },
                 justifyContent: "space-between",
-                alignItems: { xs: "flex-start", sm: "center" },
-                boxShadow: "0 12px 30px rgba(15, 23, 42, 0.08)",
-                opacity: unlocked ? 1 : 0.6,
-                border: "1px solid #e2e8f0",
+                alignItems: "center",
+                opacity: completed ? 1 : 0.7,
               }}
             >
-              <Box sx={{ flex: 1 }}>
-                <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mb: 1 }}>
-                  <Chip label={unlocked ? t('pages.Certificate.open', 'Open') : t('pages.Certificate.locked', 'Locked')} color={unlocked ? "success" : "default"} size="small" />
-                  <Chip label={`${item.score}% ${t('pages.Certificate.score', 'score')}`} color={item.score >= 80 ? "success" : "warning"} size="small" />
-                </Stack>
+              <Box>
+                <Chip
+                  label={completed ? "✅ Completed" : "🔒 Locked"}
+                  color={completed ? "success" : "default"}
+                  size="small"
+                />
 
-                <Typography fontWeight={900} color="#0f172a">
-                  {item.title}
+                <Typography fontWeight={800} mt={1}>
+                  {lesson.title}
                 </Typography>
-                <Typography sx={{ mt: 0.5, color: "text.secondary" }}>
-                  {unlocked ? t('pages.Certificate.open_message', 'Open to review the answer details for this chapter.') : t('pages.Certificate.locked_message', 'Locked until all lessons are completed and the score reaches 80%.')}
+
+                <Typography color="text.secondary">
+                  {completed
+                    ? "✔ Quiz completed"
+                    : "❌ Quiz not completed"}
                 </Typography>
               </Box>
 
-              {unlocked ? (
-                <Button
-                  onClick={() => navigate("/quiz-history")}
-                  sx={{
-                    background: "linear-gradient(135deg, #1d4ed8 0%, #2563eb 100%)",
-                    color: "#fff",
-                    px: 3,
-                    borderRadius: 999,
-                    minWidth: 120,
-                  }}
-                >
-                  {t('pages.Certificate.open', 'Open')}
-                </Button>
-              ) : (
-                <Box
-                  sx={{
-                    px: 3,
-                    py: 1,
-                    backgroundColor: "#eef2ff",
-                    borderRadius: 999,
-                    color: "#64748b",
-                  }}
-                >
-                  {t('pages.Certificate.locked', 'Locked')}
-                </Box>
-              )}
+              <Button
+                variant="contained"
+                onClick={() =>
+                  navigate(`/quiz/paper/${lesson.lessonId}`)
+                }
+              >
+                Go Quiz ✅
+              </Button>
             </Paper>
           );
         })}
 
-        <Paper sx={{ p: 2.5, borderRadius: 3, border: "1px solid #e2e8f0" }}>
-          <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="space-between" alignItems={{ sm: "center" }}>
-            <Box>
-              <Typography fontWeight={800} color="#0f172a">
-                {t('pages.Certificate.need_answer_review', 'Need the answer review?')}
+        {/* ✅ ISSUE CERTIFICATE */}
+        <Paper sx={{ p: 3, mt: 3 }}>
+          {eligibility.eligible ? (
+            <>
+              <Typography fontWeight={900} color="green">
+                🎉 Ready to get your certificate!
               </Typography>
-              <Typography color="text.secondary">
-                {t('pages.Certificate.quiz_history_note', 'The quiz history page contains the full answer breakdown for each attempt.')}
-              </Typography>
-            </Box>
-            <Button variant="contained" onClick={() => navigate("/quiz-history")}>{t('pages.Certificate.open_quiz_history', 'Open Quiz History')}</Button>
-          </Stack>
+
+              <Button
+                variant="contained"
+                sx={{ mt: 2 }}
+                onClick={handleIssueCertificate}
+                disabled={issuing}
+              >
+                {issuing ? "Issuing..." : "Issue Certificate ✅"}
+              </Button>
+            </>
+          ) : (
+            <Typography color="error">
+              🔒 Complete all requirements
+            </Typography>
+          )}
         </Paper>
+
+        {/* ✅ CERTIFICATE RESULT */}
+        {certificate && (
+          <Paper sx={{ p: 3, mt: 3 }}>
+            <Typography fontWeight={900}>
+              ✅ Certificate Issued!
+            </Typography>
+
+            <Typography mt={1}>
+              Code: {certificate.certificateCode}
+            </Typography>
+
+            <Button
+              variant="outlined"
+              sx={{ mt: 2 }}
+              onClick={() => navigate("/certificate/view")}
+            >
+              View / Download Certificate 📄
+            </Button>
+          </Paper>
+        )}
+
       </Container>
     </Box>
   );

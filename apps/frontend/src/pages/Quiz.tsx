@@ -4,67 +4,58 @@ import {
   Card,
   CardContent,
   Container,
+  Paper,
+  Stack,
   Typography,
 } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useLocale } from "../hooks/useLocale";
 import QuizHeader from "../components/Quiz/QuizHeader"; // ✅ NEW HEADER
+import { getQuizLessons, type QuizLessonSummary } from "../utils/api";
 
-/* ✅ LESSON LIST (STATIC FOR NOW) */
-const quizLessons = [
-  {
-    id: "grade12-complex-lesson1",
-    title: "Lesson 1",
-    subject: "Complex Numbers",
-    color: "#4F9CF9",
-  },
-  {
-    id: "grade12-limits-lesson2",
-    title: "Lesson 2",
-    subject: "Limits",
-    color: "#6BB6FF",
-  },
-  {
-    id: "grade12-derivatives-lesson3",
-    title: "Lesson 3",
-    subject: "Derivatives",
-    color: "#3D86E8",
-  },
-  {
-    id: "grade12-integrals-lesson4",
-    title: "Lesson 4",
-    subject: "Integrals",
-    color: "#8EC5FF",
-  },
-  {
-    id: "grade12-derivatives-lesson5",
-    title: "Lesson 5",
-    subject: "Derivatives",
-    color: "#3D86E8",
-  },
-  {
-    id: "grade12-functions-lesson6",
-    title: "Lesson 6",
-    subject: "Functions",
-    color: "#6BB6FF",
-  },
-  {
-    id: "grade12-conics-lesson7",
-    title: "Lesson 7",
-    subject: "Conic Sections",
-    color: "#6BB6FF",
-  },
-  {
-    id: "grade12-probability-lesson8",
-    title: "Lesson 8",
-    subject: "Probability",
-    color: "#6BB6FF",
-  },
-];
+
+const palette = ["#4F9CF9", "#6BB6FF", "#3D86E8", "#8EC5FF", "#2563EB", "#0EA5E9"];
 
 export default function Quiz() {
   const navigate = useNavigate();
   const { t } = useLocale();
+  const [lessons, setLessons] = useState<QuizLessonSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+
+    getQuizLessons()
+      .then((rows) => {
+        if (!mounted) return;
+        setLessons(rows);
+      })
+      .catch((err) => {
+        console.error("Failed to load quiz lessons", err);
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  const quizLessons = useMemo(
+    () =>
+      [...lessons]
+        .sort((a, b) => a.orderIndex - b.orderIndex)
+        .map((lesson, index) => ({
+          id: lesson.lessonId,
+          title: lesson.title,
+          subject: lesson.subject,
+          color: palette[index % palette.length],
+          exerciseCount: lesson.exerciseCount,
+        })),
+    [lessons],
+  );
 
   return (
     <Box
@@ -86,7 +77,21 @@ export default function Quiz() {
         </Typography>
 
         {/* ✅ LESSON LIST */}
-        <Box display="flex" flexDirection="column" gap={2}>
+        {loading ? (
+          <Stack spacing={2}>
+            <Typography color="text.secondary">Loading quiz lessons...</Typography>
+          </Stack>
+        ) : quizLessons.length === 0 ? (
+          <Paper sx={{ p: 3, borderRadius: 3, border: "1px solid #e2e8f0" }}>
+            <Typography fontWeight={700} mb={1}>
+              No quiz lessons available
+            </Typography>
+            <Typography color="text.secondary">
+              Publish lessons with exercises in the backend to make them appear here.
+            </Typography>
+          </Paper>
+        ) : (
+          <Box display="flex" flexDirection="column" gap={2}>
           {quizLessons.map((lesson) => (
             <Card
               key={lesson.id}
@@ -122,7 +127,7 @@ export default function Quiz() {
                     fontSize={13}
                     color="text.secondary"
                   >
-                    {lesson.subject}
+                    {lesson.subject} • {lesson.exerciseCount} questions
                   </Typography>
                 </Box>
 
@@ -139,7 +144,8 @@ export default function Quiz() {
               </CardContent>
             </Card>
           ))}
-        </Box>
+          </Box>
+        )}
       </Container>
     </Box>
   );

@@ -15,7 +15,7 @@ enum UserRole {
 /* ===================== USER ===================== */
 model User {
   id           String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  email        String   @unique @db.Citext
+  email String @unique
   name         String
   passwordHash String   @map("password_hash")
   role         UserRole @default(STUDENT)
@@ -108,7 +108,6 @@ model QuizSessionItem {
   isCorrect      Boolean? @map("is_correct")
 
   session  QuizSession @relation(fields: [sessionId], references: [id])
-  exercise Exercise    @relation(fields: [exerciseId], references: [id]) 
 
   @@map("quiz_session_items")
 }
@@ -222,10 +221,10 @@ model Exercise {
   solutionKm    String   @map("solution_km")
   correctAnswer String   @map("correct_answer")
   externalId    String?  @map("external_id")
+  choices     Json
   difficulty    Int      @default(1)
   createdAt     DateTime @default(now()) @map("created_at")
 
   lesson Lesson @relation(fields: [lessonId], references: [id])
-  quizItems QuizSessionItem[]
   @@map("exercises")
 }

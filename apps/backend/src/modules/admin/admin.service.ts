@@ -1,5 +1,15 @@
 import { prisma } from '../../lib/prisma';
 import type { Exercise } from '@prisma/client';
+import bcrypt from 'bcrypt';
+
+export type AdminUserSummary = {
+  id: string;
+  email: string;
+  name: string;
+  role: 'ADMIN' | 'STUDENT';
+  isBanned: boolean;
+  createdAt: Date;
+};
 
 export type LessonSummary = {
   id: string;
@@ -79,4 +89,91 @@ export async function deleteExercise(exerciseId: string) {
   const ex = await prisma.exercise.findUnique({ where: { id: exerciseId } });
   if (!ex) return null;
   return prisma.exercise.delete({ where: { id: exerciseId } });
+}
+
+export async function listUsers(): Promise<AdminUserSummary[]> {
+  const rows = await prisma.user.findMany({
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      isBanned: true,
+      createdAt: true,
+    },
+    orderBy: { createdAt: 'desc' },
+  });
+
+  return rows as AdminUserSummary[];
+}
+
+export async function createUser(data: {
+  email: string;
+  name: string;
+  role: 'ADMIN' | 'STUDENT';
+  password: string;
+}) {
+  const passwordHash = await bcrypt.hash(data.password, 10);
+
+  return prisma.user.create({
+    data: {
+      email: data.email,
+      name: data.name,
+      role: data.role,
+      passwordHash,
+    },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      isBanned: true,
+      createdAt: true,
+    },
+  });
+}
+
+export async function updateUser(
+  id: string,
+  data: {
+    email: string;
+    name: string;
+    role: 'ADMIN' | 'STUDENT';
+    isBanned: boolean;
+  },
+) {
+  return prisma.user.update({
+    where: { id },
+    data: {
+      email: data.email,
+      name: data.name,
+      role: data.role,
+      isBanned: data.isBanned,
+    },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      isBanned: true,
+      createdAt: true,
+    },
+  });
+}
+
+export async function deleteUser(id: string) {
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) return null;
+
+  return prisma.user.delete({
+    where: { id },
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      role: true,
+      isBanned: true,
+      createdAt: true,
+    },
+  });
 }

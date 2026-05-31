@@ -27,12 +27,20 @@ export class AiAuthError extends AiError {}
  * Retries on 5xx / network errors with exponential backoff. Max 2 retries.
  */
 export async function generateFlashcardWithAi(promptQuestion: string): Promise<AiFlashcard> {
-  // Development mock fallback
-  if (process.env.MOCK_AI === 'true') {
+  // Diagnostic log + Development mock fallback
+  const usingMock = process.env.MOCK_AI === 'true';
+  const modelName = process.env.GEMINI_MODEL || 'gemini-1.5-flash-002';
+  console.info(`generateFlashcardWithAi — MOCK_AI=${usingMock}, GEMINI_MODEL=${modelName}, GCP_PROJECT_ID=${process.env.GCP_PROJECT_ID ?? 'unset'}, GCP_REGION=${process.env.GCP_REGION ?? 'unset'}, GOOGLE_APPLICATION_CREDENTIALS=${process.env.GOOGLE_APPLICATION_CREDENTIALS ?? 'unset'}`);
+
+  if (usingMock) {
     return {
       question: promptQuestion,
-      answer: 'This is a mocked AI answer (MOCK_AI=true)',
-      steps: ['Mocked step 1', 'Mocked step 2'],
+      // Provide a non-echoing mock answer so it's clear this is mocked output
+      answer: 'ឧទាហរណ៍ចម្លើយ (MOCK): សូមពិនិត្យវិញដោយវិធីដោះស្រាយ។',
+      steps: [
+        'ជំហាន 1: វិភាគសំណួរ។',
+        'ជំហាន 2: ប្រើក្បាលសមីការឬបច្ចេកទេសដើម្បីគណនា។',
+      ],
     } as AiFlashcard;
   }
 
@@ -48,7 +56,7 @@ export async function generateFlashcardWithAi(promptQuestion: string): Promise<A
   const token = accessTokenResponse?.token;
   if (!token) throw new AiAuthError('Failed to obtain access token');
 
-  const url = `https://${process.env.GCP_REGION}-aiplatform.googleapis.com/v1/projects/${process.env.GCP_PROJECT_ID}/locations/${process.env.GCP_REGION}/publishers/google/models/gemini-pro:generateContent`;
+  const url = buildVertexAiUrl(modelName);
 
   const maxRetries = 2;
   const baseDelayMs = 300;
@@ -81,6 +89,50 @@ export async function generateFlashcardWithAi(promptQuestion: string): Promise<A
       }
 
       const validated = AiFlashcardSchema.parse(parsed);
+
+      const normalize = (s: string) => s.replace(/\s+/g, ' ').trim().toLowerCase();
+      const promptNorm = normalize(promptQuestion);
+      const echoesPrompt = (s: string) => {
+        const normalized = normalize(s);
+        return normalized.includes(promptNorm) || promptNorm.includes(normalized);
+      };
+
+      const hasKhmer = (s: string) => /[\u1780-\u17FF]/.test(s);
+      const answerLooksBad = !hasKhmer(validated.answer) || echoesPrompt(validated.answer) || echoesPrompt(validated.question);
+
+      if (answerLooksBad) {
+        if (attempt >= maxRetries) {
+          throw new AiProviderError('AI response echoed the question or did not contain Khmer');
+        }
+
+        const strictPrompt =
+          `${prompt}\n\n` +
+          `IMPORTANT: Do not repeat the question. Return only the final answer in Khmer. ` +
+          `If you include steps, keep them very short. Output ONLY valid JSON.`;
+
+        const retryRes = await axios.post(
+          buildVertexAiUrl(modelName),
+          {
+            contents: [
+              {
+                role: 'user',
+                parts: [{ text: strictPrompt }],
+              },
+            ],
+          },
+          {
+            headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+            timeout: 15_000,
+          },
+        );
+
+        const retryText = retryRes.data?.candidates?.[0]?.content?.parts?.[0]?.text as string | undefined;
+        if (!retryText) throw new AiProviderError('Empty response from AI on retry');
+
+        const retryParsed = AiFlashcardSchema.parse(JSON.parse(retryText));
+        return retryParsed;
+      }
+
       return validated;
     } catch (err: any) {
       const status = err?.response?.status;
@@ -113,9 +165,13 @@ export async function generateFlashcardWithAi(promptQuestion: string): Promise<A
 }
 
 function buildPrompt(question: string): string {
-  return `Provide a JSON object with keys {"question","answer","steps"} where:\n- "question": the original question (in Khmer)\n- "answer": the final numeric/text answer (in Khmer)\n- "steps": an array of strings describing step-by-step solution in Khmer\n\nReturn only valid JSON. Question: ${escapeForPrompt(question)}`;
+  return `Provide a JSON array with exactly one object: {"question":"...","answer":"...","steps":[...]}\n\nRules:\n- Solve the math problem directly.\n- The answer must be the final result, in Khmer.\n- Do NOT copy or repeat the question in the answer.\n- Keep steps short and useful.\n- Output ONLY valid JSON and nothing else.\n\nQuestion: ${escapeForPrompt(question)}`;
 }
 
 function escapeForPrompt(s: string) {
   return s.replace(/\n/g, ' ').trim();
+}
+
+function buildVertexAiUrl(modelName: string): string {
+  return `https://${process.env.GCP_REGION}-aiplatform.googleapis.com/v1/projects/${process.env.GCP_PROJECT_ID}/locations/${process.env.GCP_REGION}/publishers/google/models/${modelName}:generateContent`;
 }

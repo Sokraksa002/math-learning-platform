@@ -1,23 +1,46 @@
 import { prisma } from '../../lib/prisma';
-import { AiFlashcard, generateFlashcardWithAi } from '../../lib/ai/generateFlashcard';
+import { generateFlashcardsWithGemini } from '../../lib/ai/cloudAIGenerator';
 
 export async function generateAndSaveFlashcard(opts: {
   userId: string;
-  chapterId: string;
-  question: string;
-}): Promise<{ flashcard: Awaited<ReturnType<typeof prisma.flashcard.create>> } | never> {
-  const { userId, chapterId, question } = opts;
+  lessonId: string;
+  topic: string;
+}): Promise<{
+  flashcard: Awaited<ReturnType<typeof prisma.flashcard.create>>;
+}> {
+  const { userId, lessonId, topic } = opts;
 
-  // Call AI
-  const aiResult: AiFlashcard = await generateFlashcardWithAi(question);
+  console.log('TOPIC SENT TO AI:', topic);
 
-  // Persist result
+  /* ✅ FIND LESSON */
+  const lesson = await prisma.lesson.findUnique({
+    where: { id: lessonId },
+  });
+
+  if (!lesson) {
+    throw new Error('Lesson not found');
+  }
+
+  const chapterId = lesson.chapterId;
+
+  /* ✅ ✅ USE GEMINI (REAL AI) */
+  const cards = await generateFlashcardsWithGemini({
+    topic,
+  });
+
+  if (!cards.length) {
+    throw new Error('No AI response');
+  }
+
+  const firstCard = cards[0];
+
+  /* ✅ SAVE INTO DATABASE */
   const created = await prisma.flashcard.create({
     data: {
       userId,
       chapterId,
-      questionKm: aiResult.question,
-      answerJson: aiResult,
+      questionKm: firstCard.question,
+      answerJson: { text: firstCard.answer },
       isUserGenerated: true,
     },
   });

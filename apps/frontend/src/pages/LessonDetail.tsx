@@ -14,7 +14,7 @@ import {
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { getLesson } from "../utils/api";
+import { completeLesson, getCompletedLessons, getLesson } from "../utils/api";
 import { isLoggedIn } from "../utils/auth";
 import type { Lesson } from "../utils/api";
 
@@ -99,6 +99,7 @@ export default function LessonDetail() {
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [loading, setLoading] = useState(true);
   const [completed, setCompleted] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const [graphParam, setGraphParam] = useState(1);
 
   useEffect(() => {
@@ -106,8 +107,13 @@ export default function LessonDetail() {
       if (!lessonId) return;
 
       try {
-        const data = await getLesson(lessonId);
-        setLesson(data ?? null);
+        const [lessonData, completedLessonIds] = await Promise.all([
+          getLesson(lessonId),
+          isLoggedIn() ? getCompletedLessons() : Promise.resolve([]),
+        ]);
+
+        setLesson(lessonData ?? null);
+        setCompleted(completedLessonIds.includes(lessonId));
       } catch (err) {
         console.error(err);
       } finally {
@@ -117,7 +123,7 @@ export default function LessonDetail() {
     load();
   }, [lessonId]);
 
-  const handleComplete = () => {
+  const handleComplete = async () => {
     if (!lessonId) return;
 
     if (!isLoggedIn()) {
@@ -125,7 +131,15 @@ export default function LessonDetail() {
       return;
     }
 
-    setCompleted(true);
+    try {
+      setSubmitting(true);
+      await completeLesson(lessonId);
+      setCompleted(true);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   /* ✅ RENDER */
@@ -289,10 +303,13 @@ export default function LessonDetail() {
 
                 <Button
                   variant="contained"
-                  onClick={handleComplete}
+                  onClick={() => void handleComplete()}
+                  disabled={completed || submitting}
                 >
                   {completed
                     ? "✅ Completed"
+                    : submitting
+                    ? "Completing..."
                     : "Complete Lesson"}
                 </Button>
               </Stack>

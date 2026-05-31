@@ -7,6 +7,7 @@ import createAuthToken from '../../tests/utils/createAuthToken';
 // mock prisma
 jest.mock('../../lib/prisma', () => ({
   prisma: {
+    user: { findUnique: jest.fn() },
     lesson: { findUnique: jest.fn() },
     quizSession: { create: jest.fn(), findUnique: jest.fn() },
     exercise: { findMany: jest.fn() },
@@ -47,6 +48,7 @@ describe('quiz routes', () => {
     // create a signed token with the shared test helper and pass it in Authorization header
     const token = await createAuthToken(app, { userId: 'u1', role: 'STUDENT' });
 
+    mockedPrisma.user.findUnique.mockResolvedValue({ id: 'u1' });
     mockedPrisma.lesson.findUnique.mockResolvedValue(null);
     const res = await app.inject({
       method: 'POST',

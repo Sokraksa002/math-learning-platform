@@ -109,9 +109,9 @@ export default function Profile() {
               {t('pages.Certificate.khmer', 'Certificates')}
             </Typography>
             <List disablePadding>
-              <ListItemButton onClick={() => navigate('/certificate/1')}>
+              <ListItemButton onClick={() => navigate('/certificate')}>
                 <ListItemIcon><WorkspacePremium /></ListItemIcon>
-                <ListItemText primary={t('pages.Profile.chapter_1_certificate', 'Chapter 1 Certificate')} />
+                <ListItemText primary={t('pages.Profile.chapter_1_certificate', 'My Certificate')} />
                 <Chip label={t('pages.Profile.view', 'View')} size="small" color="primary" />
               </ListItemButton>
             </List>

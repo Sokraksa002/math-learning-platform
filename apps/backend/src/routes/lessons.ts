@@ -62,6 +62,8 @@ export async function lessonRoutes(app: FastifyInstance) {
       return {
         id: l.id,
         title: titleObj,
+        // also expose `titleKm` for older frontends expecting a top-level `titleKm` field
+        titleKm: titleObj.km ?? undefined,
         fallbackTitle: titleObj.km ?? titleObj.en ?? 'Untitled',
         orderIndex: l.orderIndex,
         chapterId: l.chapterId, // ✅ IMPORTANT FOR FRONTEND GROUPING

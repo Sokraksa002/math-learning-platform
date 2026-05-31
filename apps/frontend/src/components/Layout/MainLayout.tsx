@@ -8,7 +8,6 @@ export default function MainLayout() {
 
   return (
     <AppLayout isLoggedIn={userLoggedIn}>
-      
       {/* ✅ MAIN CONTENT */}
       <main className="flex-1 w-full overflow-y-auto">
         <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-16 py-4">

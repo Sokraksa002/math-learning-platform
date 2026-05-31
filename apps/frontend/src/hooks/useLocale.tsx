@@ -1,4 +1,4 @@
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 
 type LocaleData = Record<string, unknown>;
 
@@ -44,7 +44,7 @@ export function useLocale() {
   }, [locale]);
 
   // ✅ SUPPORT NESTED KEYS (IMPORTANT)
-  const t = (path: string, fallback?: string) => {
+  const t = useCallback((path: string, fallback?: string) => {
     const parts = path.split(".");
     let cur: unknown = messages;
 
@@ -57,13 +57,13 @@ export function useLocale() {
     }
 
     return typeof cur === "string" ? cur : fallback ?? path;
-  };
+  }, [messages]);
 
-  const setLocale = (l: string) => {
+  const setLocale = useCallback((l: string) => {
     currentLocale = l;
     localStorage.setItem(LOCALE_STORAGE_KEY, l);
     notifyLocaleChange();
-  };
+  }, []);
 
   return { locale, setLocale, t };
 }

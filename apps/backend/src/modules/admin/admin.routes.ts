@@ -2,6 +2,78 @@ import { FastifyInstance } from 'fastify';
 import * as controller from './admin.controller';
 
 export async function adminRoutes(fastify: FastifyInstance) {
+  // List users
+  fastify.get(
+    '/admin/users',
+    { preHandler: [fastify.authenticate, controller.requireAdmin] },
+    controller.listUsers as any,
+  );
+
+  // Create user
+  fastify.post(
+    '/admin/users',
+    {
+      preHandler: [fastify.authenticate, controller.requireAdmin],
+      schema: {
+        body: {
+          type: 'object',
+          required: ['email', 'name', 'role', 'password'],
+          properties: {
+            email: { type: 'string', format: 'email' },
+            name: { type: 'string', minLength: 1 },
+            role: { type: 'string', enum: ['ADMIN', 'STUDENT'] },
+            password: { type: 'string', minLength: 6 },
+          },
+          additionalProperties: false,
+        },
+      },
+    },
+    controller.addUser as any,
+  );
+
+  // Update user
+  fastify.patch(
+    '/admin/users/:id',
+    {
+      preHandler: [fastify.authenticate, controller.requireAdmin],
+      schema: {
+        params: {
+          type: 'object',
+          required: ['id'],
+          properties: { id: { type: 'string', format: 'uuid' } },
+        },
+        body: {
+          type: 'object',
+          required: ['email', 'name', 'role', 'isBanned'],
+          properties: {
+            email: { type: 'string', format: 'email' },
+            name: { type: 'string', minLength: 1 },
+            role: { type: 'string', enum: ['ADMIN', 'STUDENT'] },
+            isBanned: { type: 'boolean' },
+          },
+          additionalProperties: false,
+        },
+      },
+    },
+    controller.updateUserHandler as any,
+  );
+
+  // Delete user
+  fastify.delete(
+    '/admin/users/:id',
+    {
+      preHandler: [fastify.authenticate, controller.requireAdmin],
+      schema: {
+        params: {
+          type: 'object',
+          required: ['id'],
+          properties: { id: { type: 'string', format: 'uuid' } },
+        },
+      },
+    },
+    controller.deleteUserHandler as any,
+  );
+
   // List lessons with exercise counts
   fastify.get(
     '/admin/lessons',

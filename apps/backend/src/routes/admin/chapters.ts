@@ -7,6 +7,35 @@ import { requireAdmin } from '../../modules/admin/admin.controller';
  */
 export async function adminChapterRoutes(app: FastifyInstance) {
   /**
+   * List all chapters for admin management
+   */
+  app.get(
+    '/admin/chapters',
+    {
+      preHandler: [app.authenticate, requireAdmin],
+    },
+    async () => {
+      const chapters = await prisma.chapter.findMany({
+        orderBy: { orderIndex: 'asc' },
+      });
+
+      const normalized = chapters.map((chapter) => {
+        const titleKm = (chapter as any).titleKm ?? null;
+        return {
+          id: chapter.id,
+          title: { km: titleKm },
+          fallbackTitle: titleKm,
+          orderIndex: (chapter as any).orderIndex,
+          isPublished: (chapter as any).isPublished,
+          createdAt: (chapter as any).createdAt,
+        };
+      });
+
+      return { success: true, data: normalized };
+    },
+  );
+
+  /**
    * ✅ Create a new chapter (draft)
    */
   app.post(

@@ -8,6 +8,38 @@ import { requireAdmin } from '../../modules/admin/admin.controller';
  */
 export async function adminCertificateRoutes(app: FastifyInstance) {
   /**
+   * List all certificates
+   */
+  app.get(
+    '/admin/certificates',
+    {
+      preHandler: [app.authenticate, requireAdmin], // 👑 ADMIN ONLY
+    },
+    async () => {
+      const certificates = await prisma.certificate.findMany({
+        orderBy: { issuedAt: 'desc' },
+        include: {
+          user: {
+            select: {
+              id: true,
+              name: true,
+              email: true,
+            },
+          },
+        },
+      });
+
+      return {
+        success: true,
+        data: certificates.map((certificate) => ({
+          ...certificate,
+          status: certificate.revokedAt ? 'revoked' : 'verified',
+        })),
+      };
+    },
+  );
+
+  /**
    * Revoke a certificate
    */
   app.post(

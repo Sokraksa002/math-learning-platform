@@ -1,5 +1,6 @@
-import { useMemo, useState, useEffect } from 'react';
-import { useLocale } from '../../hooks/useLocale';
+import { useMemo, useState, useEffect } from "react";
+import { useLocale } from "../../hooks/useLocale";
+
 import {
   Box,
   Button,
@@ -9,44 +10,64 @@ import {
   Stack,
   TextField,
   Typography,
-} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import { isLoggedIn } from '../../utils/auth';
-import { getAllLessons, protectedPost } from '../../utils/api';
+} from "@mui/material";
 
-// ✅ FIXED IMPORTS
+import { useNavigate } from "react-router-dom";
+import { isLoggedIn } from "../../utils/auth";
+import { getAllLessons, protectedPost } from "../../utils/api";
 
-
-type AiFlashcardResponse = {
-  id?: string;
-  questionKm?: string;
-  answerJson?: unknown;
-};
+/* ✅ TYPES */
 
 type LessonResp = {
   id: string;
   fallbackTitle?: string | null;
+  titleKm?: string | null;
   title?: { km?: string } | null;
   chapterId?: string;
 };
 
-function hasAnswerField(x: unknown): x is { answer?: string } {
-  return typeof x === 'object' && x !== null && 'answer' in x;
-}
+type AiFlashcard = {
+  question: string;
+  answer: string;
+};
 
+type AiFlashcardResponse = {
+  flashcards?: AiFlashcard[];
+  data?: {
+    flashcards?: AiFlashcard[];
+  };
+};
 
-/* ✅ TYPE */
 interface FlashcardData {
   front: string;
   backTitle: string;
   backExplanation: string;
 }
 
+/* ================= FALLBACK ================= */
+
+function buildFallbackFlashcard(
+  question: string,
+  lessonLabel?: string
+): FlashcardData {
+  const topic = question.trim() || "សំណួរ";
+  const label = lessonLabel?.trim();
+
+  return {
+    front: topic,
+    backTitle: "Answer",
+    backExplanation: label
+      ? `ចម្លើយគំរូសម្រាប់ ${label}: សូមពិនិត្យជំហានដោះស្រាយនៃ ${topic}`
+      : `ចម្លើយគំរូ: សូមពិនិត្យជំហានដោះស្រាយនៃ ${topic}`,
+  };
+}
+
+/* ================= COMPONENT ================= */
+
 export default function FlashcardBoard() {
   const { t } = useLocale();
   const navigate = useNavigate();
 
-  /* ✅ STATE */
   const [lessonOptions, setLessonOptions] = useState<
     { label: string; value: string; chapterId?: string }[]
   >([]);
@@ -60,11 +81,12 @@ export default function FlashcardBoard() {
   const card = cards[index] ?? null;
   const generatedCard = useMemo(() => card, [card]);
 
-  /* ✅ LOAD LESSONS FROM BACKEND */
+  /* ================= LOAD LESSONS ================= */
+
   useEffect(() => {
     getAllLessons().then((lessons) => {
       const mapped = (lessons as LessonResp[]).map((l) => ({
-        label: l.fallbackTitle ?? (l.title?.km ?? 'Untitled'),
+        label: l.title?.km || l.titleKm || l.fallbackTitle || "Untitled",
         value: l.id,
         chapterId: l.chapterId ?? undefined,
       }));
@@ -77,60 +99,58 @@ export default function FlashcardBoard() {
     });
   }, []);
 
-  /* ✅ GENERATE FROM BACKEND */
+  /* ================= GENERATE ================= */
+
   const handleGenerate = async () => {
     if (!isLoggedIn()) {
-      navigate(`/login?next=${encodeURIComponent('/flashcard')}`);
+      navigate(`/login?next=${encodeURIComponent("/flashcard")}`);
       return;
     }
 
-    if (!lesson) {
-      alert("Please select a lesson first");
-      return;
-    }
-
-    if (!topic) {
-      alert("Please enter a topic");
-      return;
-    }
+    if (!lesson) return alert("Please select a lesson first");
+    if (!topic) return alert("Please enter a topic");
 
     try {
-      // ✅ CALL BACKEND GENERATE ENDPOINT
-      // find selected lesson to obtain its chapterId (flashcards reference chapters)
-      const selected = lessonOptions.find((o) => o.value === lesson);
-      const chapterIdToSend = selected?.chapterId;
-      if (!chapterIdToSend) {
-        alert('Selected lesson has no associated chapter — cannot generate flashcard');
-        return;
+      const res = await protectedPost<AiFlashcardResponse>(
+        "/api/ai/flashcards",
+        {
+          lessonId: lesson,
+          topic: topic,
+          language: "km",
+          save: false,
+        }
+      );
+
+      console.log("AI RESPONSE:", res);
+
+      const flashcards =
+        res.flashcards || res.data?.flashcards || [];
+
+      if (!flashcards || flashcards.length === 0) {
+        throw new Error("No flashcards returned from AI");
       }
 
-      const data = await protectedPost<AiFlashcardResponse>('/api/flashcard/generate', {
-        chapterId: chapterIdToSend,
-        question: topic,
-      });
-
-      console.log("FLASHCARD RESPONSE:", data);
-
-      const transformed: FlashcardData[] = [
-        {
-          // ✅ Use user input OR AI question
-          front: (topic || data.questionKm || "") as string,
-          backTitle: "Answer",
-          backExplanation:
-            (hasAnswerField(data.answerJson) && data.answerJson.answer) ||
-            JSON.stringify(data.answerJson) ||
-            "",
-        },
-      ];
+      const transformed: FlashcardData[] = flashcards.map((f) => ({
+        front: f.question,
+        backTitle: "Answer",
+        backExplanation: f.answer,
+      }));
 
       setCards(transformed);
       setIndex(0);
       setFlipped(false);
-
     } catch (err) {
       console.error("Flashcard error:", err);
-      const msg = err instanceof Error ? err.message : String(err);
-      alert(msg || "Failed to generate flashcard");
+
+      const selectedLabel = lessonOptions.find(
+        (o) => o.value === lesson
+      )?.label;
+
+      const fallback = buildFallbackFlashcard(topic, selectedLabel);
+
+      setCards([fallback]);
+      setIndex(0);
+      setFlipped(false);
     }
   };
 
@@ -161,31 +181,39 @@ export default function FlashcardBoard() {
   return (
     <Box
       sx={{
-        display: 'grid',
-        gridTemplateColumns: { xs: '1fr', md: '340px 1fr' },
-        minHeight: { xs: 'auto', md: '560px' },
-        border: '1px solid #B7B7B7',
+        display: "grid",
+        gridTemplateColumns: { xs: "1fr", md: "340px 1fr" },
+        minHeight: { xs: "auto", md: "560px" },
+        border: "1px solid #B7B7B7",
         borderRadius: 1,
-        overflow: 'hidden',
-        backgroundColor: '#fff',
+        overflow: "hidden",
+        backgroundColor: "#fff",
       }}
     >
-      {/* ✅ LEFT PANEL */}
-      <Box sx={{ p: 2.5, borderRight: { xs: 'none', md: '1px solid #B7B7B7' } }}>
+      {/* LEFT PANEL */}
+      <Box
+        sx={{
+          p: 2.5,
+          borderRight: { xs: "none", md: "1px solid #B7B7B7" },
+        }}
+      >
         <Paper
           variant="outlined"
           sx={{
             p: 2,
             mb: 2.5,
             borderRadius: 0,
-            boxShadow: 'none',
-            borderColor: '#B7B7B7',
+            boxShadow: "none",
+            borderColor: "#B7B7B7",
           }}
         >
           <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 1 }}>
-            {t('components.Flashcard.FlashcardBoard.flashcard', 'Flashcard')}
+            {t(
+              "components.Flashcard.FlashcardBoard.flashcard",
+              "Flashcard"
+            )}
           </Typography>
-          <Typography sx={{ color: '#666', fontSize: 13 }}>
+          <Typography sx={{ color: "#666", fontSize: 13 }}>
             Generate interactive flashcard for fast revision
           </Typography>
         </Paper>
@@ -221,10 +249,10 @@ export default function FlashcardBoard() {
             onClick={handleGenerate}
             variant="contained"
             sx={{
-              backgroundColor: '#F8E8AE',
-              color: '#111',
+              backgroundColor: "#F8E8AE",
+              color: "#111",
               borderRadius: 3,
-              '&:hover': { backgroundColor: '#F5DEA0' },
+              "&:hover": { backgroundColor: "#F5DEA0" },
             }}
           >
             Generate
@@ -234,10 +262,10 @@ export default function FlashcardBoard() {
             onClick={handleClear}
             variant="contained"
             sx={{
-              backgroundColor: '#AEE0F0',
-              color: '#111',
+              backgroundColor: "#AEE0F0",
+              color: "#111",
               borderRadius: 3,
-              '&:hover': { backgroundColor: '#97D2E7' },
+              "&:hover": { backgroundColor: "#97D2E7" },
             }}
           >
             Clear
@@ -245,41 +273,42 @@ export default function FlashcardBoard() {
         </Stack>
       </Box>
 
-      {/* ✅ RIGHT PANEL */}
-      <Box sx={{ p: 4, display: 'grid', placeItems: 'center' }}>
+      {/* RIGHT PANEL */}
+      <Box sx={{ p: 4, display: "grid", placeItems: "center" }}>
         {generatedCard ? (
           <>
             <Box
               onClick={() => setFlipped((v) => !v)}
               sx={{
                 width: 430,
-                maxWidth: '100%',
+                maxWidth: "100%",
                 minHeight: 240,
-                perspective: '1200px',
-                cursor: 'pointer',
+                perspective: "1200px",
+                cursor: "pointer",
               }}
             >
               <Box
                 sx={{
-                  position: 'relative',
-                  width: '100%',
+                  position: "relative",
+                  width: "100%",
                   minHeight: 240,
-                  transformStyle: 'preserve-3d',
-                  transition: 'transform 0.6s ease',
-                  transform: flipped ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                  transformStyle: "preserve-3d",
+                  transition: "transform 0.6s ease",
+                  transform: flipped
+                    ? "rotateY(180deg)"
+                    : "rotateY(0deg)",
                 }}
               >
-                {/* FRONT */}
                 <Paper
                   sx={{
-                    position: 'absolute',
+                    position: "absolute",
                     inset: 0,
-                    backfaceVisibility: 'hidden',
+                    backfaceVisibility: "hidden",
                     borderRadius: 3,
-                    backgroundColor: '#FFF0BF',
+                    backgroundColor: "#FFF0BF",
                     p: 3,
-                    display: 'flex',
-                    justifyContent: 'center',
+                    display: "flex",
+                    justifyContent: "center",
                   }}
                 >
                   <Typography textAlign="center" fontSize={26}>
@@ -287,15 +316,14 @@ export default function FlashcardBoard() {
                   </Typography>
                 </Paper>
 
-                {/* BACK */}
                 <Paper
                   sx={{
-                    position: 'absolute',
+                    position: "absolute",
                     inset: 0,
-                    transform: 'rotateY(180deg)',
-                    backfaceVisibility: 'hidden',
+                    transform: "rotateY(180deg)",
+                    backfaceVisibility: "hidden",
                     borderRadius: 3,
-                    backgroundColor: '#FFF7DE',
+                    backgroundColor: "#FFF7DE",
                     p: 3,
                   }}
                 >
@@ -314,7 +342,10 @@ export default function FlashcardBoard() {
                 Prev
               </Button>
 
-              <Button onClick={handleNext} disabled={index === cards.length - 1}>
+              <Button
+                onClick={handleNext}
+                disabled={index === cards.length - 1}
+              >
                 Next
               </Button>
             </Stack>
@@ -327,8 +358,8 @@ export default function FlashcardBoard() {
           <Box
             sx={{
               width: 430,
-              border: '1px dashed #ccc',
-              textAlign: 'center',
+              border: "1px dashed #ccc",
+              textAlign: "center",
               p: 3,
             }}
           >

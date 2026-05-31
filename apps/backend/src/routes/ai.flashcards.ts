@@ -28,7 +28,7 @@ export async function aiFlashcardRoutes(fastify: FastifyInstance) {
         /* ✅ ✅ REMOVE PRISMA LESSON CHECK (CRITICAL FIX) */
         // ❌ DO NOT use prisma.lesson.findUnique()
 
-        const result = await generateFlashcardsForLesson(lessonId, !!save, userId);
+        const result = await generateFlashcardsForLesson(lessonId, save, userId);
 
         return {
           flashcards: result,

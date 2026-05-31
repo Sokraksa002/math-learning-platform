@@ -23,47 +23,84 @@ import {
 } from '@mui/material';
 import { useEffect, useMemo, useState } from 'react';
 import AdminShell from './AdminShell';
-import { loadAdminUsers, saveAdminUsers, type AdminUser, type AdminUserStatus } from '../../data/adminContent';
 import { useLocale } from '../../hooks/useLocale';
+import {
+  createAdminUser,
+  deleteAdminUser,
+  getAdminUsers,
+  updateAdminUser,
+  type AdminUserSummary,
+} from '../../utils/api';
 
-const emptyUser: AdminUser = {
-  id: 0,
-  name: '',
-  email: '',
-  role: 'ADMIN',
-  joinDate: new Date().toISOString().slice(0, 10),
-  status: 'active',
-  progress: 0,
-  attempts: 0,
+type UserForm = {
+  email: string;
+  name: string;
+  role: 'ADMIN' | 'STUDENT';
+  isBanned: boolean;
+  password: string;
 };
 
+const blankUser = (): UserForm => ({
+  email: '',
+  name: '',
+  role: 'STUDENT',
+  isBanned: false,
+  password: '',
+});
+
 export default function ManageUsers() {
-  const [users, setUsers] = useState<AdminUser[]>(() => loadAdminUsers());
+  const [users, setUsers] = useState<AdminUserSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState('');
   const [open, setOpen] = useState(false);
-  const [editingId, setEditingId] = useState<number | null>(null);
-  const [form, setForm] = useState<AdminUser>(emptyUser);
+  const [editingUser, setEditingUser] = useState<AdminUserSummary | null>(null);
+  const [form, setForm] = useState<UserForm>(blankUser());
   const { t } = useLocale();
 
+  const loadUsers = async () => {
+    const rows = await getAdminUsers();
+    setUsers(rows);
+  };
+
   useEffect(() => {
-    saveAdminUsers(users);
-  }, [users]);
+    const boot = async () => {
+      try {
+        setLoading(true);
+        await loadUsers();
+        setError('');
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load users');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    void boot();
+  }, []);
 
   const stats = useMemo(
     () => [
       { label: 'Total users', value: users.length },
-      { label: 'Active users', value: users.filter((user) => user.status === 'active').length },
+      { label: 'Active users', value: users.filter((user) => !user.isBanned).length },
       { label: 'Admins', value: users.filter((user) => user.role === 'ADMIN').length },
     ],
-    [users]
+    [users],
   );
 
-  const openEditor = (user?: AdminUser) => {
+  const openEditor = (user?: AdminUserSummary) => {
     if (user) {
-      setEditingId(user.id);
-      setForm(user);
+      setEditingUser(user);
+      setForm({
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        isBanned: user.isBanned,
+        password: '',
+      });
     } else {
-      setEditingId(null);
-      setForm({ ...emptyUser, id: Date.now() });
+      setEditingUser(null);
+      setForm(blankUser());
     }
 
     setOpen(true);
@@ -71,30 +108,66 @@ export default function ManageUsers() {
 
   const closeEditor = () => {
     setOpen(false);
-    setEditingId(null);
-    setForm(emptyUser);
+    setEditingUser(null);
+    setForm(blankUser());
   };
 
-  const saveUser = () => {
-    const payload: AdminUser = {
-      ...form,
-      id: editingId ?? form.id ?? Date.now(),
-      name: form.name.trim() || 'New User',
-      email: form.email.trim() || 'user@example.com',
-      progress: Number(form.progress) || 0,
-      attempts: Number(form.attempts) || 0,
-    };
+  const saveUser = async () => {
+    if (!form.email.trim() || !form.name.trim()) {
+      setError('Name and email are required');
+      return;
+    }
 
-    setUsers((prev) => (editingId ? prev.map((item) => (item.id === editingId ? payload : item)) : [payload, ...prev]));
-    closeEditor();
+    try {
+      setSaving(true);
+      if (editingUser) {
+        await updateAdminUser(editingUser.id, {
+          email: form.email.trim(),
+          name: form.name.trim(),
+          role: form.role,
+          isBanned: form.isBanned,
+        });
+      } else {
+        if (!form.password.trim()) {
+          setError('Password is required for new users');
+          return;
+        }
+
+        await createAdminUser({
+          email: form.email.trim(),
+          name: form.name.trim(),
+          role: form.role,
+          password: form.password,
+        });
+      }
+
+      await loadUsers();
+      setError('');
+      closeEditor();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save user');
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const deleteUser = (id: number) => setUsers((prev) => prev.filter((item) => item.id !== id));
+  const removeUser = async (id: string) => {
+    try {
+      setSaving(true);
+      await deleteAdminUser(id);
+      await loadUsers();
+      setError('');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete user');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <AdminShell
       title={t('pages.AdminManageUsers.title', 'Manage Users')}
-      subtitle={t('pages.AdminManageUsers.subtitle', 'Create, update, and remove student or admin accounts from a single table.')}
+      subtitle={t('pages.AdminManageUsers.subtitle', 'Connected to the backend admin user endpoints.')}
     >
       <Stack spacing={3}>
         <Stack direction={{ xs: 'column', md: 'row' }} spacing={2}>
@@ -110,6 +183,12 @@ export default function ManageUsers() {
           ))}
         </Stack>
 
+        {error && (
+          <Paper sx={{ p: 2, borderRadius: 3, border: '1px solid #fecaca', background: '#fff1f2' }}>
+            <Typography color="error" fontWeight={700}>{error}</Typography>
+          </Paper>
+        )}
+
         <Paper sx={{ borderRadius: 3, overflow: 'hidden' }}>
           <Box sx={{ p: 3, display: 'flex', justifyContent: 'space-between', gap: 2, alignItems: 'center' }}>
             <Box>
@@ -117,10 +196,10 @@ export default function ManageUsers() {
                 Users
               </Typography>
               <Typography variant="body2" color="text.secondary">
-                Local CRUD for the admin-side account list.
+                Live CRUD for the backend user table.
               </Typography>
             </Box>
-            <Button variant="contained" onClick={() => openEditor()}>
+            <Button variant="contained" onClick={() => openEditor()} disabled={loading}>
               Add user
             </Button>
           </Box>
@@ -133,8 +212,7 @@ export default function ManageUsers() {
                   <TableCell>Email</TableCell>
                   <TableCell>Role</TableCell>
                   <TableCell>Status</TableCell>
-                  <TableCell>Join date</TableCell>
-                  <TableCell>Progress</TableCell>
+                  <TableCell>Created at</TableCell>
                   <TableCell align="center">Actions</TableCell>
                 </TableRow>
               </TableHead>
@@ -145,15 +223,18 @@ export default function ManageUsers() {
                     <TableCell>{user.email}</TableCell>
                     <TableCell>{user.role}</TableCell>
                     <TableCell>
-                      <Chip label={user.status} size="small" color={user.status === 'active' ? 'success' : 'default'} />
+                      <Chip
+                        label={user.isBanned ? 'banned' : 'active'}
+                        size="small"
+                        color={user.isBanned ? 'warning' : 'success'}
+                      />
                     </TableCell>
-                    <TableCell>{user.joinDate}</TableCell>
-                    <TableCell>{user.progress}%</TableCell>
+                    <TableCell>{new Date(user.createdAt).toLocaleDateString()}</TableCell>
                     <TableCell align="center">
                       <Button size="small" onClick={() => openEditor(user)} sx={{ mr: 1 }}>
                         Edit
                       </Button>
-                      <Button size="small" color="error" onClick={() => deleteUser(user.id)}>
+                      <Button size="small" color="error" onClick={() => removeUser(user.id)}>
                         Delete
                       </Button>
                     </TableCell>
@@ -166,88 +247,66 @@ export default function ManageUsers() {
       </Stack>
 
       <Dialog open={open} onClose={closeEditor} fullWidth maxWidth="sm">
-        <DialogTitle>{editingId ? 'Edit user' : 'Add user'}</DialogTitle>
+        <DialogTitle>{editingUser ? 'Edit user' : 'Add user'}</DialogTitle>
         <DialogContent sx={{ pt: 2 }}>
           <Stack spacing={2} sx={{ pt: 1 }}>
-            <TextField label="Name" value={form.name} onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))} fullWidth />
-            <TextField label="Email" value={form.email} onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))} fullWidth />
+            <Paper variant="outlined" sx={{ p: 2, borderRadius: 2, background: '#f8fbff' }}>
+              <Typography fontWeight={800} sx={{ mb: 0.5 }}>Backend user record</Typography>
+              <Typography variant="body2" color="text.secondary">
+                Admin users are stored in the database. New users need a password; edits can change email, name, role, and ban status.
+              </Typography>
+            </Paper>
+
+            <TextField
+              label="Name"
+              value={form.name}
+              onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value }))}
+              fullWidth
+            />
+            <TextField
+              label="Email"
+              value={form.email}
+              onChange={(event) => setForm((prev) => ({ ...prev, email: event.target.value }))}
+              fullWidth
+            />
             <FormControl fullWidth>
-  <InputLabel>Role</InputLabel>
-  <Select
-    value={form.role}
-    label="Role"
-    onChange={(event) =>
-      setForm((prev) => ({ ...prev, role: event.target.value as AdminUser['role'] }))
-    }
-  >
-    <MenuItem value="student">student</MenuItem>
-    <MenuItem value="teacher">teacher</MenuItem>
-    <MenuItem value="admin">admin</MenuItem>
-  </Select>
-</FormControl>
-
-<TextField
-  label="Join date"
-  type="date"
-  value={form.joinDate}
-  onChange={(event) =>
-    setForm((prev) => ({ ...prev, joinDate: event.target.value }))
-  }
-  fullWidth
-  InputLabelProps={{ shrink: true }}
-/>
-
-<FormControl fullWidth>
-  <InputLabel>Status</InputLabel>
-  <Select
-    value={form.status}
-    label="Status"
-    onChange={(event) =>
-      setForm((prev) => ({ ...prev, status: event.target.value as AdminUserStatus }))
-    }
-  >
-    <MenuItem value="active">active</MenuItem>
-    <MenuItem value="inactive">inactive</MenuItem>
-  </Select>
-</FormControl>
-
-<TextField
-  label="Progress"
-  type="number"
-  value={form.progress}
-  onChange={(event) =>
-    setForm((prev) => ({ ...prev, progress: Number(event.target.value) }))
-  }
-  fullWidth
-/>
-
-<TextField
-  label="Attempts"
-  type="number"
-  value={form.attempts}
-  onChange={(event) =>
-    setForm((prev) => ({ ...prev, attempts: Number(event.target.value) }))
-  }
-  fullWidth
-/><TextField
-  label="Progress"
-  type="number"
-  value={form.progress}
-  onChange={(e) => setForm((prev) => ({ ...prev, progress: Number(e.target.value) }))}
-  fullWidth
-/>
-<TextField
-  label="Attempts"
-  type="number"
-  value={form.attempts}
-  onChange={(e) => setForm((prev) => ({ ...prev, attempts: Number(e.target.value) }))}
-  fullWidth
-/>
-</Stack>
+              <InputLabel>Role</InputLabel>
+              <Select
+                value={form.role}
+                label="Role"
+                onChange={(event) => setForm((prev) => ({ ...prev, role: event.target.value as UserForm['role'] }))}
+              >
+                <MenuItem value="STUDENT">student</MenuItem>
+                <MenuItem value="ADMIN">admin</MenuItem>
+              </Select>
+            </FormControl>
+            <FormControl fullWidth>
+              <InputLabel>Status</InputLabel>
+              <Select
+                value={form.isBanned ? 'banned' : 'active'}
+                label="Status"
+                onChange={(event) => setForm((prev) => ({ ...prev, isBanned: event.target.value === 'banned' }))}
+              >
+                <MenuItem value="active">active</MenuItem>
+                <MenuItem value="banned">banned</MenuItem>
+              </Select>
+            </FormControl>
+            {!editingUser && (
+              <TextField
+                label="Password"
+                type="password"
+                value={form.password}
+                onChange={(event) => setForm((prev) => ({ ...prev, password: event.target.value }))}
+                fullWidth
+              />
+            )}
+          </Stack>
         </DialogContent>
         <DialogActions>
           <Button onClick={closeEditor}>Cancel</Button>
-          <Button onClick={saveUser} variant="contained">Save</Button>
+          <Button onClick={saveUser} variant="contained" disabled={saving}>
+            {saving ? 'Saving...' : 'Save'}
+          </Button>
         </DialogActions>
       </Dialog>
     </AdminShell>

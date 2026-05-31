@@ -115,7 +115,7 @@ export default function StudentDashboard() {
   return () => {
     mounted = false;
   };
-}, [t]);
+}, []);
 
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#f3f7ff" }}>

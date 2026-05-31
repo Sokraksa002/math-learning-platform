@@ -13,14 +13,12 @@ async function main() {
     {
       email: 'student1@example.com',
       name: 'Student One',
-      passwordHash,
       role: 'STUDENT',
       isBanned: false,
     },
     {
       email: 'admin@example.com',
       name: 'Admin',
-      passwordHash,
       role: 'ADMIN',
       isBanned: false,
     },
@@ -31,14 +29,14 @@ async function main() {
       where: { email: u.email },
       update: {
         name: u.name,
-        passwordHash: u.passwordHash,
+        passwordHash,
         role: u.role as any,
         isBanned: u.isBanned,
       },
       create: {
         name: u.name,
         email: u.email,
-        passwordHash: u.passwordHash,
+        passwordHash,
         role: u.role as any,
         isBanned: u.isBanned,
       },
@@ -57,14 +55,13 @@ async function main() {
           isPublished: true,
         },
       });
-
-      console.log('✅ Created chapter:', ch.titleKm);
+      console.log('✅ Created chapter:', titleKm);
     }
 
     return ch;
   }
 
-  // ================= LESSON (AUTO-LOAD JSON ✅) =================
+  // ================= LESSON =================
   async function ensureLesson(chapterId: string, titleKm: string, orderIndex: number, key: string) {
     let lesson = await prisma.lesson.findFirst({
       where: { titleKm, chapterId },
@@ -73,25 +70,22 @@ async function main() {
     let contentJson: any = { blocks: [] };
 
     try {
-      const filePath = path.join(__dirname, `../data/lessons/${key}.json`);
+      const filePath = path.join(process.cwd(), `data/lessons/${key}.json`);
 
       if (fs.existsSync(filePath)) {
         const raw = fs.readFileSync(filePath, 'utf-8');
         const parsed = JSON.parse(raw);
 
-        // ✅ SUPPORT BOTH formats
         if (parsed.blocks) {
           contentJson = { blocks: parsed.blocks };
         } else if (parsed.content?.blocks) {
           contentJson = { blocks: parsed.content.blocks };
         }
 
-        console.log(`✅ Loaded JSON for ${key}`);
-      } else {
-        console.log(`⚠️ No JSON file for ${key}`);
+        console.log(`✅ Loaded lesson JSON: ${key}`);
       }
-    } catch (err) {
-      console.log(`❌ Error loading JSON for ${key}`);
+    } catch {
+      console.log(`❌ Error loading lesson JSON: ${key}`);
     }
 
     if (!lesson) {
@@ -105,15 +99,7 @@ async function main() {
         },
       });
 
-      console.log('✅ Created lesson:', lesson.titleKm);
-    } else {
-      // ✅ update existing lesson with new JSON
-      await prisma.lesson.update({
-        where: { id: lesson.id },
-        data: { contentJson },
-      });
-
-      console.log('♻️ Updated lesson:', lesson.titleKm);
+      console.log('✅ Created lesson:', titleKm);
     }
 
     return lesson;
@@ -143,7 +129,7 @@ async function main() {
       chapter.id,
       `Lesson ${index} - ${lessonMap[key]}`,
       index,
-      key, // ✅ IMPORTANT
+      key,
     );
 
     lessonCache[key] = lesson.id;
@@ -152,7 +138,9 @@ async function main() {
 
   // ================= EXERCISES =================
   async function seedExercises() {
-    const basePath = path.join(__dirname, '../data/exercises');
+    const basePath = path.join(process.cwd(), 'data/exercises');
+
+    console.log('📂 Reading exercises from:', basePath);
 
     if (!fs.existsSync(basePath)) {
       console.log('❌ data/exercises folder not found');
@@ -172,39 +160,44 @@ async function main() {
       const folderPath = path.join(basePath, folder);
       const files = fs.readdirSync(folderPath);
 
+      let count = 0;
+
       for (const file of files) {
         const filePath = path.join(folderPath, file);
-        const raw = fs.readFileSync(filePath, 'utf-8');
 
-        let data;
         try {
-          data = JSON.parse(raw);
-        } catch {
-          console.log(`❌ Invalid JSON in ${file}`);
-          continue;
-        }
+          const raw = fs.readFileSync(filePath, 'utf-8');
+          const data = JSON.parse(raw);
 
-        const questions = Array.isArray(data) ? data : data.questions || [];
+          const questions = Array.isArray(data) ? data : data.exercises || data.questions || [];
 
-        for (const item of questions) {
-          if (!item.question || !item.answer) continue;
+          for (const item of questions) {
+            if (!item.question || !item.choices || item.correctIndex === undefined) {
+              continue;
+            }
 
-          try {
-            await prisma.exercise.create({
-              data: {
-                lessonId,
-                questionKm: item.question,
-                solutionKm: item.solution || '',
-                correctAnswer: String(item.answer),
-              },
-            });
-          } catch {
-            console.log('⚠️ Skip duplicate:', item.question);
+            try {
+              await prisma.exercise.create({
+                data: {
+                  lessonId,
+                  questionKm: item.question,
+                  solutionKm: item.explanation || '',
+                  correctAnswer: item.choices[item.correctIndex],
+                  choices: item.choices,
+                },
+              });
+
+              count++;
+            } catch {
+              // skip duplicates
+            }
           }
+        } catch {
+          console.log(`❌ Invalid JSON: ${file}`);
         }
       }
 
-      console.log(`✅ Seeded exercises: ${folder}`);
+      console.log(`✅ ${folder}: inserted ${count} questions`);
     }
   }
 

@@ -12,27 +12,38 @@ type Props = {
   navigate: NavigateFunction;
 };
 
-const getMessage = (score: number) => {
-  if (score >= 80) return "🔥 Excellent!";
-  if (score >= 60) return "💪 Keep pushing!";
+const getMessage = (averageScore: number) => {
+  if (averageScore >= 80) return "🔥 Excellent!";
+  if (averageScore >= 60) return "💪 Keep pushing!";
   return "📚 Keep practicing!";
 };
 
 export default function QuizHeader({ navigate }: Props) {
   const [progress, setProgress] = useState({
+    totalLessons: 0,
     completedLessons: 0,
-    score: 0,
+    progressPercent: 0,
+    totalQuizzes: 0,
+    averageScore: 0,
   });
 
   useEffect(() => {
     getProgress()
-      .then((res: { completedLessons: number; score: number }) =>
-        setProgress(res)
-      )
+      .then((res) => setProgress(res))
       .catch(() => {
-        setProgress({ completedLessons: 0, score: 0 });
+        setProgress({
+          totalLessons: 0,
+          completedLessons: 0,
+          progressPercent: 0,
+          totalQuizzes: 0,
+          averageScore: 0,
+        });
       });
   }, []);
+
+  const progressValue = Number.isFinite(progress.progressPercent)
+    ? progress.progressPercent
+    : 0;
 
   return (
     <Box
@@ -54,17 +65,17 @@ export default function QuizHeader({ navigate }: Props) {
       </Typography>
 
       <Typography sx={{ color: "#6b7280", mb: 2 }}>
-        {getMessage(progress.score)}
+        {getMessage(progress.averageScore)}
       </Typography>
 
       <Box mb={2}>
         <Typography fontSize={13}>
-          Weekly Progress ({progress.score}%)
+          Weekly Progress ({progressValue}%)
         </Typography>
 
         <LinearProgress
           variant="determinate"
-          value={progress.score}
+          value={progressValue}
           sx={{ height: 8, borderRadius: 5, mt: 1 }}
         />
       </Box>
@@ -88,7 +99,7 @@ export default function QuizHeader({ navigate }: Props) {
         <Box>
           <Typography fontSize={12}>Score</Typography>
           <Typography fontWeight="bold" fontSize={18}>
-            {progress.score}%
+            {progress.averageScore}%
           </Typography>
         </Box>
       </Box>

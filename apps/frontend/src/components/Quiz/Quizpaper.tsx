@@ -25,13 +25,52 @@ import type {
   QuizAnswer,
   QuizResult,
 } from "../../utils/api";
+import { useLocale } from "../../hooks/useLocale";
 
 import { saveQuizHistory } from "../../utils/quizHistory";
 import { logout } from "../../utils/auth";
 
+const LESSON_TOPIC_KM: Record<string, string> = {
+  "Complex Numbers": "ចំនួនកុំផ្លិច",
+  "Conic Sections": "កោនិក",
+  "Derivatives": "ដេរីវេ",
+  "Differential Equations": "សមីការឌីផេរ៉ង់ស្យែល",
+  "Functions": "អនុគមន៍",
+  "Integrals": "អាំងតេក្រាល",
+  "Limits": "លីមីត",
+  "Probability": "ប្រូបាប៊ីលីតេ",
+};
+
+const TITLE_ALIAS: Record<string, string> = {
+  "grade12-limits-and-continuity-lesson2": "Lesson 7 - Limits",
+};
+
+const getLocalizedLessonTitle = (title: string, locale: string): string => {
+  const canonical = TITLE_ALIAS[title.trim()] ?? title.trim();
+
+  if (locale !== "km") return canonical;
+
+  if (LESSON_TOPIC_KM[canonical]) {
+    return LESSON_TOPIC_KM[canonical];
+  }
+
+  const lessonMatch = canonical.match(/^Lesson\s*(\d+)\s*-\s*(.+)$/i);
+
+  if (!lessonMatch) {
+    return LESSON_TOPIC_KM[canonical] ?? canonical;
+  }
+
+  const lessonNumber = lessonMatch[1];
+  const topicEn = lessonMatch[2].trim();
+  const topicKm = LESSON_TOPIC_KM[topicEn] ?? topicEn;
+
+  return `មេរៀនទី ${lessonNumber} - ${topicKm}`;
+};
+
 export default function QuizPaper() {
   const { lessonId } = useParams<{ lessonId: string }>();
   const navigate = useNavigate();
+  const { locale } = useLocale();
 
   const [session, setSession] = useState<QuizSession | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -204,6 +243,7 @@ export default function QuizPaper() {
   const question = session.items[currentIndex];
   const total = session.items.length;
   const progress = ((currentIndex + 1) / total) * 100;
+  const displayLessonTitle = getLocalizedLessonTitle(lessonTitle, locale);
 
   /* ✅ RESULT SCREEN */
   if (finished) {
@@ -255,7 +295,7 @@ export default function QuizPaper() {
       <Container maxWidth="md">
         <Paper sx={{ p: 4 }}>
 
-          <Typography variant="h5">{lessonTitle}</Typography>
+          <Typography variant="h5">{displayLessonTitle}</Typography>
 
           <Typography color="text.secondary">
             Question {currentIndex + 1} / {total}

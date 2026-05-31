@@ -44,6 +44,31 @@ interface FlashcardData {
   backExplanation: string;
 }
 
+const LESSON_TITLE_KM: Record<string, string> = {
+  "Complex Numbers": "ចំនួនកុំផ្លិច",
+  "Conic Sections": "កោនិក",
+  "Derivatives": "ដេរីវេ",
+  "Differential Equations": "សមីការឌីផេរ៉ង់ស្យែល",
+  "Functions": "អនុគមន៍",
+  "Integrals": "អាំងតេក្រាល",
+  "Limits": "លីមីត",
+  "Probability": "ប្រូបាប៊ីលីតេ",
+};
+
+const localizeLessonTitle = (value: string, locale: string): string => {
+  if (locale !== "km") return value;
+
+  const lessonMatch = value.match(/^Lesson\s*(\d+)\s*-\s*(.+)$/i);
+  if (lessonMatch) {
+    const number = lessonMatch[1];
+    const subject = lessonMatch[2].trim();
+    const translatedSubject = LESSON_TITLE_KM[subject] ?? subject;
+    return `មេរៀនទី ${number} - ${translatedSubject}`;
+  }
+
+  return LESSON_TITLE_KM[value] ?? value;
+};
+
 /* ================= FALLBACK ================= */
 
 function buildFallbackFlashcard(
@@ -65,7 +90,8 @@ function buildFallbackFlashcard(
 /* ================= COMPONENT ================= */
 
 export default function FlashcardBoard() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const isKhmer = locale === 'km';
   const navigate = useNavigate();
 
   const [lessonOptions, setLessonOptions] = useState<
@@ -86,18 +112,23 @@ export default function FlashcardBoard() {
   useEffect(() => {
     getAllLessons().then((lessons) => {
       const mapped = (lessons as LessonResp[]).map((l) => ({
-        label: l.title?.km || l.titleKm || l.fallbackTitle || "Untitled",
+        label: localizeLessonTitle(
+          l.title?.km || l.titleKm || l.fallbackTitle || "Untitled",
+          locale
+        ),
         value: l.id,
         chapterId: l.chapterId ?? undefined,
       }));
 
       setLessonOptions(mapped);
 
-      if (mapped.length > 0) {
-        setLesson(mapped[0].value);
-      }
+      setLesson((current) =>
+        current && mapped.some((option) => option.value === current)
+          ? current
+          : mapped[0]?.value || ""
+      );
     });
-  }, []);
+  }, [locale]);
 
   /* ================= GENERATE ================= */
 
@@ -107,8 +138,8 @@ export default function FlashcardBoard() {
       return;
     }
 
-    if (!lesson) return alert("Please select a lesson first");
-    if (!topic) return alert("Please enter a topic");
+    if (!lesson) return alert(isKhmer ? "សូមជ្រើសរើសមេរៀនសិន" : "Please select a lesson first");
+    if (!topic) return alert(isKhmer ? "សូមបញ្ចូលប្រធានបទសិន" : "Please enter a topic");
 
     try {
       const res = await protectedPost<AiFlashcardResponse>(
@@ -127,7 +158,7 @@ export default function FlashcardBoard() {
         res.flashcards || res.data?.flashcards || [];
 
       if (!flashcards || flashcards.length === 0) {
-        throw new Error("No flashcards returned from AI");
+        throw new Error(isKhmer ? "មិនមានកាតត្រឡប់មកពី AI ទេ" : "No flashcards returned from AI");
       }
 
       const transformed: FlashcardData[] = flashcards.map((f) => ({
@@ -210,17 +241,19 @@ export default function FlashcardBoard() {
           <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 1 }}>
             {t(
               "components.Flashcard.FlashcardBoard.flashcard",
-              "Flashcard"
+              isKhmer ? "កាតរំលឹក" : "Flashcard"
             )}
           </Typography>
           <Typography sx={{ color: "#666", fontSize: 13 }}>
-            Generate interactive flashcard for fast revision
+            {isKhmer
+              ? 'បង្កើតកាតរំលឹកអន្តរកម្មសម្រាប់ការពិនិត្យមើលឆាប់រហ័ស'
+              : 'Generate interactive flashcard for fast revision'}
           </Typography>
         </Paper>
 
         <Stack spacing={1.5}>
           <Box>
-            <Typography sx={{ mb: 0.75 }}>Lesson</Typography>
+            <Typography sx={{ mb: 0.75 }}>{isKhmer ? 'មេរៀន' : 'Lesson'}</Typography>
 
             <Select
               fullWidth
@@ -236,12 +269,12 @@ export default function FlashcardBoard() {
           </Box>
 
           <Box>
-            <Typography sx={{ mb: 0.75 }}>Topic</Typography>
+            <Typography sx={{ mb: 0.75 }}>{isKhmer ? 'ប្រធានបទ' : 'Topic'}</Typography>
             <TextField
               fullWidth
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              placeholder="Enter exercise"
+              placeholder={isKhmer ? 'បញ្ចូលលំហាត់' : 'Enter exercise'}
             />
           </Box>
 
@@ -255,7 +288,7 @@ export default function FlashcardBoard() {
               "&:hover": { backgroundColor: "#F5DEA0" },
             }}
           >
-            Generate
+            {isKhmer ? 'បង្កើត' : 'Generate'}
           </Button>
 
           <Button
@@ -268,7 +301,7 @@ export default function FlashcardBoard() {
               "&:hover": { backgroundColor: "#97D2E7" },
             }}
           >
-            Clear
+            {isKhmer ? 'សម្អាត' : 'Clear'}
           </Button>
         </Stack>
       </Box>
@@ -328,7 +361,7 @@ export default function FlashcardBoard() {
                   }}
                 >
                   <Typography fontWeight="bold" mb={1}>
-                    {generatedCard.backTitle}
+                    {isKhmer ? 'ចម្លើយ' : generatedCard.backTitle}
                   </Typography>
                   <Typography>
                     {generatedCard.backExplanation}
@@ -339,14 +372,14 @@ export default function FlashcardBoard() {
 
             <Stack direction="row" spacing={2} mt={2}>
               <Button onClick={handlePrev} disabled={index === 0}>
-                Prev
+                {isKhmer ? 'មុន' : 'Prev'}
               </Button>
 
               <Button
                 onClick={handleNext}
                 disabled={index === cards.length - 1}
               >
-                Next
+                {isKhmer ? 'បន្ទាប់' : 'Next'}
               </Button>
             </Stack>
 
@@ -363,7 +396,7 @@ export default function FlashcardBoard() {
               p: 3,
             }}
           >
-            No flashcard yet
+            {isKhmer ? 'មិនទាន់មានកាតរំលឹកទេ' : 'No flashcard yet'}
           </Box>
         )}
       </Box>

@@ -6,8 +6,9 @@ import { useNavigate } from 'react-router-dom';
 const MATH_SYMBOLS = ['∑', '∫', 'π', '√', 'θ', 'x²', '∞', '∂'];
 
 export default function HeroSection() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const navigate = useNavigate();
+  const isKhmer = locale === 'km';
   return (
     <Box sx={{ position: 'relative', py: { xs: 4, md: 8 }, overflow: 'hidden' }}>
       <Container maxWidth="lg">
@@ -131,7 +132,7 @@ export default function HeroSection() {
                 endIcon={<ArrowRight size={18} />}
                 onClick={() => navigate('/chapter')}
               >
-                {t('start_learning', 'Start Learning')}
+                {isKhmer ? 'ចាប់ផ្តើមរៀន' : t('start_learning', 'Start Learning')}
               </Button>
             </Box>
           </Box>

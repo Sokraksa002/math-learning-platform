@@ -54,7 +54,7 @@ export default function Certificate() {
       setCertificate(res);
     } catch (err) {
       console.error("❌ issue error:", err);
-      alert("Failed to issue certificate");
+      alert("មិនអាចចេញវិញ្ញាបនបត្របានទេ");
     } finally {
       setIssuing(false);
     }
@@ -121,15 +121,15 @@ export default function Certificate() {
           }}
         >
           <Typography variant="h4" fontWeight={900}>
-            🎓 Certificate Center
+            🎓 មជ្ឈមណ្ឌលវិញ្ញាបនបត្រ
           </Typography>
 
           <Typography mt={1}>
-            Complete all lessons + quizzes ≥80%
+            បញ្ចប់មេរៀន និងកម្រងសំណួរទាំងអស់ ≥80%
           </Typography>
 
           <Typography mt={2}>
-            {eligibility.completedLessons}/{eligibility.totalLessons} lessons
+            {eligibility.completedLessons}/{eligibility.totalLessons} មេរៀន
           </Typography>
         </Paper>
 
@@ -137,12 +137,12 @@ export default function Certificate() {
         <Paper sx={{ p: 3, mb: 3 }}>
           <Stack spacing={1}>
             <Chip
-              label={`Lessons: ${eligibility.completedLessons}/${eligibility.totalLessons}`}
+              label={`មេរៀន: ${eligibility.completedLessons}/${eligibility.totalLessons}`}
               color={isLessonCompleted ? "success" : "default"}
             />
 
             <Chip
-              label={`Quizzes: ${eligibility.completedQuizzes}/${eligibility.totalLessons}`}
+              label={`កម្រងសំណួរ: ${eligibility.completedQuizzes}/${eligibility.totalLessons}`}
               color={
                 eligibility.completedQuizzes === eligibility.totalLessons
                   ? "success"
@@ -151,7 +151,7 @@ export default function Certificate() {
             />
 
             <Chip
-              label={`Score: ${eligibility.averageScore}%`}
+              label={`ពិន្ទុ: ${eligibility.averageScore}%`}
               color={
                 eligibility.averageScore >= 80 ? "success" : "warning"
               }
@@ -178,7 +178,7 @@ export default function Certificate() {
             >
               <Box>
                 <Chip
-                  label={completed ? "✅ Completed" : "🔒 Locked"}
+                  label={completed ? "✅ បានបញ្ចប់" : "🔒 បានបិទ"}
                   color={completed ? "success" : "default"}
                   size="small"
                 />
@@ -189,8 +189,8 @@ export default function Certificate() {
 
                 <Typography color="text.secondary">
                   {completed
-                    ? "✔ Quiz completed"
-                    : "❌ Quiz not completed"}
+                    ? "✔ កម្រងសំណួរបានបញ្ចប់"
+                    : "❌ កម្រងសំណួរមិនទាន់បញ្ចប់"}
                 </Typography>
               </Box>
 
@@ -200,7 +200,7 @@ export default function Certificate() {
                   navigate(`/quiz/paper/${lesson.lessonId}`)
                 }
               >
-                Go Quiz ✅
+                ទៅកាន់កម្រងសំណួរ ✅
               </Button>
             </Paper>
           );
@@ -211,7 +211,7 @@ export default function Certificate() {
           {eligibility.eligible ? (
             <>
               <Typography fontWeight={900} color="green">
-                🎉 Ready to get your certificate!
+                🎉 ត្រៀមរួចរាល់ដើម្បីទទួលវិញ្ញាបនបត្រ!
               </Typography>
 
               <Button
@@ -220,12 +220,12 @@ export default function Certificate() {
                 onClick={handleIssueCertificate}
                 disabled={issuing}
               >
-                {issuing ? "Issuing..." : "Issue Certificate ✅"}
+                {issuing ? "កំពុងចេញ..." : "ចេញវិញ្ញាបនបត្រ ✅"}
               </Button>
             </>
           ) : (
             <Typography color="error">
-              🔒 Complete all requirements
+              🔒 បំពេញលក្ខខណ្ឌទាំងអស់
             </Typography>
           )}
         </Paper>
@@ -234,11 +234,11 @@ export default function Certificate() {
         {certificate && (
           <Paper sx={{ p: 3, mt: 3 }}>
             <Typography fontWeight={900}>
-              ✅ Certificate Issued!
+              ✅ បានចេញវិញ្ញាបនបត្រ!
             </Typography>
 
             <Typography mt={1}>
-              Code: {certificate.certificateCode}
+              កូដ: {certificate.certificateCode}
             </Typography>
 
             <Button
@@ -246,7 +246,7 @@ export default function Certificate() {
               sx={{ mt: 2 }}
               onClick={() => navigate("/certificate/view")}
             >
-              View / Download Certificate 📄
+              មើល / ទាញយកវិញ្ញាបនបត្រ 📄
             </Button>
           </Paper>
         )}

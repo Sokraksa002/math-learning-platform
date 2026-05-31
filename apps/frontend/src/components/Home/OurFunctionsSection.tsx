@@ -10,7 +10,7 @@ export default function OurFunctionsSection() {
 
   const features = [
     {
-      title: t('nav.chapter', 'Chapter'),
+      title: t('nav.chapter', 'ជំពូក'),
       titleKhmer: t('chapter.khmer', 'ជំពូក'),
       description: t(
         'components.Home.OurFunctionsSection.chapter_desc',
@@ -22,7 +22,7 @@ export default function OurFunctionsSection() {
       path: '/chapter',
     },
     {
-      title: t('nav.quiz', 'Quiz Practice'),
+      title: t('nav.quiz', 'កម្រងសំណួរ'),
       titleKhmer: t('quiz.khmer', 'ធ្វើតេស្ត'),
       description: t(
         'components.Home.OurFunctionsSection.quiz_desc',
@@ -34,7 +34,7 @@ export default function OurFunctionsSection() {
       path: '/quiz',
     },
     {
-      title: t('flashcard.flashcardQA', 'Flashcard'),
+      title: t('flashcard.flashcardQA', 'សំណួរ និង ចម្លើយកាតរំលឹក'),
       titleKhmer: t('flashcard.khmer', 'កាតបង្រៀន'),
       description: t(
         'components.Home.OurFunctionsSection.flashcard_desc',
@@ -46,7 +46,7 @@ export default function OurFunctionsSection() {
       path: '/flashcard',
     },
     {
-      title: t('focus.title', 'Focus Timer'),
+      title: t('focus.title', 'ម៉ាស៊ីនផ្តោត'),
       titleKhmer: t('focus.khmer', 'ផ្តោតលើគោលដៅ'),
       description: t(
         'components.Home.OurFunctionsSection.focus_desc',
@@ -58,7 +58,7 @@ export default function OurFunctionsSection() {
       path: '/focus',
     },
     {
-      title: t('certificate.title', 'Certificate'),
+      title: t('certificate.title', 'វិញ្ញាបនបត្រ'),
       titleKhmer: t('certificate.khmer', 'វិក័យប័ត្រ'),
       description: t(
         'components.Home.OurFunctionsSection.certificate_desc',
@@ -84,7 +84,7 @@ export default function OurFunctionsSection() {
             fontSize: { xs: '28px', md: '36px' },
           }}
         >
-          {t('components.Home.OurFunctionsSection.our_functions', 'Our Features')}
+          {t('components.Home.OurFunctionsSection.our_functions', 'មុខងាររបស់យើង')}
         </Typography>
         <Typography
           sx={{

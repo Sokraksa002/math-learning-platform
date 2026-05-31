@@ -10,9 +10,6 @@ import {
   DialogActions,
   TextField,
   Button,
-  IconButton,
-  Grid,
-  Chip,
 } from "@mui/material";
 
 interface EmotionData {
@@ -35,7 +32,7 @@ export default function EmotionCalendar() {
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [selectedEmotion, setSelectedEmotion] = useState<string>("😊");
   const [note, setNote] = useState("");
-  const [animatedDates, setAnimatedDates] = useState<Set<string>>(new Set());
+  // animatedDates removed — compact UI does not use per-day animation
 
   useEffect(() => {
     const saved = localStorage.getItem("emotionCalendar");
@@ -71,14 +68,7 @@ export default function EmotionCalendar() {
       const newData = { ...emotionData };
       newData[selectedDate] = { emotion: selectedEmotion, note };
       saveData(newData);
-      setAnimatedDates(prev => new Set([...prev, selectedDate]));
-      setTimeout(() => {
-        setAnimatedDates(prev => {
-          const next = new Set(prev);
-          next.delete(selectedDate);
-          return next;
-        });
-      }, 600);
+      // no animation for compact view
     }
     setOpenDialog(false);
   };
@@ -111,6 +101,9 @@ export default function EmotionCalendar() {
     days.push(i);
   }
 
+  const emotionCount = Object.keys(emotionData).length;
+  const emptyCount = Math.max(daysInMonth - emotionCount, 0);
+
   const monthNames = [
     "January", "February", "March", "April", "May", "June",
     "July", "August", "September", "October", "November", "December"
@@ -119,119 +112,214 @@ export default function EmotionCalendar() {
   return (
     <Paper
       sx={{
-        p: 3,
-        mt: 4,
-        borderRadius: 3,
-        background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
-        animation: "slideInUp 0.6s ease-out",
+        p: { xs: 1.25, md: 2 },
+        mt: 2.5,
+        borderRadius: 3.5,
+        background: "#ffffff",
+        boxShadow: "0 8px 24px rgba(15, 23, 42, 0.05)",
+        border: "1px solid rgba(226, 232, 240, 0.95)",
+        animation: "slideInUp 0.5s ease-out",
         "@keyframes slideInUp": {
-          from: { opacity: 0, transform: "translateY(20px)" },
+          from: { opacity: 0, transform: "translateY(10px)" },
           to: { opacity: 1, transform: "translateY(0)" },
         },
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-        <Typography variant="h6" fontWeight={700}>
-          🎭 Mood & Reflection Calendar
-        </Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <IconButton size="small" onClick={handlePrevMonth} sx={{ "&:hover": { backgroundColor: "rgba(0,0,0,0.1)" } }}>
-            <Typography component="span" fontSize="1.1rem" lineHeight={1}>
-              ←
-            </Typography>
-          </IconButton>
-          <Typography variant="body2" fontWeight={600} sx={{ minWidth: 160, textAlign: "center" }}>
-            {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+      {/* Header */}
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: { xs: 'flex-start', md: 'center' },
+          gap: 2,
+          mb: 2,
+          flexDirection: { xs: 'column', md: 'row' },
+        }}
+      >
+        <Box>
+          <Typography sx={{ fontWeight: 900, fontSize: { xs: 17, md: 22 }, letterSpacing: -0.35 }}>
+            Week: {monthNames[currentDate.getMonth()]}
           </Typography>
-          <IconButton size="small" onClick={handleNextMonth} sx={{ "&:hover": { backgroundColor: "rgba(0,0,0,0.1)" } }}>
-            <Typography component="span" fontSize="1.1rem" lineHeight={1}>
-              →
-            </Typography>
-          </IconButton>
+        </Box>
+
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, width: { xs: '100%', md: 'auto' }, flexWrap: 'wrap' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.25 }}>
+            <Button variant="text" onClick={handlePrevMonth} sx={{ minWidth: 24, height: 28, borderRadius: 999, color: '#64748b', fontWeight: 900, px: 0.6 }}>‹</Button>
+            <Button variant="text" onClick={handleNextMonth} sx={{ minWidth: 24, height: 28, borderRadius: 999, color: '#64748b', fontWeight: 900, px: 0.6 }}>›</Button>
+          </Box>
+
+          <TextField
+            size="small"
+            placeholder="Search for deadlines or meetings..."
+            sx={{
+              width: { xs: '100%', md: 235 },
+              '& .MuiOutlinedInput-root': {
+                borderRadius: 999,
+                background: '#fff',
+                  height: 34,
+                  fontSize: 12,
+                boxShadow: '0 1px 3px rgba(15, 23, 42, 0.06)',
+              },
+            }}
+          />
         </Box>
       </Box>
 
-      <Grid container spacing={0.5} sx={{ mb: 1 }}>
-        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-          <Grid item xs={12 / 7} key={day}>
-            <Typography variant="caption" fontWeight={700} sx={{ textAlign: "center", display: "block", color: "#666" }}>
-              {day}
-            </Typography>
-          </Grid>
+      {/* View Tabs */}
+      <Box sx={{ display: 'flex', gap: 0.6, mb: 1.25, flexWrap: 'wrap' }}>
+        {['Day', 'Week', 'Month'].map((v, index) => (
+          <Button
+            key={v}
+            variant={index === 1 ? 'contained' : 'outlined'}
+            size="small"
+            sx={{
+              borderRadius: 999,
+              textTransform: 'none',
+              px: 1.15,
+              py: 0.3,
+              fontWeight: 700,
+              fontSize: 11.5,
+              minWidth: 84,
+              backgroundColor: index === 1 ? '#4338ca' : 'transparent',
+              color: index === 1 ? '#ffffff' : '#4338ca',
+              borderColor: index === 1 ? '#4338ca' : 'rgba(67,56,202,0.35)',
+              boxShadow: index === 1 ? '0 10px 18px rgba(67,56,202,0.22)' : 'none',
+              '&:hover': {
+                backgroundColor: index === 1 ? '#3730a3' : 'rgba(67,56,202,0.06)',
+              },
+            }}
+          >
+            {v}
+          </Button>
         ))}
-      </Grid>
+      </Box>
 
-      <Grid container spacing={0.5}>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(7, minmax(0, 1fr))',
+          border: '1px solid rgba(226, 232, 240, 1)',
+          borderRadius: 2.5,
+          overflow: 'hidden',
+          background: '#fff',
+        }}
+      >
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+          <Box
+            key={day}
+            sx={{
+              py: 0.9,
+              textAlign: 'center',
+              borderRight: '1px solid rgba(226, 232, 240, 1)',
+              background: 'linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%)',
+              '&:last-of-type': { borderRight: 'none' },
+            }}
+          >
+            <Typography sx={{ fontSize: 11.5, fontWeight: 700, color: '#94a3b8' }}>{day}</Typography>
+          </Box>
+        ))}
+
         {days.map((day, index) => {
           const dateStr = day ? `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${day}` : null;
           const hasEmotion = dateStr && emotionData[dateStr];
-          const isAnimating = dateStr && animatedDates.has(dateStr);
 
           return (
-            <Grid item xs={12 / 7} key={index}>
-              <Paper
+            <Box
+              key={index}
+              sx={{
+                minHeight: { xs: 78, md: 100 },
+                borderRight: '1px solid rgba(226, 232, 240, 1)',
+                borderTop: '1px solid rgba(226, 232, 240, 1)',
+                background: day ? '#fff' : '#fbfdff',
+                '&:nth-of-type(7n)': { borderRight: 'none' },
+              }}
+            >
+              <Box
                 onClick={() => day && handleDateClick(day)}
                 sx={{
-                  p: 1,
-                  textAlign: "center",
-                  minHeight: 70,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  background: day ? "white" : "transparent",
-                  cursor: day ? "pointer" : "default",
-                  border: hasEmotion ? "2px solid #667eea" : "1px solid #e0e0e0",
-                  borderRadius: 1.5,
-                  transition: "all 0.3s ease",
-                  animation: isAnimating ? "pulse 0.6s ease-out" : "none",
-                  "@keyframes pulse": {
-                    "0%": { transform: "scale(1)" },
-                    "50%": { transform: "scale(1.15)" },
-                    "100%": { transform: "scale(1)" },
-                  },
-                  "&:hover": day ? { boxShadow: "0 4px 12px rgba(102, 126, 234, 0.3)", transform: "translateY(-2px)" } : {},
+                  height: { xs: 78, md: 100 },
+                  borderRadius: 0,
+                  background: day
+                    ? hasEmotion
+                      ? 'linear-gradient(180deg, #f8f8ff 0%, #fff 100%)'
+                      : '#fff'
+                    : 'transparent',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  p: 0.85,
+                  cursor: day ? 'pointer' : 'default',
+                  transition: 'background-color 0.16s ease, box-shadow 0.16s ease',
+                  '&:hover': day
+                    ? {
+                        backgroundColor: '#f8fbff',
+                        boxShadow: 'inset 0 0 0 1px rgba(79,70,229,0.12)',
+                      }
+                    : {},
                 }}
               >
-                {day && (
+                {day ? (
                   <>
-                    <Typography variant="caption" fontWeight={600} sx={{ mb: 0.5 }}>
-                      {day}
-                    </Typography>
-                    {hasEmotion ? (
-                      <Typography sx={{ fontSize: "1.8rem", animation: "bounce 0.6s ease-out", "@keyframes bounce": { "0%": { transform: "translateY(-10px)" }, "100%": { transform: "translateY(0)" } } }}>
-                        {emotionData[dateStr]?.emotion}
-                      </Typography>
-                    ) : (
-                      <Typography variant="caption" sx={{ color: "#ccc" }}>
-                        Click
-                      </Typography>
-                    )}
+                    <Typography sx={{ fontSize: 10.5, fontWeight: 800, color: hasEmotion ? '#4338ca' : '#64748b' }}>{day}</Typography>
+
+                    <Box sx={{ mt: 0.75, display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-start', flex: 1 }}>
+                      {hasEmotion ? (
+                        <Box
+                          sx={{
+                            px: 1,
+                            py: 0.45,
+                            borderRadius: 1.5,
+                            background: `${emotionData[dateStr]?.emotion ? '#ede9fe' : '#f1f5f9'}`,
+                            color: '#4338ca',
+                            fontSize: 11,
+                            fontWeight: 700,
+                            maxWidth: '100%',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            whiteSpace: 'nowrap',
+                          }}
+                        >
+                          {emotionData[dateStr]?.emotion} {emotionData[dateStr]?.note ? `• ${emotionData[dateStr].note}` : ''}
+                        </Box>
+                      ) : (
+                        <Typography sx={{ fontSize: 11, color: '#cbd5e1' }}> </Typography>
+                      )}
+                    </Box>
                   </>
-                )}
-              </Paper>
-            </Grid>
+                ) : null}
+              </Box>
+            </Box>
           );
         })}
-      </Grid>
+      </Box>
 
-      <Box sx={{ mt: 3, pt: 2, borderTop: "1px solid #ddd" }}>
-        <Typography variant="caption" fontWeight={600} sx={{ display: "block", mb: 1 }}>
-          Emotion Legend:
-        </Typography>
-        <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap" }}>
+      {/* Legend */}
+      <Box sx={{ mt: 1.5, pt: 1.25, borderTop: '1px solid rgba(148, 163, 184, 0.12)' }}>
+        <Box sx={{ display: 'flex', gap: 0.65, flexWrap: 'wrap', mb: 0.9 }}>
+          <Box sx={{ px: 1.1, py: 0.55, borderRadius: 999, background: 'linear-gradient(180deg, #eff6ff 0%, #ffffff 100%)', border: '1px solid rgba(59,130,246,0.10)' }}>
+            <Typography sx={{ fontWeight: 900, fontSize: 11, color: '#1d4ed8' }}>{emotionCount} tracked days</Typography>
+          </Box>
+          <Box sx={{ px: 1.1, py: 0.55, borderRadius: 999, background: 'linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)', border: '1px solid rgba(148,163,184,0.14)' }}>
+            <Typography sx={{ fontWeight: 800, fontSize: 11, color: '#475569' }}>{emptyCount} open days</Typography>
+          </Box>
+        </Box>
+        <Box sx={{ display: 'flex', gap: 0.6, flexWrap: 'wrap' }}>
           {emotions.map((e) => (
-            <Chip
+            <Box
               key={e.emoji}
-              label={`${e.emoji} ${e.label}`}
-              size="small"
               sx={{
-                backgroundColor: `${e.color}30`,
-                border: `2px solid ${e.color}`,
-                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 0.4,
+                px: 0.8,
+                py: 0.42,
+                borderRadius: 999,
+                background: `${e.color}22`,
+                border: `1px solid ${e.color}55`,
               }}
-            />
+            >
+              <Typography sx={{ fontSize: 12 }}>{e.emoji}</Typography>
+              <Typography sx={{ fontSize: 10.5, fontWeight: 700, color: '#475569' }}>{e.label}</Typography>
+            </Box>
           ))}
         </Box>
       </Box>

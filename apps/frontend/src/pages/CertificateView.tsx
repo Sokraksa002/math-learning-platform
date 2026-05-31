@@ -111,10 +111,12 @@ export default function CertificateView() {
 
           <Box sx={{ position: 'relative', zIndex: 1, height: '100%', p: { xs: 4, md: 7 }, display: 'flex', flexDirection: 'column' }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                <Box sx={{ width: 22, height: 22, transform: 'rotate(45deg)', background: 'linear-gradient(135deg, #0f172a, #2563eb)' }} />
-                <Typography sx={{ fontSize: 12, letterSpacing: 1.6, color: 'text.secondary', fontWeight: 700 }}>
-                  COMPANY NAME
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
+                <Box sx={{ width: 96, height: 96, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 56, borderRadius: 1 }}>
+                  📐
+                </Box>
+                <Typography sx={{ fontSize: 32, letterSpacing: 3, color: 'text.secondary', fontWeight: 900 }}>
+                  KANIT
                 </Typography>
               </Box>
               <Box sx={{ width: 110, height: 110, borderRadius: '50%', background: 'radial-gradient(circle at 35% 35%, #ffffff 0, #eff6ff 45%, #dbeafe 100%)', border: '6px solid #93c5fd', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 8px 20px rgba(37,99,235,0.18)' }}>

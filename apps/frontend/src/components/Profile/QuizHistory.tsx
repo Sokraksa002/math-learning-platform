@@ -31,9 +31,50 @@ const formatDate = (dateString: string) =>
     minute: "2-digit",
   });
 
+const LESSON_TITLE_KM: Record<string, string> = {
+  "Lesson 1 - Complex Numbers": "មេរៀនទី 1 - ចំនួនកុំផ្លិច",
+  "Lesson 2 - Conic Sections": "មេរៀនទី 2 - កោនិក",
+  "Lesson 3 - Derivatives": "មេរៀនទី 3 - ដេរីវេ",
+  "Lesson 4 - Differential Equations": "មេរៀនទី 4 - សមីការឌីផេរ៉ង់ស្យែល",
+  "Lesson 5 - Functions": "មេរៀនទី 5 - អនុគមន៍",
+  "Lesson 6 - Integrals": "មេរៀនទី 6 - អាំងតេក្រាល",
+  "Lesson 7 - Limits": "មេរៀនទី 7 - លីមីត",
+  "Lesson 8 - Probability": "មេរៀនទី 8 - ប្រូបាប៊ីលីតេ",
+};
+
+const LESSON_SLUG_KM: Record<string, string> = {
+  "grade12-complex": "មេរៀនទី 1 - ចំនួនកុំផ្លិច",
+  "grade12-conics": "មេរៀនទី 2 - កោនិក",
+  "grade12-derivatives": "មេរៀនទី 3 - ដេរីវេ",
+  "grade12-differential": "មេរៀនទី 4 - សមីការឌីផេរ៉ង់ស្យែល",
+  "grade12-functions": "មេរៀនទី 5 - អនុគមន៍",
+  "grade12-integrals": "មេរៀនទី 6 - អាំងតេក្រាល",
+  "grade12-limits": "មេរៀនទី 7 - លីមីត",
+  "grade12-probability": "មេរៀនទី 8 - ប្រូបាប៊ីលីតេ",
+};
+
+const localizeAttemptTitle = (value: string, locale: string): string => {
+  const trimmed = value.trim();
+  if (locale !== "km") return trimmed;
+
+  if (LESSON_TITLE_KM[trimmed]) return LESSON_TITLE_KM[trimmed];
+  if (LESSON_SLUG_KM[trimmed]) return LESSON_SLUG_KM[trimmed];
+
+  const normalized = trimmed.match(/^Lesson\s*(\d+)\s*-\s*(.+)$/i);
+  if (!normalized) return trimmed;
+
+  const lessonNumber = normalized[1];
+  const topic = normalized[2].trim();
+  const topicKm = LESSON_TITLE_KM[`Lesson ${lessonNumber} - ${topic}`] ?? topic;
+  return `មេរៀនទី ${lessonNumber} - ${topicKm.replace(/^មេរៀនទី\s*\d+\s*-\s*/, "")}`;
+};
+
+const tOr = (t: (key: string, fallback: string) => string, key: string, fallback: string) =>
+  t(key, fallback);
+
 export default function QuizHistory() {
   const navigate = useNavigate();
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const quizAttempts = getQuizHistory();
   const [openAttemptId, setOpenAttemptId] = useState<string | null>(quizAttempts[0]?.date ?? null);
 
@@ -69,13 +110,19 @@ export default function QuizHistory() {
           }}
         >
           <Typography variant="overline" sx={{ opacity: 0.85, letterSpacing: 1.2 }}>
-            {t('pages.QuizHistory.quiz_history', 'Quiz history')}
+            {tOr(t, 'pages.QuizHistory.quiz_history', locale === 'km' ? 'ប្រវត្តិកម្រងសំណួរ' : 'Quiz history')}
           </Typography>
           <Typography variant="h4" fontWeight={800} mt={1} mb={1}>
-            {t('pages.QuizHistory.your_quiz_attempts', 'Your quiz attempts')}
+            {tOr(t, 'pages.QuizHistory.your_quiz_attempts', locale === 'km' ? 'ការប្រឡងរបស់អ្នក' : 'Your quiz attempts')}
           </Typography>
           <Typography sx={{ maxWidth: 720, opacity: 0.9 }}>
-            {t('pages.QuizHistory.subtitle', 'Review your recent attempts, compare scores, and reopen any review that is still within the 7-day window.')}
+            {tOr(
+              t,
+              'pages.QuizHistory.subtitle',
+              locale === 'km'
+                ? 'ពិនិត្យមើលការប្រឡងថ្មីៗ ប្រៀបធៀបពិន្ទុ និងបើកមើលការត្រួតពិនិត្យឡើងវិញក្នុងរយៈពេល 7 ថ្ងៃ។'
+                : 'Review your recent attempts, compare scores, and reopen any review that is still within the 7-day window.'
+            )}
           </Typography>
         </Paper>
 
@@ -83,14 +130,20 @@ export default function QuizHistory() {
           <Stack direction={{ xs: "column", sm: "row" }} spacing={2} justifyContent="space-between" alignItems={{ sm: "center" }}>
             <Box>
               <Typography fontWeight={800} color="#1d4ed8">
-                {t('pages.QuizHistory.jump_back_into_quizzes', 'Jump back into quizzes')}
+                {tOr(t, 'pages.QuizHistory.jump_back_into_quizzes', locale === 'km' ? 'ត្រឡប់ទៅកម្រងសំណួរ' : 'Jump back into quizzes')}
               </Typography>
               <Typography color="text.secondary">
-                {t('pages.QuizHistory.quiz_page_hint', 'Open the quiz page directly when you want to practice again.')}
+                {tOr(
+                  t,
+                  'pages.QuizHistory.quiz_page_hint',
+                  locale === 'km'
+                    ? 'បើកទំព័រកម្រងសំណួរដោយផ្ទាល់ នៅពេលអ្នកចង់ហ្វឹកហាត់ម្ដងទៀត។'
+                    : 'Open the quiz page directly when you want to practice again.'
+                )}
               </Typography>
             </Box>
             <Button variant="contained" onClick={() => navigate("/quiz") }>
-              {t('pages.QuizHistory.go_to_quiz', 'Go to Quiz')}
+              {tOr(t, 'pages.QuizHistory.go_to_quiz', locale === 'km' ? 'ទៅកាន់កម្រងសំណួរ' : 'Go to Quiz')}
             </Button>
           </Stack>
         </Paper>
@@ -105,7 +158,7 @@ export default function QuizHistory() {
         >
           <Paper sx={{ p: 2.5, borderRadius: 3, border: "1px solid #dbeafe", boxShadow: "0 10px 24px rgba(37, 99, 235, 0.06)" }}>
             <Typography color="text.secondary" fontSize="0.9rem">
-              {t('pages.QuizHistory.total_attempts', 'Total attempts')}
+              {tOr(t, 'pages.QuizHistory.total_attempts', locale === 'km' ? 'ចំនួនការប្រឡងសរុប' : 'Total attempts')}
             </Typography>
             <Typography variant="h4" fontWeight={800} color="#1d4ed8">
               {stats.totalAttempts}
@@ -114,7 +167,7 @@ export default function QuizHistory() {
 
           <Paper sx={{ p: 2.5, borderRadius: 3, border: "1px solid #dbeafe", boxShadow: "0 10px 24px rgba(37, 99, 235, 0.06)" }}>
             <Typography color="text.secondary" fontSize="0.9rem">
-              {t('pages.QuizHistory.average_score', 'Average score')}
+              {tOr(t, 'pages.QuizHistory.average_score', locale === 'km' ? 'ពិន្ទុមធ្យម' : 'Average score')}
             </Typography>
             <Typography variant="h4" fontWeight={800} color="#1d4ed8">
               {stats.averageScore}%
@@ -123,7 +176,7 @@ export default function QuizHistory() {
 
           <Paper sx={{ p: 2.5, borderRadius: 3, border: "1px solid #dbeafe", boxShadow: "0 10px 24px rgba(37, 99, 235, 0.06)" }}>
             <Typography color="text.secondary" fontSize="0.9rem">
-              {t('pages.QuizHistory.reviewable_now', 'Reviewable now')}
+              {tOr(t, 'pages.QuizHistory.reviewable_now', locale === 'km' ? 'អាចត្រួតពិនិត្យឥឡូវនេះ' : 'Reviewable now')}
             </Typography>
             <Typography variant="h4" fontWeight={800} color="#1d4ed8">
               {stats.reviewableAttempts}
@@ -135,13 +188,15 @@ export default function QuizHistory() {
           {quizAttempts.length === 0 ? (
             <Paper sx={{ p: 3, borderRadius: 3, textAlign: 'center', border: '1px solid #dbeafe' }}>
               <Typography fontWeight={800} mb={1}>
-                No quiz attempts yet
+                {locale === 'km' ? 'មិនទាន់មានការប្រឡងទេ' : 'No quiz attempts yet'}
               </Typography>
               <Typography color="text.secondary" mb={2}>
-                Finish a quiz and your recent attempts will appear here.
+                {locale === 'km'
+                  ? 'បញ្ចប់កម្រងសំណួរមួយ ហើយការប្រឡងថ្មីៗរបស់អ្នកនឹងបង្ហាញនៅទីនេះ។'
+                  : 'Finish a quiz and your recent attempts will appear here.'}
               </Typography>
               <Button variant="contained" onClick={() => navigate('/quiz')}>
-                Start a quiz
+                {locale === 'km' ? 'ចាប់ផ្តើមកម្រងសំណួរ' : 'Start a quiz'}
               </Button>
             </Paper>
           ) : null}
@@ -171,24 +226,28 @@ export default function QuizHistory() {
                   >
                     <Box sx={{ flex: 1 }}>
                       <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" sx={{ mb: 1 }}>
-                        <Chip label={isReviewAvailable ? "Open" : "Locked"} color={isReviewAvailable ? "success" : "default"} size="small" />
                         <Chip
-                          label={`${progress}% score`}
+                          label={isReviewAvailable ? (locale === 'km' ? 'បើក' : 'Open') : (locale === 'km' ? 'បានចាក់សោ' : 'Locked')}
+                          color={isReviewAvailable ? "success" : "default"}
+                          size="small"
+                        />
+                        <Chip
+                          label={locale === 'km' ? `ពិន្ទុ ${progress}%` : `${progress}% score`}
                           color={progress >= 80 ? "success" : progress >= 50 ? "warning" : "error"}
                           size="small"
                         />
                       </Stack>
 
                       <Typography variant="h6" fontWeight={800} mb={0.5}>
-                        {attempt.chapterTitle || attempt.quizTitle || attempt.lesson}
+                        {localizeAttemptTitle(attempt.chapterTitle || attempt.quizTitle || attempt.lesson, locale)}
                       </Typography>
 
                       <Typography color="text.secondary" mb={1}>
-                        {attempt.quizTitle || attempt.lesson}
+                        {localizeAttemptTitle(attempt.quizTitle || attempt.lesson, locale)}
                       </Typography>
 
                       <Typography color="text.secondary" fontSize="0.9rem">
-                        Attempted on {formatDate(attempt.date)}
+                        {locale === 'km' ? 'បានធ្វើនៅ' : 'Attempted on'} {formatDate(attempt.date)}
                       </Typography>
                     </Box>
 
@@ -204,18 +263,22 @@ export default function QuizHistory() {
                       />
                       <Typography color="text.secondary" fontSize="0.9rem" mb={2}>
                         {isReviewAvailable
-                          ? `${7 - daysDifference} day${7 - daysDifference !== 1 ? "s" : ""} left to review answers`
-                          : "Answer review expired after 7 days"}
+                          ? locale === 'km'
+                            ? `នៅសល់ ${7 - daysDifference} ថ្ងៃសម្រាប់ពិនិត្យចម្លើយ`
+                            : `${7 - daysDifference} day${7 - daysDifference !== 1 ? "s" : ""} left to review answers`
+                          : locale === 'km'
+                            ? 'ការពិនិត្យចម្លើយផុតកំណត់ក្រោយ 7 ថ្ងៃ'
+                            : 'Answer review expired after 7 days'}
                       </Typography>
                       <Stack spacing={1.2}>
                         <Button
                           variant={isOpen ? "contained" : "outlined"}
                           onClick={() => setOpenAttemptId(isOpen ? null : attempt.date)}
                         >
-                          {isOpen ? "Hide" : "Open"}
+                          {isOpen ? (locale === 'km' ? 'លាក់' : 'Hide') : (locale === 'km' ? 'បើក' : 'Open')}
                         </Button>
                         <Button variant="text" onClick={() => navigate("/quiz")}>
-                          Open Quiz
+                          {locale === 'km' ? 'បើកកម្រងសំណួរ' : 'Open Quiz'}
                         </Button>
                       </Stack>
                     </Box>
@@ -249,20 +312,20 @@ export default function QuizHistory() {
                                   }}
                                 >
                                   <Typography fontWeight={700}>
-                                    Question {index + 1}
+                                    {locale === 'km' ? `សំណួរ ${index + 1}` : `Question ${index + 1}`}
                                   </Typography>
                                   <Chip
-                                    label={isCorrect ? "Correct" : "Wrong"}
+                                    label={isCorrect ? (locale === 'km' ? 'ត្រឹមត្រូវ' : 'Correct') : (locale === 'km' ? 'ខុស' : 'Wrong')}
                                     color={isCorrect ? "success" : "error"}
                                     size="small"
                                   />
                                 </Box>
                                 <Typography mb={1}>{answer.question}</Typography>
                                 <Typography>
-                                  Your answer: <strong>{answer.selected}</strong>
+                                  {locale === 'km' ? 'ចម្លើយរបស់អ្នក៖' : 'Your answer:'} <strong>{answer.selected}</strong>
                                 </Typography>
                                 <Typography>
-                                  Correct answer: <strong>{answer.correct}</strong>
+                                  {locale === 'km' ? 'ចម្លើយត្រឹមត្រូវ៖' : 'Correct answer:'} <strong>{answer.correct}</strong>
                                 </Typography>
                                 <Typography fontSize="0.9rem" color="text.secondary" mt={1}>
                                   {answer.explanation}
@@ -281,10 +344,12 @@ export default function QuizHistory() {
                           }}
                         >
                           <Typography fontWeight={700} mb={0.5}>
-                            Review expired
+                            {locale === 'km' ? 'ការពិនិត្យផុតកំណត់' : 'Review expired'}
                           </Typography>
                           <Typography color="text.secondary" fontSize="0.9rem">
-                            Retake the quiz to review answers immediately after completion.
+                            {locale === 'km'
+                              ? 'ធ្វើកម្រងសំណួរម្ដងទៀត ដើម្បីពិនិត្យចម្លើយភ្លាមៗបន្ទាប់ពីបញ្ចប់។'
+                              : 'Retake the quiz to review answers immediately after completion.'}
                           </Typography>
                         </Paper>
                       )}

@@ -65,7 +65,7 @@ export default function Profile() {
 
               <ListItemButton onClick={() => navigate('/quiz-history')}>
                 <ListItemIcon><Quiz /></ListItemIcon>
-                <ListItemText primary={t('nav.quizHistory', 'My quiz attempts')} />
+                <ListItemText primary={t('nav.quizHistory', 'Quiz history')} />
               </ListItemButton>
 
               <ListItemButton onClick={() => navigate('/flashcard-history')}>

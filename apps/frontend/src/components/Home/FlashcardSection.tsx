@@ -4,7 +4,8 @@ import { useLocale } from '../../hooks/useLocale';
 import walk from '../../assets/walk.gif';
 
 export default function FlashcardSection() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const isKhmer = locale === "km";
 
   return (
     <Box sx={{ py: 8 }}>
@@ -33,10 +34,12 @@ export default function FlashcardSection() {
                 fontSize: 32,
               }}
             >
-              {t(
-                'components.Home.FlashcardSection.flashcards',
-                'Flashcards'
-              )}
+              {isKhmer
+                ? 'កាតរំលឹក'
+                : t(
+                    'components.Home.FlashcardSection.flashcards',
+                    'Flashcards'
+                  )}
             </Typography>
 
             <Typography
@@ -46,10 +49,12 @@ export default function FlashcardSection() {
                 mb: 3,
               }}
             >
-              {t(
-                'components.Home.FlashcardSection.best_approach',
-                'Let us show you the best approach to ace the test!'
-              )}
+              {isKhmer
+                ? 'យើងនឹងបង្ហាញវិធីល្អបំផុតសម្រាប់ការរៀន និងការប្រឡង!'
+                : t(
+                    'components.Home.FlashcardSection.best_approach',
+                    'Let us show you the best approach to ace the test!'
+                  )}
             </Typography>
 
             <Button
@@ -69,10 +74,12 @@ export default function FlashcardSection() {
                 },
               }}
             >
-              {t(
-                'components.Home.FlashcardSection.card_generate',
-                'Card Generate'
-              )}
+              {isKhmer
+                ? 'បង្កើតកាត'
+                : t(
+                    'components.Home.FlashcardSection.card_generate',
+                    'Card Generate'
+                  )}
             </Button>
           </Box>
 

@@ -34,6 +34,31 @@ type LocaleKey = "en" | "km";
 const truncate = (s: string, n = 120) =>
   s.length > n ? s.slice(0, n).trim() + "…" : s;
 
+const LESSON_TITLE_KM: Record<string, string> = {
+  "Complex Numbers": "ចំនួនកុំផ្លិច",
+  "Conic Sections": "កោនិក",
+  "Derivatives": "ដេរីវេ",
+  "Differential Equations": "សមីការឌីផេរ៉ង់ស្យែល",
+  "Functions": "អនុគមន៍",
+  "Integrals": "អាំងតេក្រាល",
+  "Limits": "លីមីត",
+  "Probability": "ប្រូបាប៊ីលីតេ",
+};
+
+const localizeKnownTitle = (value: string, locale: string): string => {
+  if (locale !== "km") return value;
+
+  const lessonMatch = value.match(/^Lesson\s*(\d+)\s*-\s*(.+)$/i);
+  if (lessonMatch) {
+    const number = lessonMatch[1];
+    const subject = lessonMatch[2].trim();
+    const translatedSubject = LESSON_TITLE_KM[subject] ?? subject;
+    return `មេរៀនទី ${number} - ${translatedSubject}`;
+  }
+
+  return LESSON_TITLE_KM[value] ?? value;
+};
+
 export default function LessonCard({
   lesson,
   completed = false,
@@ -61,7 +86,7 @@ export default function LessonCard({
   const rawTitle =
     lesson.title ?? lesson.fallbackTitle ?? `Lesson ${id}`;
 
-  const title =
+  const titleValue =
     typeof rawTitle === "object"
       ? rawTitle[safeLocale] ??
         rawTitle.en ??
@@ -69,8 +94,12 @@ export default function LessonCard({
         "Untitled"
       : String(rawTitle);
 
+  const title = localizeKnownTitle(titleValue, safeLocale);
+
   // ✅ DESCRIPTION
-  let description = "No description available.";
+  let description = safeLocale === "km"
+    ? "មិនមានការពិពណ៌នាទេ។"
+    : "No description available.";
   const content = lesson?.contentJson ?? null;
 
   try {
@@ -185,7 +214,7 @@ export default function LessonCard({
             >
               <CheckCircle sx={{ color: "#10B981" }} />
               <Typography fontWeight={700} fontSize={13}>
-                Completed
+                {safeLocale === "km" ? "បានបញ្ចប់" : "Completed"}
               </Typography>
             </Box>
           )}
@@ -200,7 +229,7 @@ export default function LessonCard({
             >
               <PlayArrow sx={{ color: "#3B82F6" }} />
               <Typography fontWeight={700} fontSize={13}>
-                Continue
+                {safeLocale === "km" ? "បន្ត" : "Continue"}
               </Typography>
             </Box>
           )}
@@ -215,7 +244,7 @@ export default function LessonCard({
             >
               <Lock sx={{ color: "#ffffff" }} />
               <Typography fontWeight={700} fontSize={13}>
-                Locked
+                {safeLocale === "km" ? "បានចាក់សោ" : "Locked"}
               </Typography>
             </Box>
           )}
@@ -250,12 +279,12 @@ export default function LessonCard({
           }}
         >
           {finalStatus === "completed"
-            ? "Review"
+            ? (safeLocale === "km" ? "ពិនិត្យមើល" : "Review")
             : finalStatus === "current"
-            ? "Continue"
+            ? (safeLocale === "km" ? "បន្ត" : "Continue")
             : finalStatus === "locked"
-            ? "Locked"
-            : "Start"}
+            ? (safeLocale === "km" ? "បានចាក់សោ" : "Locked")
+            : (safeLocale === "km" ? "ចាប់ផ្តើម" : "Start")}
         </Button>
       </CardActions>
     </Card>

@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { MenuBook } from "@mui/icons-material";
 import { useLocale } from "../../hooks/useLocale";
-import { getAllLessons } from "../../utils/api";
+import { getAllLessons, getCompletedLessons } from "../../utils/api";
 import type { Lesson } from "../../utils/api"; // ✅ FIXED
 import LessonCard from "./LessonCard";
 
@@ -17,49 +17,72 @@ export default function LessonList({
 }: {
   chapterName?: string;
 }) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const isKhmer = locale === "km";
 
   const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [completedIds, setCompletedIds] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
 
-    getAllLessons()
-      .then((data) => {
+    const readFallbackCompletedIds = () => {
+      try {
+        const raw = localStorage.getItem("completedLessonIds");
+        return raw ? JSON.parse(raw) : [];
+      } catch {
+        return [];
+      }
+    };
+
+    const loadLessons = async () => {
+      try {
+        const lessonData = await getAllLessons();
+
         if (!mounted) return;
-        setLessons(Array.isArray(data) ? data : []);
-      })
-      .catch((err: unknown) => {
+
+        setLessons(Array.isArray(lessonData) ? lessonData : []);
+      } catch (err: unknown) {
         console.error("getAllLessons failed", err);
 
         if (!mounted) return;
 
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          setError("Failed to load lessons");
-        }
-      })
-      .finally(() => {
-        if (mounted) setLoading(false);
-      });
+        setLessons([]);
+
+        setError(
+          isKhmer
+            ? "មិនអាចផ្ទុកមេរៀនបាន។ សូមព្យាយាមម្តងទៀត។"
+            : err instanceof Error
+              ? err.message
+              : "Failed to load lessons"
+        );
+      }
+    };
+
+    const loadCompletedIds = async () => {
+      try {
+        const completedData = await getCompletedLessons();
+
+        if (!mounted) return;
+
+        setCompletedIds(Array.isArray(completedData) ? completedData : []);
+      } catch {
+        if (!mounted) return;
+
+        setCompletedIds(readFallbackCompletedIds());
+      }
+    };
+
+    Promise.all([loadLessons(), loadCompletedIds()]).finally(() => {
+      if (mounted) setLoading(false);
+    });
 
     return () => {
       mounted = false;
     };
   }, []);
-
-  // ✅ Safe localStorage read
-  let completedIds: string[] = [];
-
-  try {
-    const raw = localStorage.getItem("completedLessonIds");
-    completedIds = raw ? JSON.parse(raw) : [];
-  } catch {
-    completedIds = [];
-  }
 
   const total = lessons.length;
 
@@ -80,7 +103,7 @@ export default function LessonList({
         {/* ✅ SHOW ERROR (FIXED UNUSED VAR) */}
         {error && (
           <Typography color="error" mb={2}>
-            {error}
+            {isKhmer ? "មិនអាចផ្ទុកមេរៀនបាន។ សូមព្យាយាមម្តងទៀត។" : error}
           </Typography>
         )}
 
@@ -105,16 +128,18 @@ export default function LessonList({
               {chapterName
                 ? `${t(
                     "components.Home.LessonList.chapter",
-                    "Chapter"
+                    isKhmer ? "ជំពូក" : "Chapter"
                   )}: ${chapterName}`
                 : t(
                     "components.Home.LessonList.lessons",
-                    "Lessons"
+                    isKhmer ? "មេរៀន" : "Lessons"
                   )}
             </Typography>
 
             <Typography sx={{ color: "#6B7280", fontSize: 13 }}>
-              {`${completedCount} / ${total} lessons completed`}
+              {isKhmer
+                ? `${completedCount} / ${total} មេរៀនបានបញ្ចប់`
+                : `${completedCount} / ${total} lessons completed`}
             </Typography>
           </Box>
 
@@ -129,14 +154,14 @@ export default function LessonList({
 
         {/* CONTENT */}
         {loading ? (
-          <Typography>Loading lessons...</Typography>
+          <Typography>{isKhmer ? "កំពុងផ្ទុកមេរៀន..." : "Loading lessons..."}</Typography>
         ) : lessons.length === 0 ? (
           <Box sx={{ textAlign: "center", py: 8 }}>
             <MenuBook
               sx={{ fontSize: 48, color: "#3B82F6", mb: 2 }}
             />
             <Typography sx={{ fontSize: 18, fontWeight: 700 }}>
-              No lessons available
+              {isKhmer ? "មិនមានមេរៀនទេ" : "No lessons available"}
             </Typography>
           </Box>
         ) : (

@@ -5,9 +5,15 @@
     "quiz": "Quiz",
     "flashcard": "Flashcard",
     "profile": "Profile",
-    "quizHistory": "My quiz attempts",
+    "focus": "Focus",
+    "certificate": "Certificate",
+    "history": "History",
+    "quizHistory": "Quiz history",
     "flashcardHistory": "Flashcard history",
-    "ability": "My Ability"
+    "ability": "My Ability",
+    "login": "Sign in",
+    "register": "Register",
+    "logout": "Log out"
   },
   "sidebar": {
     "admin": "Admin",
@@ -218,7 +224,17 @@
       }
     },
     "Chapter": {
-      "lets_study": "Let's study with us!"
+      "lets_study": "Let's study with us!",
+      "lessons": "Lessons"
+    },
+    "Home": {
+      "LessonList": {
+        "chapter": "Chapter",
+        "lessons": "Lessons",
+        "no_lessons": "No lessons available",
+        "loading": "Loading lessons...",
+        "completed_lessons": "Completed lessons"
+      }
     }
   },
   "pages": {
@@ -353,6 +369,13 @@
       "today": "Today",
       "quizzes_completed": "quizzes completed",
       "pick_a_chapter": "Pick a chapter"
+    },
+    "Lesson": {
+      "loading": "Loading lessons...",
+      "no_lessons": "No lessons available",
+      "lesson": "Lesson",
+      "lessons": "Lessons",
+      "chapter": "Chapter"
     },
     "Focus": {
       "focused_time_distribution": "Focused Time Distribution"

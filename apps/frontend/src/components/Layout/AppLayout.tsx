@@ -69,7 +69,7 @@ export const AppLayout = ({
         { icon: BookOpen, label: t("nav.flashcard"), path: "/flashcard" },
         { icon: BarChart3, label: t("nav.ability"), path: "/ability" },
         { icon: BadgeCheck, label: t("nav.certificate"), path: "/certificate" },
-        { icon: BookOpen, label: t("nav.history"), path: "/quiz-history" },
+        { icon: BookOpen, label: t("nav.quizHistory"), path: "/quiz-history" },
       ];
 
   const drawerWidth = sidebarExpanded ? 200 : 70;
@@ -90,6 +90,7 @@ export const AppLayout = ({
         color: "white",
         px: 1,
         pt: 1.5,
+        pb: 3,
       }}
     >
       {/* LOGO */}
@@ -140,7 +141,7 @@ export const AppLayout = ({
       <Divider sx={{ background: "rgba(255,255,255,0.2)" }} />
 
       {/* ✅ LANGUAGE SWITCH */}
-      <Box sx={{ textAlign: "center", mb: 1 }}>
+      <Box sx={{ textAlign: "center", mb: 2 }}>
         <Button
           size="small"
           onClick={() => setLocale("en")}
@@ -167,7 +168,7 @@ export const AppLayout = ({
       </Box>
 
       {/* LOGIN / LOGOUT */}
-      <Box>
+      <Box sx={{ mt: 1 }}>
         {isLoggedIn ? (
           <Button onClick={handleLogout} fullWidth sx={{ color: "white" }}>
             <LogOut size={17} />

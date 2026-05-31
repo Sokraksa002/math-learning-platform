@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { getChapters, getAllLessons } from "../../utils/api";
 import type { Lesson } from "../../utils/api";
 import { isValidUuid } from "../../utils/validators";
+import { useLocale } from "../../hooks/useLocale";
 
 // 🎨 Pastel colors
 const PASTEL_PALETTE = [
@@ -20,16 +21,51 @@ const PASTEL_PALETTE = [
   "#B2DFDB",
 ];
 
+const LESSON_TITLE_KM: Record<string, string> = {
+  "Complex Numbers": "ចំនួនកុំផ្លិច",
+  "Conic Sections": "កោនិក",
+  "Derivatives": "ដេរីវេ",
+  "Differential Equations": "សមីការឌីផេរ៉ង់ស្យែល",
+  "Functions": "អនុគមន៍",
+  "Integrals": "អាំងតេក្រាល",
+  "Limits": "លីមីត",
+  "Probability": "ប្រូបាប៊ីលីតេ",
+};
+
+const CHAPTER_TITLE_KM: Record<string, string> = {
+  "Grade 12 Mathematics": "គណិតវិទ្យា ថ្នាក់ទី១២",
+};
+
 // ✅ SAFE TEXT
-const getText = (value: unknown): string => {
+const getText = (value: unknown, locale: string): string => {
   if (typeof value === "string") return value;
 
   if (typeof value === "object" && value !== null) {
     const obj = value as Record<string, string>;
+    if (locale === "km") {
+      return obj.km ?? obj.en ?? "គ្មានចំណងជើង";
+    }
+
     return obj.en ?? obj.km ?? "Untitled";
   }
 
-  return "Untitled";
+  return locale === "km" ? "គ្មានចំណងជើង" : "Untitled";
+};
+
+const localizeKnownTitle = (value: string, locale: string): string => {
+  if (locale !== "km") return value;
+
+  if (CHAPTER_TITLE_KM[value]) return CHAPTER_TITLE_KM[value];
+
+  const lessonMatch = value.match(/^Lesson\s*(\d+)\s*-\s*(.+)$/i);
+  if (lessonMatch) {
+    const number = lessonMatch[1];
+    const subject = lessonMatch[2].trim();
+    const translatedSubject = LESSON_TITLE_KM[subject] ?? subject;
+    return `មេរៀនទី ${number} - ${translatedSubject}`;
+  }
+
+  return LESSON_TITLE_KM[value] ?? value;
 };
 
 type ChapterApi = {
@@ -40,6 +76,7 @@ type ChapterApi = {
 
 export default function ChapterLessonList() {
   const navigate = useNavigate();
+  const { locale } = useLocale();
 
   const [chapters, setChapters] = useState<ChapterApi[]>([]);
   const [lessonsByChapter, setLessonsByChapter] =
@@ -95,9 +132,9 @@ export default function ChapterLessonList() {
         <Box display="flex" flexDirection="column" gap={3}>
 
           {loadingChapters ? (
-            <Typography>Loading...</Typography>
+            <Typography>{locale === "km" ? "កំពុងផ្ទុក..." : "Loading..."}</Typography>
           ) : chapters.length === 0 ? (
-            <Typography>No chapters available</Typography>
+            <Typography>{locale === "km" ? "មិនមានជំពូកទេ" : "No chapters available"}</Typography>
           ) : (
             chapters.map((chapter, index) => {
               const idStr = String(chapter.id);
@@ -127,9 +164,12 @@ export default function ChapterLessonList() {
                     }}
                   >
                     <Typography sx={{ fontWeight: 700 }}>
-                      {getText(chapter.title) ||
-                        chapter.name ||
-                        "Untitled"}
+                      {localizeKnownTitle(
+                        getText(chapter.title, locale) ||
+                          chapter.name ||
+                          (locale === "km" ? "គ្មានចំណងជើង" : "Untitled"),
+                        locale,
+                      )}
                     </Typography>
 
                     <Box
@@ -162,7 +202,7 @@ export default function ChapterLessonList() {
                     >
                       {lessons.length === 0 ? (
                         <Typography color="text.secondary">
-                          No lessons
+                          {locale === "km" ? "មិនមានមេរៀន" : "No lessons"}
                         </Typography>
                       ) : (
                         lessons.map((lesson) => {
@@ -197,8 +237,12 @@ export default function ChapterLessonList() {
                                   color: "#1E293B",
                                 }}
                               >
-                                {getText(lesson.title) ||
-                                  lesson.titleKm}
+                                {localizeKnownTitle(
+                                  getText(lesson.title, locale) ||
+                                    lesson.titleKm ||
+                                    (locale === "km" ? "គ្មានចំណងជើង" : "Untitled"),
+                                  locale,
+                                )}
                               </Typography>
 
                               <Button

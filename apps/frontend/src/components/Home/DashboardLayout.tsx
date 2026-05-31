@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Avatar,
   Button,
 } from "@mui/material";
 import { BookOpen, Edit3, Clock, TrendingUp, CheckCircle } from "lucide-react";
@@ -13,7 +12,7 @@ import { useLocale } from "../../hooks/useLocale";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-import { protectedGet } from "../../utils/api";
+import { getProgress } from "../../utils/api";
 
 type ProgressData = {
   totalLessons: number;
@@ -24,8 +23,9 @@ type ProgressData = {
 };
 
 export default function DashboardLayout() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const navigate = useNavigate();
+  const isKhmer = locale === "km";
 
   const [progress, setProgress] = useState<ProgressData | null>(null);
 
@@ -33,10 +33,23 @@ export default function DashboardLayout() {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await protectedGet<ProgressData>("/api/progress");
-        setProgress(data);
+        const data = await getProgress();
+        setProgress({
+          totalLessons: data.totalLessons ?? 0,
+          completedLessons: data.completedLessons ?? 0,
+          progressPercent: data.progressPercent ?? 0,
+          totalQuizzes: data.totalQuizzes ?? 0,
+          averageScore: data.averageScore ?? 0,
+        });
       } catch (err) {
         console.error("Failed to load progress:", err);
+        setProgress({
+          totalLessons: 0,
+          completedLessons: 0,
+          progressPercent: 0,
+          totalQuizzes: 0,
+          averageScore: 0,
+        });
       }
     };
 
@@ -46,7 +59,7 @@ export default function DashboardLayout() {
   // ✅ Dynamic Stats
   const stats = [
     {
-      label: t("pages.Dashboard.chapters_done", "Chapters Done"),
+      label: isKhmer ? "មេរៀនបានបញ្ចប់" : t("pages.Dashboard.chapters_done", "Chapters Done"),
       value: progress
         ? `${progress.completedLessons}/${progress.totalLessons}`
         : "...",
@@ -54,13 +67,13 @@ export default function DashboardLayout() {
       color: "#3B82F6",
     },
     {
-      label: t("pages.Dashboard.quiz_accuracy", "Quiz Accuracy"),
+      label: isKhmer ? "ភាពត្រឹមត្រូវកម្រងសំណួរ" : t("pages.Dashboard.quiz_accuracy", "Quiz Accuracy"),
       value: progress ? `${progress.averageScore}%` : "...",
       icon: TrendingUp,
       color: "#10B981",
     },
     {
-      label: t("pages.Dashboard.progress", "Progress"),
+      label: isKhmer ? "វឌ្ឍនភាព" : t("pages.Dashboard.progress", "Progress"),
       value: progress ? `${progress.progressPercent}%` : "...",
       icon: Clock,
       color: "#F59E0B",
@@ -100,11 +113,11 @@ export default function DashboardLayout() {
         {/* ✅ HEADER */}
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" sx={{ fontWeight: 700 }}>
-            {t("pages.Dashboard.hello_student", "Hello, Student! 👋")}
+            {isKhmer ? "សួស្តី សិស្ស! 👋" : t("pages.Dashboard.hello_student", "Hello, Student! 👋")}
           </Typography>
 
           <Typography sx={{ color: "#6B7280", fontSize: "14px" }}>
-            {new Date().toLocaleDateString("en-US", {
+            {new Date().toLocaleDateString(isKhmer ? "km-KH" : "en-US", {
               weekday: "long",
               month: "long",
               day: "numeric",
@@ -129,13 +142,17 @@ export default function DashboardLayout() {
               <CardContent sx={{ display: "flex", gap: 3 }}>
                 <Box sx={{ flex: 1 }}>
                   <Typography variant="h6" sx={{ mb: 1 }}>
-                    {t("pages.Dashboard.welcome_back", "Welcome back!")}
+                    {isKhmer ? "សូមស្វាគមន៍ត្រឡប់មកវិញ!" : t("pages.Dashboard.welcome_back", "Welcome back!")}
                   </Typography>
 
                   <Typography sx={{ mb: 2, fontSize: "14px" }}>
                     {progress
-                      ? `You've completed ${progress.completedLessons} lessons 🎯`
-                      : "Loading progress..."}
+                      ? isKhmer
+                        ? `អ្នកបានបញ្ចប់មេរៀន ${progress.completedLessons} មេរៀន 🎯`
+                        : `You've completed ${progress.completedLessons} lessons 🎯`
+                      : isKhmer
+                        ? "កំពុងផ្ទុកវឌ្ឍនភាព..."
+                        : "Loading progress..."}
                   </Typography>
 
                   <Button
@@ -147,7 +164,7 @@ export default function DashboardLayout() {
                       "&:hover": { backgroundColor: "#F3F4F6" },
                     }}
                   >
-                    {t("pages.Dashboard.continue_learning", "Continue Learning")}
+                    {isKhmer ? "បន្តការរៀន" : t("pages.Dashboard.continue_learning", "Continue Learning")}
                   </Button>
                 </Box>
 
@@ -201,9 +218,8 @@ export default function DashboardLayout() {
               ))}
             </Grid>
 
-            {/* ✅ FEATURES */}
             <Typography sx={{ fontWeight: 700, mb: 2 }}>
-              Your Learning Path
+              {isKhmer ? "ផ្លូវការរៀនរបស់អ្នក" : "Your Learning Path"}
             </Typography>
 
             <Grid container spacing={2}>
@@ -247,7 +263,7 @@ export default function DashboardLayout() {
           {/* ✅ RIGHT SIDE */}
           <Grid item xs={12} md={4}>
             
-            {/* ✅ Progress Card */}
+            {/* ✅ Progress Card
             <Card sx={{ mb: 3, borderRadius: 2 }}>
               <CardContent>
                 <Typography sx={{ fontWeight: 700, mb: 1 }}>
@@ -256,7 +272,7 @@ export default function DashboardLayout() {
 
                 <Typography sx={{ fontSize: "14px", color: "#6B7280", mb: 2 }}>
                   {progress
-                    ? `You are ${progress.progressPercent}% complete 🚀`
+                    ? `You are ${progress.progressPercent ?? 0}% complete 🚀`
                     : "Loading progress..."}
                 </Typography>
 
@@ -273,9 +289,9 @@ export default function DashboardLayout() {
                   Continue Learning
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
 
-            {/* ✅ Profile Card */}
+            {/* ✅ Profile Card
             <Card sx={{ borderRadius: 2 }}>
               <CardContent>
                 <Typography sx={{ fontWeight: 700, mb: 2 }}>
@@ -304,7 +320,7 @@ export default function DashboardLayout() {
                   </Button>
                 </Box>
               </CardContent>
-            </Card>
+            </Card> */}
 
           </Grid>
 

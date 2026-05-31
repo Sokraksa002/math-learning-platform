@@ -220,7 +220,7 @@ export default function Header() {
 
         <MenuItem onClick={() => { navigate("/quiz-history"); handleProfileClose(); }}>
           <ListItemIcon><Quiz /></ListItemIcon>
-          {t("nav.quizHistory", "My quiz attempts")}
+          {t("nav.quizHistory", "Quiz history")}
         </MenuItem>
 
         <MenuItem onClick={() => { navigate("/flashcard-history"); handleProfileClose(); }}>

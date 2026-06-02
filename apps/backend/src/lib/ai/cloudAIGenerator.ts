@@ -179,6 +179,68 @@ ${input.topic}
     answer: String(item.answer || 'No answer'),
   }));
 
+  // Post-process answers: normalize LaTeX typos and extract concise final solution
+  function normalizeLatex(s: string): string {
+    if (!s) return s;
+    let out = s;
+    out = out.replace(/\brac\{/g, "\\frac{");
+    out = out.replace(/\bfrc\{/g, "\\frac{");
+    out = out.replace(/(?<!\\)\bfrac\{/g, "\\frac{");
+    out = out.replace(/->/g, " \\to ");
+    out = out.replace(/→/g, " \\to ");
+    out = out.replace(/\binfty\b/g, "\\infty");
+    out = out.replace(/`([^`]+)`/g, "$1");
+    return out;
+  }
+
+  function extractFinal(s: string): string {
+    if (!s) return s;
+    let t = s.trim();
+    // try to find last '=' and take RHS
+    const lastEq = t.lastIndexOf('=');
+    if (lastEq !== -1 && lastEq < t.length - 1) {
+      const cand = t.slice(lastEq + 1).trim().replace(/^[\s:\-–]+|[\s;,.]+$/g, '');
+      if (cand) return cand;
+    }
+    // fallback: last non-empty line
+    const lines = t.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+    if (lines.length) return lines[lines.length - 1];
+    return t;
+  }
+
+  for (const r of result) {
+    r.answer = normalizeLatex(String(r.answer));
+    try {
+      const concise = extractFinal(r.answer);
+      if (concise) r.answer = concise;
+    } catch {
+      // ignore
+    }
+  }
+
+  // Additional cleanup: remove stray words and ensure a single math block
+  for (const r of result) {
+    let a = String(r.answer || '');
+    // remove leading words like 'exists' or 'there exists'
+    a = a.replace(/^\s*(?:exists|there exists)\s*/i, '');
+    // fix common typo: 'x o 0' or 'x o  \to 0' -> 'x \\to 0'
+    a = a.replace(/x\s*o\s*0/g, 'x \\to 0');
+    a = a.replace(/\\?\s*o\s*/g, ' \\to ');
+    // collapse multiple dollar signs to at most two
+    a = a.replace(/\${3,}/g, '$$');
+    // if there is text before the first math indicator, strip it
+    const mathIndex = a.search(/(\\frac|lim_|\\to|\\infty|\\\(|\\\[|\$\$|\$)/);
+    if (mathIndex > 0) {
+      a = a.slice(mathIndex).trim();
+    }
+    // ensure wrapped in $$ if it looks like LaTeX and not already wrapped
+    if (/\\frac|lim_|\\to|\\infty|\\sqrt/.test(a) && !/^\$\$[\s\S]*\$\$/.test(a)) {
+      a = `$$${a}$$`;
+    }
+    // final trim
+    r.answer = a.trim();
+  }
+
   return result;
 }
 

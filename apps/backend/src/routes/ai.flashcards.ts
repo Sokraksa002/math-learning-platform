@@ -21,14 +21,14 @@ export async function aiFlashcardRoutes(fastify: FastifyInstance) {
     },
     async (request, reply) => {
       try {
-        const { lessonId, save } = request.body as z.infer<typeof generateFlashcardsSchema>;
+        const { lessonId, topic, save } = request.body as z.infer<typeof generateFlashcardsSchema>;
 
         const userId = request.user.userId;
 
         /* ✅ ✅ REMOVE PRISMA LESSON CHECK (CRITICAL FIX) */
         // ❌ DO NOT use prisma.lesson.findUnique()
 
-        const result = await generateFlashcardsForLesson(lessonId, save, userId);
+        const result = await generateFlashcardsForLesson(lessonId, topic, save, userId);
 
         return {
           flashcards: result,

@@ -28,7 +28,7 @@ import { flashcardReviewRoutes } from './routes/flashcard-review';
 import { flashcardsDueRoutes } from './routes/flashcards-due';
 import { aiFlashcardRoutes } from './routes/ai.flashcards'; // ✅ ✅ ADD THIS
 import { aiDebugRoutes } from './routes/ai.debug';
-
+import { aiMathSolverRoutes } from './routes/ai.math-solver';
 import { flashcardRoutes } from './modules/flashcards/flashcard.routes';
 import { adminRoutes as adminModuleRoutes } from './modules/admin/admin.routes';
 
@@ -106,7 +106,7 @@ app.register(aiDebugRoutes, { prefix: '/api' });
 // Move the AI config check after app creation
 checkAiConfig();
 app.register(aiFlashcardRoutes, { prefix: '/api' });
-
+app.register(aiMathSolverRoutes, { prefix: '/api' });
 // ✅ Progress + Certificate
 app.register(lessonCompletionRoutes, { prefix: '/api' });
 app.register(progressRoutes, { prefix: '/api' });
